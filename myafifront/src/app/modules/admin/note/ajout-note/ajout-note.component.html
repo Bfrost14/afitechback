@@ -1,0 +1,109 @@
+<div class="flex flex-col md:min-w-160 max-h-screen divide-y-8 divide-bleue-claire-1 w-full">
+
+  <div class=" flex  h-10 text-white  w-full -mb-0.5 justify-between  bg-rouge-1 p-1">
+
+    <span class="mr-4 mt-1.5 font-bold">{{noteId == 0 ? ('Ajouter Note' | titlecase) : ('Modifier Note'
+      | titlecase)}}</span>
+  </div>
+  <!-- Compose form -->
+  <form class="flex flex-col flex-auto sm:p-8 overflow-y-auto bg-bleue-claire-6 w-full" [formGroup]="form">
+
+    <!-- To -->
+    <div class="grid grid-cols-1 gap-4 w-full">
+
+      <div class="flex flex-col gt-xs:flex-row m-2">
+        <div formArrayName="notes">
+          <div *ngFor="let field of detailFilds.controls; let i = index">
+            <div [formGroupName]="i">
+              <div class="flex">
+
+
+                <mat-form-field class="w-full">
+                  <mat-label>{{'Etudiant'}}</mat-label>
+                  <input type="text" matInput formControlName="user" [matAutocomplete]="auto"
+                    (keyup)="getUsers($event.target.value)" [readonly]="user != undefined">
+                  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+                    <mat-option *ngFor="let option of users " [value]="option">
+                      {{option.matricule}} {{option.prenom}} {{option.nom}}
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-error *ngIf="field.get('user').hasError('required')">
+                    {{ 'etudiant.doit.etre.choisi' }}</mat-error>
+                </mat-form-field>
+
+              </div>
+              <div class="flex">
+                <mat-form-field class="w-1/3 pr-2">
+                  <mat-label>{{'Semestre'}}</mat-label>
+                  <input matInput [formControlName]="'semestre'" oninput="this.value = this.value.toUpperCase()">
+                  <mat-error *ngIf="field.get('semestre').hasError('required')">
+                    {{ 'semestre.doit.etre.saisi' }}</mat-error>
+                </mat-form-field>
+                <mat-form-field class="w-1/3 pl-2">
+                  <mat-label>Matière</mat-label>
+                  <input matInput [formControlName]="'matiere'" oninput="this.value = this.value.toUpperCase()">
+                  <mat-error *ngIf="field.get('matiere').hasError('required')">
+                    {{ 'matiere.doit.etre.saisi' }}</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="flex">
+
+                <mat-form-field class="w-1/3 pr-2">
+                  <mat-label>{{'Crédit'}}</mat-label>
+                  <input matInput type="number" [formControlName]="'credit'">
+                  <mat-error *ngIf="field.get('credit').hasError('required')">
+                    {{ 'credit.doit.etre.saisi' }}</mat-error>
+                </mat-form-field>
+
+
+
+                <mat-form-field class="w-1/3 pl-2">
+                  <mat-label>{{'Valeur'}}</mat-label>
+                  <input matInput type="number" [formControlName]="'valeur'">
+                  <mat-error *ngIf="field.get('valeur').hasError('required')">
+                    {{ 'valeur.doit.etre.saisi' }}</mat-error>
+                </mat-form-field>
+
+              </div>
+              <div class="w-1/3 pr-2" *ngIf="noteId == 0">
+                <button mat-fab color="primary" (click)="addFieldDetail()" type="button">
+                  <mat-icon>add</mat-icon>
+                </button>
+                <button mat-fab color="danger" (click)="removeFieldDetail(i)" type="button">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+
+            </div>
+            <hr>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex items-center mt-4 sm:mt-0 justify-between">
+
+      <!-- Buttons -->
+      <button class="order-first sm:order-last" mat-flat-button [color]="'warn'" (click)="annuler()" *ngIf="!note">
+        Annuler
+      </button>
+      <button *ngIf="note" class="order-first sm:order-last" mat-flat-button [color]="'warn'" [swal]="supprimerSwal">
+        Supprimer
+      </button>
+      <button *ngIf="!note" class="order-first sm:order-last" mat-flat-button [color]="'primary'"
+        [disabled]="!form.valid" [swal]="enregistrerSwal">
+        Ajouter
+      </button>
+      <button *ngIf="note" class="order-first sm:order-last" mat-flat-button [color]="'primary'" [swal]="modifierSwal"
+        [disabled]="!form.valid">
+        Modifier
+      </button>
+    </div>
+  </form>
+</div>
+
+<!-- Sweetalert modals -->
+<swal #enregistrerSwal (confirm)="enregistrer()" [swalOptions]="Enregistrer"></swal>
+<swal #annulerSwal (confirm)="annuler()" [swalOptions]="Annuler"></swal>
+<swal #modifierSwal (confirm)="modifier()" [swalOptions]="Modifier"></swal>
+<swal #supprimerSwal (confirm)="supprimer()" [swalOptions]="Supprimer"></swal>
