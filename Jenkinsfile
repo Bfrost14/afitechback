@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         NAME = 'myafiback'
+        NAMEF = 'myafifront'
         VERSION = '3.3.2'
         NAME_NETWORK = 'bfrost_ibr'
         PORT = 8095
@@ -43,6 +44,38 @@ pipeline {
                 sh  "docker run --network ${NAME_NETWORK} --name ${NAME}-dev -v ${VOLUME}:/data --restart=always -e JAVA_OPTS='-Dspring.profiles.active=prod -Dspring.cloud.config.label=develop -Dserver.port=8095'  -p ${PORT}:8095 -d ${NAME}-dev:${VERSION}"
             }
         }
+
+        stage('INSTALL NPM') {
+            steps {
+            dir('myafifront') {
+                sh  "npm install --legacy-peer-deps"
+            }
+            }
+        }
+
+        stage('BUILD NPM') {
+            when { branch 'master' }
+            steps {
+                sh  "npm run build-prod"
+            }
+        }
+
+                stage('BUILD DOCKER FRONT' ) {
+                     when { branch 'master' }
+                    steps {
+                        sh  "docker build -t ${NAMEF} ."
+
+                    }
+                }
+
+                stage('RUN DOCKER FRONT') {
+                     when { branch 'master' }
+                    steps {
+                        sh  "docker rm -f ${NAMEF}"
+                        sh  "docker run  --name ${NAMEF} -p 4240:80 -d ${NAMEF}:latest"
+
+                    }
+                }
 
     }
 
