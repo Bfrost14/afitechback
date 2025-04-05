@@ -48,8 +48,8 @@ pipeline {
         stage('[DEV] BUILD DOCKER') {
             when { branch 'master' }
             steps {
-                sh  "docker build -t ${NAME}-dev:${VERSION} ."
-                sh  "docker build -t ${NAMEF} ."
+                sh "docker build -t ${NAME}-dev:${VERSION} -f myafiback/Dockerfile myafiback"
+                sh "docker build -t ${NAMEF}:latest -f myafifront/Dockerfile myafifront"
             }
 
         }

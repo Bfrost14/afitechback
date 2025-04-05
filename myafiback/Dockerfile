@@ -26,10 +26,3 @@ EXPOSE 8095
 # HEALTHCHECK
 HEALTHCHECK --retries=3 CMD curl --fail http://localhost:8095/actuator/health || exit 1
 
-
-FROM nginx:1.13.12-alpine
-WORKDIR /usr/src/app
-
-COPY ./myafifront/dist/fuse /usr/share/nginx/html
-COPY ./myafifront/nginx.conf /etc/nginx/conf.d/default.template
-
