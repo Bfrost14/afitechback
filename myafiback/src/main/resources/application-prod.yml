@@ -1,10 +1,10 @@
 spring:
-  profiles:
-    active: prod
+  main:
+    allow-bean-definition-overriding: true
   datasource:
-    url: jdbc:mysql://localhost:3306/myafiback?createDatabaseIfNotExist=true
+    url: jdbc:mysql://mysql:3306/myafiback?createDatabaseIfNotExist=true
     username: root
-    password:
+    password: Batou@14275800
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       maximum-pool-size: 10
@@ -19,11 +19,12 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
-  application:
-    name: myafiback
+    application:
+      name: myafiback
 server:
-  port: 8080
-
+  port: 8095
+  tomcat:
+    max-http-header-size: 5242880
 
 
 logging:
@@ -34,7 +35,18 @@ logging:
 application:
   security:
     jwt:
-      secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+      secret-key: VXYA1dL34F+NlEydw0hQhI8WEdlOEe2iXRCI/Ne+XpLiQLsH6KvZcVsaxNcClIQwCHxTMHBa1PdHXN3Z0Q==
       expiration: 86400000 # a day
       refresh-token:
         expiration: 604800000 # 7 days
+
+# OpenAPI Configuration
+springdoc:
+  default-produces-media-type: application/json
+  show-actuator: true
+  swagger-ui:
+    path: /
+    operationsSorted: method
+  api-docs:
+    path: /documentation
+  pathToMatch: /**
