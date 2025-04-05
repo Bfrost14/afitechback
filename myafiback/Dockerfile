@@ -12,7 +12,7 @@ ENV CONTEXT_PATH myafiback
 # WAR filename
 ENV WAR_FILENAME myafiback.jar
 
-COPY /myafiback/target/${SERVICE_NAME}-${VERSION}.jar ${WAR_FILENAME}
+COPY target/${SERVICE_NAME}-${VERSION}.jar ${WAR_FILENAME}
 
 COPY ./entrypoint.sh /
 
