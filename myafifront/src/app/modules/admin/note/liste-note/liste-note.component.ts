@@ -34,7 +34,7 @@ interface SearchFild {
  */
 @Component({
     selector: 'app-liste-note',
-    styleUrls: ['./liste-note.component.scss'],
+    styleUrls: ['./liste-note.component.css'],
     templateUrl: './liste-note.component.html',
     animations: [
         trigger('detailExpand', [

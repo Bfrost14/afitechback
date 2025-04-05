@@ -49,6 +49,7 @@ pipeline {
             when { branch 'master' }
             steps {
                 sh  "docker build -t ${NAME}-dev:${VERSION} ."
+                sh  "docker build -t ${NAMEF} ."
             }
 
         }
@@ -60,16 +61,6 @@ pipeline {
                 sh  "docker run --network ${NAME_NETWORK} --name ${NAME}-dev -v ${VOLUME}:/data --restart=always -e JAVA_OPTS='-Dspring.profiles.active=prod -Dspring.cloud.config.label=develop -Dserver.port=8095'  -p ${PORT}:8095 -d ${NAME}-dev:${VERSION}"
             }
         }
-
-
-
-                stage('BUILD DOCKER FRONT' ) {
-                     when { branch 'master' }
-                    steps {
-                        sh  "docker build -t ${NAMEF} ."
-
-                    }
-                }
 
                 stage('RUN DOCKER FRONT') {
                      when { branch 'master' }
