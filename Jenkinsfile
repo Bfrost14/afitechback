@@ -29,7 +29,7 @@ pipeline {
 
 
         stage('[DEV] BUILD DOCKER') {
-            when { branch 'main' }
+            when { branch 'master' }
             steps {
                 sh  "docker build -t ${NAME}-dev:${VERSION} ."
             }
@@ -37,7 +37,7 @@ pipeline {
         }
 
         stage('[DEV] RUN DOCKER') {
-             when { branch 'main' }
+             when { branch 'master' }
             steps {
                 sh  "docker rm -f ${NAME}-dev"
                 sh  "docker run --network ${NAME_NETWORK} --name ${NAME}-dev -v ${VOLUME}:/data --restart=always -e JAVA_OPTS='-Dspring.profiles.active=prod -Dspring.cloud.config.label=develop -Dserver.port=8095'  -p ${PORT}:8095 -d ${NAME}-dev:${VERSION}"
