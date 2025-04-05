@@ -5,6 +5,7 @@
 export const environment = {
     production: false,
     backend: "http://localhost:8080",
+    //backend: "http://92.112.194.46:8095",
     defaultPassword: "Passer@123"
 
 };

@@ -20,7 +20,8 @@ import { HasRoleDirective } from './hasrole.directive';
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
-        NumberConverterPipe
+        NumberConverterPipe,
+        HasRoleDirective
     ]
 })
 export class SharedModule

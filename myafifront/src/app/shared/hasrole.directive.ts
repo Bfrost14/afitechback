@@ -12,7 +12,7 @@ export class HasRoleDirective {
     private viewContainer: ViewContainerRef,
     private authService: AuthService
   ) {
-    this.authService.getUtilisateur().subscribe(user => {
+    this.authService.getUtilisateurOb().subscribe(user => {
       this.currentRole = user.role;
     });
   }
