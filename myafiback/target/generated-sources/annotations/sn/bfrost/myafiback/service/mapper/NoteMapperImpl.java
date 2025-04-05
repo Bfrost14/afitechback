@@ -11,7 +11,7 @@ import sn.bfrost.myafiback.service.dto.UserDTO;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-04-05T02:57:19+0000",
+    date = "2025-04-05T03:25:03+0000",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 17.0.11 (Oracle Corporation)"
 )
 @Component
