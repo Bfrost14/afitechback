@@ -26,16 +26,19 @@ Cette application permet la gestion des étudiants et des notes avec un back-end
 ---
 
 ## 🔧 Lancer le projet
-
-### ⚙️ Backend (Spring Boot)
-```bash
-cd myafiback
-./mvnw spring-boot:run
-
+Vous pouvez accèder directement vers le lien http://92.112.194.46:4240/
 utilisateur créer au demarrage avec le role ROLE_SECRETAIRE;
 email: secretaire@myafi.com
 password: admin
 
+un étudiant crée à pour motdepasse par defaut Passer@123 
+qu'il va pouvoir changer dès sa premiere connexion
+
+sinon lancer le projet en local avec
+### ⚙️ Backend (Spring Boot)
+```bash
+cd myafiback
+./mvnw spring-boot:run
 
 cd myafifront
 npm install
