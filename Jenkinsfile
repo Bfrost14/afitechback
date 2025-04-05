@@ -27,6 +27,22 @@ pipeline {
             }
         }
 
+        stage('INSTALL NPM') {
+                    steps {
+                    dir('myafifront') {
+                        sh  "npm install --legacy-peer-deps"
+                    }
+                    }
+                }
+
+                stage('BUILD NPM') {
+                    when { branch 'master' }
+                    steps {
+                    dir('myafifront') {
+                        sh  "npm run build-prod"
+                    }
+                    }
+                }
 
 
         stage('[DEV] BUILD DOCKER') {
@@ -45,20 +61,7 @@ pipeline {
             }
         }
 
-        stage('INSTALL NPM') {
-            steps {
-            dir('myafifront') {
-                sh  "npm install --legacy-peer-deps"
-            }
-            }
-        }
 
-        stage('BUILD NPM') {
-            when { branch 'master' }
-            steps {
-                sh  "npm run build-prod"
-            }
-        }
 
                 stage('BUILD DOCKER FRONT' ) {
                      when { branch 'master' }
