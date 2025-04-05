@@ -19,8 +19,10 @@ pipeline {
 
         stage('Clean Install') {
             steps {
-                sh  "/usr/share/maven/bin/mvn clean install -DskipTests"
-                stash includes: '**/target/*', name: 'target'
+                dir('myafiback') {
+                    sh  "/usr/share/maven/bin/mvn clean install -DskipTests"
+                    stash includes: '**/target/*', name: 'target'
+                }
             }
         }
 
@@ -31,6 +33,7 @@ pipeline {
             steps {
                 sh  "docker build -t ${NAME}-dev:${VERSION} ."
             }
+
         }
 
         stage('[DEV] RUN DOCKER') {
