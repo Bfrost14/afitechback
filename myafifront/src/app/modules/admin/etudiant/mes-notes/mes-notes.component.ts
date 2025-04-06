@@ -107,7 +107,7 @@ export class MesNotesComponent implements OnInit, AfterViewInit {
         this.searchFilds = this.searchColumnForm.get(
             'searchFilds'
         ) as FormArray;
-
+        
         if(this.userEmail == undefined){
           this.userEmail = this._authService.getUtilisateur().email;
         }
