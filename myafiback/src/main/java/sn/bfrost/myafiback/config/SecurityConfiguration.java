@@ -36,8 +36,8 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(req ->
                         req
                                 .requestMatchers("/auth/**", "/actuator/**", "/error", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-                                .requestMatchers("/note/**").hasRole("SECRETAIRE")
-                                .requestMatchers("/note/etudiant/**").hasRole("ETUDIANT")
+                                .requestMatchers("/notes/**").hasRole("SECRETAIRE")
+                                .requestMatchers("/notes/etudiant/**").hasRole("ETUDIANT")
                                 .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider)
