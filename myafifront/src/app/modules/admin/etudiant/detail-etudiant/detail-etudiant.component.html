@@ -91,7 +91,7 @@
                   <ng-template mat-tab-label>
                     <button class="btspan">{{'Notes'}}</button>
                   </ng-template>
-                  <app-mes-notes [userEmail]="etudiant.email" [user]="etudiant"></app-mes-notes>
+                  <app-mes-notes *ngIf="etudiant?.email != undefined" [userEmail]="etudiant.email" [user]="etudiant"></app-mes-notes>
                 </mat-tab>
   
             
