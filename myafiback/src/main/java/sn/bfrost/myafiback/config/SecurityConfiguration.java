@@ -36,7 +36,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(req ->
                         req
                                 .requestMatchers("/auth/**", "/actuator/**", "/error", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-                                .requestMatchers("/notes/**").hasRole("SECRETAIRE")
+                                .requestMatchers("/notes/private/**").hasRole("SECRETAIRE")
                                 .requestMatchers("/notes/etudiant/**").hasAnyRole("ETUDIANT", "SECRETAIRE")
                                 .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
