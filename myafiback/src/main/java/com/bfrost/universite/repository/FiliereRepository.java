@@ -1,0 +1,12 @@
+package com.bfrost.universite.repository;
+
+import com.bfrost.universite.domain.Filiere;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+/**
+ * Spring Data JPA repository for the Filiere entity.
+ */
+@SuppressWarnings("unused")
+@Repository
+public interface FiliereRepository extends JpaRepository<Filiere, Long> {}

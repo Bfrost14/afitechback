@@ -1,4 +1,15 @@
 spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: bwsilent7@gmail.com
+    password: 'uxum tumj trfn geuz'
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
   main:
     allow-bean-definition-overriding: true
   datasource:
@@ -7,10 +18,13 @@ spring:
     password: Batou@14275800
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
-      maximum-pool-size: 10
-      minimum-idle: 5
-      idle-timeout: 30000
-      max-lifetime: 1800000
+      poolName: Hikari
+      auto-commit: false
+      data-source-properties:
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
 
   jpa:
     hibernate:
@@ -35,7 +49,7 @@ logging:
 application:
   security:
     jwt:
-      secret-key: VXYA1dL34F+NlEydw0hQhI8WEdlOEe2iXRCI/Ne+XpLiQLsH6KvZcVsaxNcClIQwCHxTMHBa1PdHXN3Z0Q==
+      secret-key: MmFmYzk2M2E1MmNlYzc4OGUzMjdkZDY3NzA0NDZmODIwZDdiY2Y1YTYwMWE5MWU4YWVjMDA5Zjc3YTcwZTM0M2Q1NDk2ZWRjNmFlOThhMDU1ZjBiOWRhOGFkOGExMzU5ZjEyMTkwMDA2M2Q5ZjIwNjUwYjBkOTYyYzA4M2NkOTM=
       expiration: 86400000 # a day
       refresh-token:
         expiration: 604800000 # 7 days
