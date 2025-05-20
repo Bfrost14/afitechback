@@ -10,7 +10,7 @@ type EntityArrayResponseType = HttpResponse<Map<string, object>>;
 export class AuthService {
     private _authenticated: boolean = false;
     public resourceUrl =
-        this.applicationConfigService.getEndpointForAuth('/auth');
+        this.applicationConfigService.getEndpointForAuth('/api');
     public resourceUrl2 =
         this.applicationConfigService.getEndpointFor('/users');
 
@@ -115,7 +115,7 @@ export class AuthService {
         size: number = 10,
         sort: string = 'code',
         order: 'asc' | 'desc' | '' = 'desc'
-    ): Observable<EntityArrayResponseType> {
+    ): Observable<any> {
         const pagination1 = {
             sort: sort + ',' + order,
             page: page,
@@ -132,14 +132,14 @@ export class AuthService {
      *
      * @param credentials
      */
-    signIn(credentials: { email: string; password: string }): Observable<any> {
+    signIn(credentials: { username: string; password: string }): Observable<any> {
         // Throw error, if the user is already logged in
         if (this._authenticated) {
             return throwError('User is already logged in.');
         }
 
         return this._httpClient
-            .post(this.resourceUrl + '/login', credentials)
+            .post(this.resourceUrl + '/authenticate', credentials)
             .pipe(
                 switchMap((response: any) => {
                     if (response.access_token != null) {

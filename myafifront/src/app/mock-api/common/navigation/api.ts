@@ -35,17 +35,17 @@ export class NavigationMockApi
             .onGet('api/common/navigation')
             .reply(() => {
                 let liste : any = []
-                if(this._authService.getUtilisateur().role == "ROLE_ETUDIANT"){
-                    liste = defaultNavigation.filter(def => def.id.includes('etudiant.'))
-                }else{
-                    liste = defaultNavigation.filter(def => def.id.includes('secretaire.'))
-                }
+                // if(this._authService.getUtilisateur().role == "ROLE_ETUDIANT"){
+                //     liste = defaultNavigation.filter(def => def.id.includes('etudiant.'))
+                // }else{
+                //     liste = defaultNavigation.filter(def => def.id.includes('secretaire.'))
+                // }
                 
                 // Return the response
                 return [
                     200,
                     {
-                        default   : cloneDeep(liste )
+                        default   : cloneDeep(defaultNavigation )
                     }
                 ];
             });

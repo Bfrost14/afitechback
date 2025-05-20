@@ -22,7 +22,8 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NoteService } from '../note.service';
-import { Note } from '../note';
+import { NewNote } from '../note';
+
 
 interface SearchFild {
     key: string;
@@ -56,14 +57,14 @@ export class ListeNoteComponent implements OnInit, AfterViewInit {
         { key: 'filiere', value: null },
     ];
 
-    dataSource: Note[] = [];
+    dataSource: NewNote[] = [];
     columnsToDisplay = ["matricule", 'prenom', 'nom', 'filiere',"matiere", 'semestre',"valeur"];
     displayedColumn: string[] = ['prenom', 'nom', 'filiere',"matiere", 'semestre',"valeur"];
     displayedColumns: string[] = ['prenom', 'nom', 'filiere',"matiere", 'semestre',"valeur"];
 
     columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
-    expandedElement: Note | null;
-    selectNoteEdit: Note
+    expandedElement: NewNote | null;
+    selectNewNoteEdit: NewNote
     selectedColumn = [
         { key: 'matiere', value: '' },
         { key: 'semestre', value: '' },
@@ -80,7 +81,7 @@ export class ListeNoteComponent implements OnInit, AfterViewInit {
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
     exampleDatabase: any | null;
-    data: Note[] = [];
+    data: NewNote[] = [];
     pageSize = 25;
     pageSizeOptions: number[] = [25, 50, 100];
     // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -111,10 +112,10 @@ export class ListeNoteComponent implements OnInit, AfterViewInit {
 
         this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
 
-        this.allNotes();
+        this.allNewNotes();
     }
 
-    getAllNote(column: SearchFild[]) {
+    getAllNewNote(column: SearchFild[]) {
         let matiere = '';
         let prenom = '';
         let nom = '';
@@ -179,7 +180,7 @@ export class ListeNoteComponent implements OnInit, AfterViewInit {
 
         if (fields.length == 0) {
             this.searchFilds.clear();
-            this.getAllNote(fields);
+            this.getAllNewNote(fields);
             
         } else {
             this.searchFilds.clear();
@@ -207,11 +208,11 @@ export class ListeNoteComponent implements OnInit, AfterViewInit {
             '@@@@@@@@@@@@@ filtered column ======>',
             this.selectedColumn
         );
-        this.getAllNote(column);
+        this.getAllNewNote(column);
       
     }
 
-    allNotes() {
+    allNewNotes() {
         merge(this.sort.sortChange, this.paginator.page)
             .pipe(
                 startWith({}),
@@ -264,7 +265,7 @@ export class ListeNoteComponent implements OnInit, AfterViewInit {
     }
 
     fiche: boolean = false;
-    setDataSource(note: Note) {
+    setDataSource(note: NewNote) {
         console.log('>>>>>>>>>>>>>>>.. data set >>>>>>>>>>>>>>>>>>', note);
         if (this.fiche) {
             this.noteId = null
@@ -283,16 +284,16 @@ export class ListeNoteComponent implements OnInit, AfterViewInit {
         );
     }
 
-    setDataSourceEdit(note: Note) {
+    setDataSourceEdit(note: NewNote) {
         console.log('>>>>>>>>>>>>>>>.. data set >>>>>>>>>>>>>>>>>>', note);
         if (this.add) {
             this.noteIdEdit = null
-            this.selectNoteEdit = null
+            this.selectNewNoteEdit = null
             this.add = false;
             this.data = [...this.dataSource];
         } else {
             this.noteIdEdit = note.id
-            this.selectNoteEdit = note
+            this.selectNewNoteEdit = note
             this.add = true;
             this.data = [note];
         }
@@ -300,6 +301,6 @@ export class ListeNoteComponent implements OnInit, AfterViewInit {
 
     setAdd(event){
         this.add = event
-        this.allNotes()
+        this.allNewNotes()
       }
 }

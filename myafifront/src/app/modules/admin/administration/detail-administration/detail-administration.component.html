@@ -1,0 +1,107 @@
+<div class=" w-full  border-solid border-bleu-foncee bg-white border-b-4 border-r-4 border-l-4 divide-y-8 divide-bleue-claire-1">
+  
+      <p class="flex bg-bleu-foncee h-10 text-white justify-between w-full -mb-0.5 justify-between">
+        <span class="ml-4 mt-2 ">Détails étudiant</span>
+      </p>
+  
+      <div class="grid grid-cols-1 gap-1 divide-y-8 divide-bleue-claire-1">
+        <div class="flex flex-col gt-xs:flex-row mt-1 h-10 bg-bleue-claire-6">
+          <fuse-alert class="mt-8 -mb-4" *ngIf="showAlert" [appearance]="'outline'" [showIcon]="false" [type]="alert.type"
+            [@shake]="alert.type === 'error'">
+            {{alert.message}}
+          </fuse-alert>
+  
+        </div>
+  
+        <div class="flex flex-col gt-xs:flex-row">
+  
+          <mat-card>
+        
+            <mat-card-content class=" flex justify-center">
+  
+              <mat-tab-group class="w-full">
+
+  
+                <mat-tab>
+                  <ng-template mat-tab-label>
+                    <button class="btspan">{{'Identification'}}</button>
+  
+                  </ng-template>
+  
+                  <div class=" w-full rounded-md  bg-white border-4 ">
+                    <mat-card>
+                      <div class="grid grid-cols-2 gap-4 divide-x-4 ">
+                        <div class="flex flex-col gt-xs:flex-row">
+
+  
+                          <div class="truncate hover:text-clip flex justify-between">
+                            <span>
+                              
+                                <p>
+                                  <span class=" ml-2  text-black">{{'Matricule'}}:</span>
+                                  <span class="ml-2 text-slate-500">{{etudiant?.matricule}}</span>
+                                </p>
+                              <p>
+                                <span class=" ml-2  text-black">{{'Prénom'}}:</span>
+                                <span class="ml-2 text-slate-500">{{etudiant?.prenom}}</span>
+                              </p>
+                              <p>
+                                <span class=" ml-2  text-black">{{'Nom'}}:</span>
+                                <span class="ml-2 text-slate-500">{{etudiant?.nom}}</span>
+                              </p>
+                            </span>
+  
+  
+                          </div>
+  
+                                             
+                        </div>
+  
+                        <div class="flex flex-col gt-xs:flex-row">
+                        
+    
+  
+                          <div class="truncate hover:text-clip flex justify-between">
+                            <span>
+                              <span class=" ml-2 text-black">{{'Email'}}:</span>
+                              <span class="ml-2 text-slate-500">{{etudiant?.email}}</span>
+  
+                            </span>
+
+  
+                          </div>
+  
+                          <p><span class=" ml-2 text-black">{{'Filière'}}:</span><span
+                              class="ml-2 text-slate-500">{{etudiant?.filiere}}</span></p>
+                          <p class="truncate hover:text-clip"> <span
+                              class=" ml-2  text-black">{{'Téléphone'}}:</span><span
+                              class="ml-2 text-slate-500">{{etudiant?.telephone}}</span></p>
+                          <p class="truncate hover:text-clip"> <span
+                              class=" ml-2  text-black">{{'Date de naissance'}}:</span><span
+                              class="ml-2 text-slate-500">{{etudiant?.dateDeNaissance | date:'dd/MM/YYYY'}}</span></p>
+                        </div>
+        
+                      </div>
+                    </mat-card>
+                  </div>
+                </mat-tab>
+                <!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ les notes @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
+  
+                <mat-tab>
+                  <ng-template mat-tab-label>
+                    <button class="btspan">{{'Notes'}}</button>
+                  </ng-template>
+                  <app-mes-notes *ngIf="etudiant?.email != undefined" [userEmail]="etudiant?.email" [user]="etudiant"></app-mes-notes>
+                </mat-tab>
+  
+            
+  
+  
+  
+              </mat-tab-group>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+  

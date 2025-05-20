@@ -9,10 +9,11 @@ import {
 import { SweetAlertOptions } from 'sweetalert2';
 import { AlertToastService } from 'app/core/util/alertToast.service';
 import { environment } from 'environments/environment';
-import { Note } from '../note';
 import { NoteService } from '../note.service';
-import { EtudiantService } from '../../etudiant/etudiant.service';
-import { UserAll } from '../../etudiant/user-all';
+import { NewUtilisateur } from '../../ue/ue.model';
+import { AdminService } from '../../user/service/admin.service';
+import { NewNote } from '../note';
+
 @Component({
     selector: 'app-ajout-note',
     templateUrl: './ajout-note.component.html',
@@ -66,13 +67,13 @@ export class AjoutNoteComponent implements OnInit {
 
     form: UntypedFormGroup;
     @Input() noteId: number;
-    @Input() note: Note;
-    @Input() user: UserAll;
+    @Input() note: NewNote;
+    @Input() user: NewUtilisateur;
     @Output() edit = new EventEmitter<boolean>();
     @Output() add = new EventEmitter<boolean>();
     @Output() refresh = new EventEmitter<number>();
     // ++++++++++++++++++++++++++++++++++++ mat-select infinit scroll categorie note ++++++++++++++++++++++++++++++++++
-    users: UserAll[] = []
+    users: NewUtilisateur[] = []
     genreNgModel: string = '';
     mesLists: any[] = [];
     titeleMessage: string;
@@ -85,7 +86,7 @@ export class AjoutNoteComponent implements OnInit {
         private _formBuilder: UntypedFormBuilder,
         private _noteService: NoteService,
         private _alertToastService: AlertToastService,
-        private _etudiantService: EtudiantService
+        private _etudiantService: AdminService
     ) {}
 
     ngOnInit(): void {
@@ -171,7 +172,7 @@ export class AjoutNoteComponent implements OnInit {
         });
     }
 
-    addFieldDetail(note?: Note) {
+    addFieldDetail(note?: NewNote) {
         this.index = this.index + 1;
         if (note != null && note != undefined) {
             (this.detailFilds as FormArray).push(
@@ -180,8 +181,7 @@ export class AjoutNoteComponent implements OnInit {
                     semestre: [note.semestre, [Validators.required]],
                     matiere: [note.matiere, [Validators.required]],
                     valeur: [note.valeur, [Validators.required]],
-                    credit: [note.credit],
-                    user: [note.user],
+                    user: [note.utilisateur],
                 })
             );
         } else {

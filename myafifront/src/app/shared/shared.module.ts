@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NumberConverterPipe } from 'app/core/util/numberpipe';
 import { ToastrModule } from 'ngx-toastr';
 import { HasRoleDirective } from './hasrole.directive';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
 @NgModule({
     declarations: [	
@@ -14,14 +15,16 @@ import { HasRoleDirective } from './hasrole.directive';
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
-        ToastrModule.forRoot()
+        ToastrModule.forRoot(),
+        NgxMatSelectSearchModule
     ],
     exports: [
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
         NumberConverterPipe,
-        HasRoleDirective
+        HasRoleDirective,
+        NgxMatSelectSearchModule
     ]
 })
 export class SharedModule

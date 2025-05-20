@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpResponse} from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
-
-type EntityResponseType = HttpResponse<any>; 
 import { ApplicationConfigService } from 'app/core/config/config/application-config.service';
 
 
@@ -10,12 +8,12 @@ import { ApplicationConfigService } from 'app/core/config/config/application-con
 @Injectable({
     providedIn: 'root'
 })
-export class EtudiantService
+export class AdminService
 {
     private user: BehaviorSubject<any | null> = new BehaviorSubject(null);
     private users: BehaviorSubject<any[] | null> = new BehaviorSubject(null);
    // private resourceUrl = environment.SERVER_API_URL_COTISATION+'/v1/api/type-controleurs';
-    private resourceUrl = this.applicationConfigService.getEndpointFor('/users');
+    private resourceUrl = this.applicationConfigService.getEndpointFor('/admin');
     /**
      * Constructor
      */
@@ -103,12 +101,12 @@ export class EtudiantService
      * @param id
      * @param user
      */
-    updateuser(id: number,user: any): Observable<EntityResponseType> {
+    updateuser(id: number,user: any): Observable<any> {
         return this._httpClient
             .put<any>(this.resourceUrl+'/'+id, user, { observe: 'response' });
     }
 
-    saveuser(user: any): Observable<EntityResponseType> {
+    saveuser(user: any): Observable<any> {
         return this._httpClient
             .post<any>(this.resourceUrl, user, { observe: 'response' });
     }

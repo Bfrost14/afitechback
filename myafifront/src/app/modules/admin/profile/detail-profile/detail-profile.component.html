@@ -1,0 +1,83 @@
+<div
+  class=" w-full  border-solid border-bleu-foncee bg-white border-b-4 border-r-4 border-l-4 divide-y-8 divide-bleue-claire-1">
+
+  <p class="flex bg-bleu-foncee h-10 text-white justify-between w-full -mb-0.5 justify-between">
+    <span class="ml-4 mt-2 ">Détails profile</span>
+  </p>
+
+  <div class="grid grid-cols-1 gap-1 divide-y-8 divide-bleue-claire-1">
+    <div class="flex flex-col gt-xs:flex-row mt-1 h-10 bg-bleue-claire-6">
+      <fuse-alert class="mt-8 -mb-4" *ngIf="showAlert" [appearance]="'outline'" [showIcon]="false" [type]="alert.type"
+        [@shake]="alert.type === 'error'">
+        {{alert.message}}
+      </fuse-alert>
+
+    </div>
+
+    <div class="flex flex-col gt-xs:flex-row">
+
+      <mat-card>
+
+        <mat-card-content class=" flex justify-center">
+
+          <mat-tab-group class="w-full">
+
+
+            <mat-tab>
+              <ng-template mat-tab-label>
+                <button class="btspan">{{'Détail'}}</button>
+
+              </ng-template>
+
+              <div class=" w-full rounded-md  bg-white border-4 ">
+                <mat-card>
+                  <div class="grid grid-cols-2 gap-4 divide-x-4 ">
+                    <div class="flex flex-col gt-xs:flex-row">
+
+
+                      <div class="truncate hover:text-clip flex justify-between">
+                        <span>
+
+                          <p>
+                            <span class=" ml-2  text-black">{{'Nom'}}:</span>
+                            <span class="ml-2 text-slate-500">{{profile?.nom}}</span>
+                          </p>
+                        </span>
+
+
+                      </div>
+
+
+                    </div>
+
+                    <div class="flex flex-col gt-xs:flex-row">
+
+
+                      <ng-container *ngFor="let item of profile.authorities">
+                      <div class="truncate hover:text-clip flex justify-between">
+                        
+                          <span>
+                            <span class=" ml-2 text-black">{{'Authorités'}}:</span>
+                            <span class="ml-2 text-slate-500">{{item?.name}}</span>
+
+                          </span>
+
+
+
+
+                      </div>
+                      </ng-container>
+
+
+                    </div>
+
+                  </div>
+                </mat-card>
+              </div>
+            </mat-tab>
+          </mat-tab-group>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

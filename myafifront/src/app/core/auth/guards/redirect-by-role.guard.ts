@@ -20,7 +20,7 @@ export class RedirectByRoleGuard implements CanActivate {
                 if (user.role === 'ROLE_SECRETAIRE') {
                     this.router.navigate(['dashboards/etudiants/liste']);
                   } else {
-                    this.router.navigate(['dashboards/etudiants/mesnotes']);
+                    this.router.navigate(['admin/profiles/liste']);
                   }
             }
           

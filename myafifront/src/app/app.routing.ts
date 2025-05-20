@@ -78,9 +78,17 @@ export const appRoutes: Route[] = [
         children   : [
 
             // Dashboards
-            {path: 'dashboards', children: [
-                {path: 'etudiants', loadChildren: () => import('app/modules/admin/etudiant/etudiant.module').then(m => m.EtudiantModule)},             
-                {path: 'notes', loadChildren: () => import('app/modules/admin/note/note.module').then(m => m.NoteModule)}               
+            {path: 'admin', children: [
+                {path: 'profiles', loadChildren: () => import('app/modules/admin/profile/profile.module').then(m => m.ProfileModule)},             
+                {path: 'ue', loadChildren: () => import('app/modules/admin/ue/ue.module').then(m => m.UeModule)},             
+                {path: 'semestre', loadChildren: () => import('app/modules/admin/semestre/semestre.module').then(m => m.SemestreModule)},             
+                {path: 'campus', loadChildren: () => import('app/modules/admin/campus/campus.module').then(m => m.CampusModule)},             
+                {path: 'salle', loadChildren: () => import('app/modules/admin/salle/salle.module').then(m => m.SalleModule)},  
+                {path: 'matiere', loadChildren: () => import('app/modules/admin/matiere/matiere.module').then(m => m.MatiereModule)},  
+                {path: 'filiere', loadChildren: () => import('app/modules/admin/filiere/filiere.module').then(m => m.FiliereModule)},  
+                {path: 'professeur', loadChildren: () => import('app/modules/admin/professeur/professeur.module').then(m => m.ProfesseurModule)},  
+                //{path: 'cours', loadChildren: () => import('app/modules/admin/cours/cours.module').then(m => m.CoursModule)},  
+
             ]},
             
             

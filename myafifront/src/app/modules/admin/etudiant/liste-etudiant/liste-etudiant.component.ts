@@ -21,8 +21,8 @@ import {
     UntypedFormGroup,
 } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { UserAll } from '../user-all';
-import { EtudiantService } from '../etudiant.service';
+import { NewUtilisateur } from '../../ue/ue.model';
+import { AdminService } from '../../user/service/admin.service';
 
 interface SearchFild {
     key: string;
@@ -56,14 +56,14 @@ export class ListeEtudiantComponent implements OnInit, AfterViewInit {
         { key: 'filiere', value: null },
     ];
 
-    dataSource: UserAll[] = [];
+    dataSource: NewUtilisateur[] = [];
     columnsToDisplay = ['matricule', 'prenom', 'nom', 'email', 'filiere'];
     displayedColumn: string[] = ['prenom', 'nom', 'email', 'filiere'];
     displayedColumns: string[] = ['prenom', 'nom', 'email', 'filiere'];
 
     columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
-    expandedElement: UserAll | null;
-    selectEtudiantEdit: UserAll
+    expandedElement: NewUtilisateur | null;
+    selectEtudiantEdit: NewUtilisateur
     selectedColumn = [
         { key: 'matricule', value: '' },
         { key: 'email', value: '' },
@@ -80,7 +80,7 @@ export class ListeEtudiantComponent implements OnInit, AfterViewInit {
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
     exampleDatabase: any | null;
-    data: UserAll[] = [];
+    data: NewUtilisateur[] = [];
     pageSize = 25;
     pageSizeOptions: number[] = [25, 50, 100];
     // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -91,7 +91,7 @@ export class ListeEtudiantComponent implements OnInit, AfterViewInit {
      */
 
     constructor(
-        private _etudiantService: EtudiantService,
+        private _etudiantService: AdminService,
         private _formBuilder: UntypedFormBuilder,
         private _route: ActivatedRoute
     ) {}
@@ -264,7 +264,7 @@ export class ListeEtudiantComponent implements OnInit, AfterViewInit {
     }
 
     fiche: boolean = false;
-    setDataSource(etudiant: UserAll) {
+    setDataSource(etudiant: NewUtilisateur) {
         console.log('>>>>>>>>>>>>>>>.. data set >>>>>>>>>>>>>>>>>>', etudiant);
         if (this.fiche) {
             this.etudiantId = null
@@ -283,7 +283,7 @@ export class ListeEtudiantComponent implements OnInit, AfterViewInit {
         );
     }
 
-    setDataSourceEdit(etudiant: UserAll) {
+    setDataSourceEdit(etudiant: NewUtilisateur) {
         console.log('>>>>>>>>>>>>>>>.. data set >>>>>>>>>>>>>>>>>>', etudiant);
         if (this.add) {
             this.etudiantIdEdit = null

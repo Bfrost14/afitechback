@@ -19,6 +19,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSortModule } from '@angular/material/sort';
 import { MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
 const MY_DATE_FORMATS = {
     parse: {
@@ -60,7 +61,6 @@ const routerConfig: ExtraOptions = {
         MatCheckboxModule,
         MatButtonModule,
         MatIconModule,
-
         // Layout module of your application
         LayoutModule,
         // 3rd party modules that require global configuration via forRoot

@@ -136,17 +136,17 @@ export class NoteService
      * @param id
      * @param note
      */
-    updatenote(note: any): Observable<EntityResponseType> {
+    updatenote(note: any): Observable<any> {
         return this._httpClient
             .put<any>(this.resourceUrl+'/private/update', note, { observe: 'response' });
     }
 
-    savenote(note: any): Observable<EntityResponseType> {
+    savenote(note: any): Observable<any> {
         return this._httpClient
             .post<any>(this.resourceUrl+'/private', note, { observe: 'response' });
     }
 
-    saveallnote(note: any[]): Observable<EntityResponseType> {
+    saveallnote(note: any[]): Observable<any> {
         return this._httpClient
             .post<any>(this.resourceUrl+'/private/all', note, { observe: 'response' });
     }

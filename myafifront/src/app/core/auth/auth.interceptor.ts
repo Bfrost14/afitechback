@@ -53,26 +53,8 @@ export class AuthInterceptor implements HttpInterceptor {
             this.isRefreshing = true;
             this.refreshTokenSubject.next(null);
 
-            const token = this._authService.refreshToken;
-
-            if (token) {
-                return this._authService.signInUsingToken().pipe(
-                    switchMap((tokenn: any) => {
-                        console.log(tokenn)
-                        this.isRefreshing = false;
-                        this.refreshTokenSubject.next(tokenn.access_token);
-                        return next.handle(this.addTokenHeader(request, tokenn.access_token));
-                    }),
-                    catchError((err) => {
-                        this.isRefreshing = false;
-                        this._router.navigate(['sign-out']);
-                        return throwError(err);
-                    }),
-                    finalize(() => {
-                        this.isRefreshing = false;
-                    })
-                );
-            }
+            const token = this._authService.accessToken;
+            
         }
 
         return this.refreshTokenSubject.pipe(

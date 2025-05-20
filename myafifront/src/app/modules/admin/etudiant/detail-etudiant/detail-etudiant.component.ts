@@ -2,10 +2,8 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FuseAlertType } from '@fuse/components/alert';
 import { fuseAnimations } from '@fuse/animations';
 import { ActivatedRoute } from '@angular/router';
-import { SweetAlertOptions } from 'sweetalert2';
-import { UserAll } from '../user-all';
-import { EtudiantService } from '../etudiant.service';
-
+import { NewUtilisateur } from '../../ue/ue.model';
+import { AdminService } from '../../user/service/admin.service';
 @Component({
     selector: 'app-detail-etudiant',
     templateUrl: './detail-etudiant.component.html',
@@ -21,11 +19,11 @@ export class DetailEtudiantComponent implements OnInit {
     showAlert: boolean = false;
     @Output() actualiser: EventEmitter<number> = new EventEmitter<number>();
     @Input() etudiantId: number;
-    etudiant: UserAll;
+    etudiant: NewUtilisateur;
     fiche: boolean = true;
 
     constructor(
-        private _etudiantService: EtudiantService,
+        private _etudiantService: AdminService,
         private _activatedRoute: ActivatedRoute
     ) {}
 
@@ -49,7 +47,7 @@ export class DetailEtudiantComponent implements OnInit {
 
 
 
-    refresh(emp: UserAll) {
+    refresh(emp: NewUtilisateur) {
         this.etudiant = emp;
     }
 

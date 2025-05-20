@@ -2,13 +2,10 @@ import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { SweetAlertOptions } from 'sweetalert2';
-import { TranslocoService } from '@ngneat/transloco';
-import { MatDialog } from '@angular/material/dialog';
-import { FuseConfirmationService } from '@fuse/services/confirmation';
-import { UserAll } from '../user-all';
-import { EtudiantService } from '../etudiant.service';
 import { AlertToastService } from 'app/core/util/alertToast.service';
 import { environment } from 'environments/environment';
+import { NewUtilisateur } from '../../ue/ue.model';
+import { AdminService } from '../../user/service/admin.service';
 @Component({
     selector: 'app-ajout-etudiant',
     templateUrl: './ajout-etudiant.component.html',
@@ -62,7 +59,7 @@ export class AjoutEtudiantComponent implements OnInit {
 
     form: UntypedFormGroup;
     @Input() etudiantId: number;
-    @Input() etudiant: UserAll;
+    @Input() etudiant: NewUtilisateur;
     @Output() edit = new EventEmitter<boolean>();
     @Output() add = new EventEmitter<boolean>();
     @Output() refresh = new EventEmitter<number>();
@@ -77,7 +74,7 @@ export class AjoutEtudiantComponent implements OnInit {
     adresse: any[] = [];
     constructor(
         private _formBuilder: UntypedFormBuilder,
-        private _etudiantService: EtudiantService,
+        private _etudiantService: AdminService,
         private _alertToastService: AlertToastService
     ) {
        

@@ -1,0 +1,24 @@
+.list-driver-container {
+  width: 100%;
+  margin: 20px;
+  
+  .header-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 16px 16px;
+  }
+  table{
+    width: 100%;
+  }
+
+  .selection-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .table-wrapper {
+    overflow-x: auto;
+  }
+}
