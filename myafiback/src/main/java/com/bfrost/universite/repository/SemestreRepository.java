@@ -1,6 +1,8 @@
 package com.bfrost.universite.repository;
 
 import com.bfrost.universite.domain.Semestre;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,4 +11,7 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface SemestreRepository extends JpaRepository<Semestre, Long> {}
+public interface SemestreRepository extends JpaRepository<Semestre, Long> {
+
+    Page<Semestre> findAllByNomContainingIgnoreCase(Pageable pageable, String nom);
+}

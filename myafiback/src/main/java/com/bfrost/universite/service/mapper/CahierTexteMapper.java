@@ -16,17 +16,5 @@ import org.mapstruct.Named;
  */
 @Mapper(componentModel = "spring")
 public interface CahierTexteMapper extends EntityMapper<CahierTexteDTO, CahierTexte> {
-    @Mapping(target = "cours", source = "cours", qualifiedByName = "coursId")
-    @Mapping(target = "user", source = "user", qualifiedByName = "userId")
-    CahierTexteDTO toDto(CahierTexte s);
 
-    @Named("coursId")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    CoursDTO toDtoCoursId(Cours cours);
-
-    @Named("userId")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    UserDTO toDtoUserId(User user);
 }

@@ -7,6 +7,9 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
@@ -23,6 +26,8 @@ import java.util.Set;
  * A user.
  */
 @Entity
+@RequiredArgsConstructor
+@Data
 @Table(name = "user")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class User extends AbstractAuditingEntity<Long> implements Serializable {
@@ -113,189 +118,9 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     private Campus campus;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Profil profil;
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
-    public String getLogin() {
-        return login;
-    }
-
-    // Lowercase the login before saving it in database
-    public void setLogin(String login) {
-        this.login = StringUtils.lowerCase(login, Locale.ENGLISH);
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    public boolean isActivated() {
-        return activated;
-    }
-
-    public void setActivated(boolean activated) {
-        this.activated = activated;
-    }
-
-    public String getActivationKey() {
-        return activationKey;
-    }
-
-    public void setActivationKey(String activationKey) {
-        this.activationKey = activationKey;
-    }
-
-    public String getResetKey() {
-        return resetKey;
-    }
-
-    public void setResetKey(String resetKey) {
-        this.resetKey = resetKey;
-    }
-
-    public Instant getResetDate() {
-        return resetDate;
-    }
-
-    public void setResetDate(Instant resetDate) {
-        this.resetDate = resetDate;
-    }
-
-    public String getLangKey() {
-        return langKey;
-    }
-
-    public void setLangKey(String langKey) {
-        this.langKey = langKey;
-    }
-
-    public Set<Authority> getAuthorities() {
-        return authorities;
-    }
-
-    public void setAuthorities(Set<Authority> authorities) {
-        this.authorities = authorities;
-    }
-
-    public LocalDate getDateDeNaissance() {
-        return dateDeNaissance;
-    }
-
-    public void setDateDeNaissance(LocalDate dateDeNaissance) {
-        this.dateDeNaissance = dateDeNaissance;
-    }
-
-    public String getTelephone() {
-        return telephone;
-    }
-
-    public void setTelephone(String telephone) {
-        this.telephone = telephone;
-    }
-
-    public Boolean getFirstConnection() {
-        return firstConnection;
-    }
-
-    public void setFirstConnection(Boolean firstConnection) {
-        this.firstConnection = firstConnection;
-    }
-
-    public @NotNull String getMatricule() {
-        return matricule;
-    }
-
-    public void setMatricule(@NotNull String matricule) {
-        this.matricule = matricule;
-    }
-
-    public Filiere getFiliere() {
-        return filiere;
-    }
-
-    public void setFiliere(Filiere filiere) {
-        this.filiere = filiere;
-    }
-
-    public Campus getCampus() {
-        return campus;
-    }
-
-    public void setCampus(Campus campus) {
-        this.campus = campus;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof User)) {
-            return false;
-        }
-        return id != null && id.equals(((User) o).id);
-    }
-
-    @Override
-    public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
-        return getClass().hashCode();
-    }
-
-    // prettier-ignore
-    @Override
-    public String toString() {
-        return "User{" +
-            "login='" + login + '\'' +
-            ", firstName='" + firstName + '\'' +
-            ", lastName='" + lastName + '\'' +
-            ", email='" + email + '\'' +
-            ", imageUrl='" + imageUrl + '\'' +
-            ", activated='" + activated + '\'' +
-            ", langKey='" + langKey + '\'' +
-            ", activationKey='" + activationKey + '\'' +
-            "}";
-    }
 }

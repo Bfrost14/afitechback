@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-18T16:20:55+0000",
+    date = "2025-05-20T19:29:15+0000",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 21.0.4 (Oracle Corporation)"
 )
 @Component
@@ -34,6 +34,23 @@ public class CahierTexteMapperImpl implements CahierTexteMapper {
         cahierTexte.setUser( userDTOToUser( dto.getUser() ) );
 
         return cahierTexte;
+    }
+
+    @Override
+    public CahierTexteDTO toDto(CahierTexte entity) {
+        if ( entity == null ) {
+            return null;
+        }
+
+        CahierTexteDTO cahierTexteDTO = new CahierTexteDTO();
+
+        cahierTexteDTO.setId( entity.getId() );
+        cahierTexteDTO.setDate( entity.getDate() );
+        cahierTexteDTO.setContenu( entity.getContenu() );
+        cahierTexteDTO.setCours( coursToCoursDTO( entity.getCours() ) );
+        cahierTexteDTO.setUser( userToUserDTO( entity.getUser() ) );
+
+        return cahierTexteDTO;
     }
 
     @Override
@@ -93,49 +110,6 @@ public class CahierTexteMapperImpl implements CahierTexteMapper {
         }
     }
 
-    @Override
-    public CahierTexteDTO toDto(CahierTexte s) {
-        if ( s == null ) {
-            return null;
-        }
-
-        CahierTexteDTO cahierTexteDTO = new CahierTexteDTO();
-
-        cahierTexteDTO.setCours( toDtoCoursId( s.getCours() ) );
-        cahierTexteDTO.setUser( toDtoUserId( s.getUser() ) );
-        cahierTexteDTO.setId( s.getId() );
-        cahierTexteDTO.setDate( s.getDate() );
-        cahierTexteDTO.setContenu( s.getContenu() );
-
-        return cahierTexteDTO;
-    }
-
-    @Override
-    public CoursDTO toDtoCoursId(Cours cours) {
-        if ( cours == null ) {
-            return null;
-        }
-
-        CoursDTO coursDTO = new CoursDTO();
-
-        coursDTO.setId( cours.getId() );
-
-        return coursDTO;
-    }
-
-    @Override
-    public UserDTO toDtoUserId(User user) {
-        if ( user == null ) {
-            return null;
-        }
-
-        UserDTO userDTO = new UserDTO();
-
-        userDTO.setId( user.getId() );
-
-        return userDTO;
-    }
-
     protected User userDTOToUser(UserDTO userDTO) {
         if ( userDTO == null ) {
             return null;
@@ -161,6 +135,33 @@ public class CahierTexteMapperImpl implements CahierTexteMapper {
         cours.professeur( userDTOToUser( coursDTO.getProfesseur() ) );
 
         return cours;
+    }
+
+    protected UserDTO userToUserDTO(User user) {
+        if ( user == null ) {
+            return null;
+        }
+
+        UserDTO userDTO = new UserDTO();
+
+        userDTO.setId( user.getId() );
+        userDTO.setLogin( user.getLogin() );
+
+        return userDTO;
+    }
+
+    protected CoursDTO coursToCoursDTO(Cours cours) {
+        if ( cours == null ) {
+            return null;
+        }
+
+        CoursDTO coursDTO = new CoursDTO();
+
+        coursDTO.setId( cours.getId() );
+        coursDTO.setIntitule( cours.getIntitule() );
+        coursDTO.setProfesseur( userToUserDTO( cours.getProfesseur() ) );
+
+        return coursDTO;
     }
 
     protected void userDTOToUser1(UserDTO userDTO, User mappingTarget) {

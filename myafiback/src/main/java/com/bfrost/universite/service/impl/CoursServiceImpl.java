@@ -69,7 +69,7 @@ public class CoursServiceImpl implements CoursService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<CoursDTO> findAll(Pageable pageable) {
+    public Page<CoursDTO> findAll(Pageable pageable, String intitule, String professeur) {
         LOG.debug("Request to get all Cours");
         return coursRepository.findAll(pageable).map(coursMapper::toDto);
     }

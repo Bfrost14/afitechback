@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-18T16:20:55+0000",
+    date = "2025-05-20T19:29:13+0000",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 21.0.4 (Oracle Corporation)"
 )
 @Component
@@ -30,6 +30,21 @@ public class SalleMapperImpl implements SalleMapper {
         salle.campus( campusDTOToCampus( dto.getCampus() ) );
 
         return salle;
+    }
+
+    @Override
+    public SalleDTO toDto(Salle entity) {
+        if ( entity == null ) {
+            return null;
+        }
+
+        SalleDTO salleDTO = new SalleDTO();
+
+        salleDTO.setId( entity.getId() );
+        salleDTO.setNumero( entity.getNumero() );
+        salleDTO.setCampus( campusToCampusDTO( entity.getCampus() ) );
+
+        return salleDTO;
     }
 
     @Override
@@ -80,34 +95,6 @@ public class SalleMapperImpl implements SalleMapper {
         }
     }
 
-    @Override
-    public SalleDTO toDto(Salle s) {
-        if ( s == null ) {
-            return null;
-        }
-
-        SalleDTO salleDTO = new SalleDTO();
-
-        salleDTO.setCampus( toDtoCampusId( s.getCampus() ) );
-        salleDTO.setId( s.getId() );
-        salleDTO.setNumero( s.getNumero() );
-
-        return salleDTO;
-    }
-
-    @Override
-    public CampusDTO toDtoCampusId(Campus campus) {
-        if ( campus == null ) {
-            return null;
-        }
-
-        CampusDTO campusDTO = new CampusDTO();
-
-        campusDTO.setId( campus.getId() );
-
-        return campusDTO;
-    }
-
     protected Campus campusDTOToCampus(CampusDTO campusDTO) {
         if ( campusDTO == null ) {
             return null;
@@ -119,6 +106,19 @@ public class SalleMapperImpl implements SalleMapper {
         campus.setNom( campusDTO.getNom() );
 
         return campus;
+    }
+
+    protected CampusDTO campusToCampusDTO(Campus campus) {
+        if ( campus == null ) {
+            return null;
+        }
+
+        CampusDTO campusDTO = new CampusDTO();
+
+        campusDTO.setId( campus.getId() );
+        campusDTO.setNom( campus.getNom() );
+
+        return campusDTO;
     }
 
     protected void campusDTOToCampus1(CampusDTO campusDTO, Campus mappingTarget) {

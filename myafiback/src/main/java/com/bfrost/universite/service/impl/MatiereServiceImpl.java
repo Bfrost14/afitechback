@@ -72,9 +72,9 @@ public class MatiereServiceImpl implements MatiereService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<MatiereDTO> findAll(Pageable pageable) {
+    public Page<MatiereDTO> findAll(Pageable pageable, String nom, String ue) {
         LOG.debug("Request to get all Matieres");
-        return matiereRepository.findAll(pageable).map(matiereMapper::toDto);
+        return matiereRepository.searchAllByNomAndUe(pageable, nom, ue).map(matiereMapper::toDto);
     }
 
     @Override

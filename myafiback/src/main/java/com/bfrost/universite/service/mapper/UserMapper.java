@@ -1,9 +1,11 @@
 package com.bfrost.universite.service.mapper;
 
 import com.bfrost.universite.domain.Authority;
+import com.bfrost.universite.domain.Filiere;
 import com.bfrost.universite.domain.User;
 import com.bfrost.universite.service.dto.AdminUserDTO;
 import com.bfrost.universite.service.dto.UserDTO;
+import lombok.RequiredArgsConstructor;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -19,7 +21,12 @@ import java.util.stream.Collectors;
  * support is still in beta, and requires a manual step with an IDE.
  */
 @Service
+@RequiredArgsConstructor
 public class UserMapper {
+
+    private final CampusMapper campusMapper;
+    private final FiliereMapper filiereMapper;
+    private final ProfilMapper profilMapper;
 
     public List<UserDTO> usersToUserDTOs(List<User> users) {
         return users.stream().filter(Objects::nonNull).map(this::userToUserDTO).toList();
@@ -60,6 +67,13 @@ public class UserMapper {
             user.setLangKey(userDTO.getLangKey());
             Set<Authority> authorities = this.authoritiesFromStrings(userDTO.getAuthorities());
             user.setAuthorities(authorities);
+            user.setCampus(campusMapper.toEntity(userDTO.getCampus()));
+            user.setFiliere(filiereMapper.toEntity(userDTO.getFiliere()));
+            user.setProfil(profilMapper.toEntity(userDTO.getProfil()));
+            user.setMatricule(userDTO.getMatricule());
+            user.setTelephone(userDTO.getTelephone());
+            user.setDateDeNaissance(userDTO.getDateDeNaissance());
+            user.setFirstConnection(userDTO.getFirstConnection());
             return user;
         }
     }

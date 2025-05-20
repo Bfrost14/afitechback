@@ -1,0 +1,90 @@
+package com.bfrost.universite.service.impl;
+
+import ch.qos.logback.core.util.StringUtil;
+import com.bfrost.universite.domain.Profil;
+import com.bfrost.universite.repository.ProfilRepository;
+import com.bfrost.universite.service.ProfilService;
+import com.bfrost.universite.service.dto.ProfilDTO;
+import com.bfrost.universite.service.mapper.ProfilMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+
+import java.util.Optional;
+
+/**
+ * Service Implementation for managing {@link Profil}.
+ */
+@Service
+@Transactional
+public class ProfilServiceImpl implements ProfilService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ProfilServiceImpl.class);
+
+    private final ProfilRepository profilRepository;
+
+    private final ProfilMapper profilMapper;
+
+    public ProfilServiceImpl(ProfilRepository profilRepository, ProfilMapper profilMapper) {
+        this.profilRepository = profilRepository;
+        this.profilMapper = profilMapper;
+    }
+
+    @Override
+    public ProfilDTO save(ProfilDTO profilDTO) {
+        LOG.debug("Request to save Profil : {}", profilDTO);
+        Profil profil = profilMapper.toEntity(profilDTO);
+        profil = profilRepository.save(profil);
+        return profilMapper.toDto(profil);
+    }
+
+    @Override
+    public ProfilDTO update(ProfilDTO profilDTO) {
+        LOG.debug("Request to update Profil : {}", profilDTO);
+        Profil profil = profilMapper.toEntity(profilDTO);
+        profil = profilRepository.save(profil);
+        return profilMapper.toDto(profil);
+    }
+
+    @Override
+    public Optional<ProfilDTO> partialUpdate(ProfilDTO profilDTO) {
+        LOG.debug("Request to partially update Profil : {}", profilDTO);
+
+        return profilRepository
+            .findById(profilDTO.getId())
+            .map(existingProfil -> {
+                profilMapper.partialUpdate(existingProfil, profilDTO);
+
+                return existingProfil;
+            })
+            .map(profilRepository::save)
+            .map(profilMapper::toDto);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<ProfilDTO> findAll(Pageable pageable, String nom) {
+        LOG.debug("Request to get all Profiles");
+        if(StringUtils.hasText(nom)){
+            return profilRepository.findAllByNomContainingIgnoreCase(pageable, nom).map(profilMapper::toDto);
+        }
+        return profilRepository.findAll(pageable).map(profilMapper::toDto);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<ProfilDTO> findOne(Long id) {
+        LOG.debug("Request to get Profil : {}", id);
+        return profilRepository.findById(id).map(profilMapper::toDto);
+    }
+
+    @Override
+    public void delete(Long id) {
+        LOG.debug("Request to delete Profil : {}", id);
+        profilRepository.deleteById(id);
+    }
+}

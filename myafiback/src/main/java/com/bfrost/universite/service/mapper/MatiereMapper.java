@@ -14,11 +14,5 @@ import org.mapstruct.Named;
  */
 @Mapper(componentModel = "spring")
 public interface MatiereMapper extends EntityMapper<MatiereDTO, Matiere> {
-    @Mapping(target = "ue", source = "ue", qualifiedByName = "uEId")
-    MatiereDTO toDto(Matiere s);
 
-    @Named("uEId")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    UEDTO toDtoUEId(UE uE);
 }

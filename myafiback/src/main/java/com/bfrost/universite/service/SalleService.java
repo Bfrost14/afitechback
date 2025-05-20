@@ -38,9 +38,11 @@ public interface SalleService {
      * Get all the salles.
      *
      * @param pageable the pagination information.
+     * @param numero
+     * @param campus
      * @return the list of entities.
      */
-    Page<SalleDTO> findAll(Pageable pageable);
+    Page<SalleDTO> findAll(Pageable pageable, String numero, String campus);
 
     /**
      * Get the "id" salle.

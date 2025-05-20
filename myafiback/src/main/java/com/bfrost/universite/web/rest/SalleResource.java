@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -59,6 +60,7 @@ public class SalleResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
+    @PreAuthorize("hasAnyAuthority('ENREGISTREMENT_SALLE')")
     public ResponseEntity<SalleDTO> createSalle(@Valid @RequestBody SalleDTO salleDTO) throws URISyntaxException {
         LOG.debug("REST request to save Salle : {}", salleDTO);
         if (salleDTO.getId() != null) {
@@ -81,6 +83,7 @@ public class SalleResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('MODIFICATION_GENERALE_SALLE')")
     public ResponseEntity<SalleDTO> updateSalle(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody SalleDTO salleDTO
@@ -115,6 +118,7 @@ public class SalleResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PreAuthorize("hasAnyAuthority('MODIFICATION_SALLE')")
     public ResponseEntity<SalleDTO> partialUpdateSalle(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody SalleDTO salleDTO
@@ -146,9 +150,12 @@ public class SalleResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of salles in body.
      */
     @GetMapping("")
-    public ResponseEntity<Map<String,Object>> getAllSalles(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
+    @PreAuthorize("hasAnyAuthority('LECTURE_LISTE_SALLE')")
+    public ResponseEntity<Map<String,Object>> getAllSalles(@org.springdoc.core.annotations.ParameterObject Pageable pageable,
+                                                           @RequestParam(value = "numero", required = false) String numero,
+                                                           @RequestParam(value = "campus", required = false) String campus) {
         LOG.debug("REST request to get a page of Salles");
-        Page<SalleDTO> page = salleService.findAll(pageable);
+        Page<SalleDTO> page = salleService.findAll(pageable, numero, campus);
         Pagination pagination=paginationService.instancierPagination(page);
         Map<String,Object> response=new HashMap<>();
         response.put("data",page.getContent());
@@ -163,6 +170,7 @@ public class SalleResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the salleDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('LECTURE_DETAILLE_SALLE')")
     public ResponseEntity<SalleDTO> getSalle(@PathVariable("id") Long id) {
         LOG.debug("REST request to get Salle : {}", id);
         Optional<SalleDTO> salleDTO = salleService.findOne(id);
@@ -176,6 +184,7 @@ public class SalleResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('SUPPRESSION_SALLE')")
     public ResponseEntity<Void> deleteSalle(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete Salle : {}", id);
         salleService.delete(id);

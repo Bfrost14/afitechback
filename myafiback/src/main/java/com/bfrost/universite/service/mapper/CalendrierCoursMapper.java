@@ -18,23 +18,5 @@ import org.mapstruct.Named;
  */
 @Mapper(componentModel = "spring")
 public interface CalendrierCoursMapper extends EntityMapper<CalendrierCoursDTO, CalendrierCours> {
-    @Mapping(target = "cours", source = "cours", qualifiedByName = "coursId")
-    @Mapping(target = "salle", source = "salle", qualifiedByName = "salleId")
-    @Mapping(target = "filiere", source = "filiere", qualifiedByName = "filiereId")
-    CalendrierCoursDTO toDto(CalendrierCours s);
 
-    @Named("coursId")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    CoursDTO toDtoCoursId(Cours cours);
-
-    @Named("salleId")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    SalleDTO toDtoSalleId(Salle salle);
-
-    @Named("filiereId")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    FiliereDTO toDtoFiliereId(Filiere filiere);
 }

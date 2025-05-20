@@ -39,9 +39,11 @@ public interface MatiereService {
      * Get all the matieres.
      *
      * @param pageable the pagination information.
+     * @param nom
+     * @param ue
      * @return the list of entities.
      */
-    Page<MatiereDTO> findAll(Pageable pageable);
+    Page<MatiereDTO> findAll(Pageable pageable, String nom, String ue);
 
     /**
      * Get the "id" matiere.

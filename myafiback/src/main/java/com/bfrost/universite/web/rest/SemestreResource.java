@@ -19,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -59,6 +60,7 @@ public class SemestreResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
+    @PreAuthorize("hasAnyAuthority('ENREGISTREMENT_SEMESTRE')")
     public ResponseEntity<SemestreDTO> createSemestre(@Valid @RequestBody SemestreDTO semestreDTO) throws URISyntaxException {
         LOG.debug("REST request to save Semestre : {}", semestreDTO);
         if (semestreDTO.getId() != null) {
@@ -81,6 +83,7 @@ public class SemestreResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('MODIFICATION_GENERALE_SEMESTRE')")
     public ResponseEntity<SemestreDTO> updateSemestre(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody SemestreDTO semestreDTO
@@ -115,6 +118,7 @@ public class SemestreResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PreAuthorize("hasAnyAuthority('MODIFICATION_SEMESTRE')")
     public ResponseEntity<SemestreDTO> partialUpdateSemestre(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody SemestreDTO semestreDTO
@@ -146,9 +150,11 @@ public class SemestreResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of semestres in body.
      */
     @GetMapping("")
-    public ResponseEntity<Map<String,Object>> getAllSemestres(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
+    @PreAuthorize("hasAnyAuthority('LECTURE_LISTE_SEMESTRE')")
+    public ResponseEntity<Map<String,Object>> getAllSemestres(@org.springdoc.core.annotations.ParameterObject Pageable pageable,
+                                                              @RequestParam(value = "nom", required = false) String nom) {
         LOG.debug("REST request to get a page of Semestres");
-        Page<SemestreDTO> page = semestreService.findAll(pageable);
+        Page<SemestreDTO> page = semestreService.findAll(pageable, nom);
         Pagination pagination=paginationService.instancierPagination(page);
         Map<String,Object> response=new HashMap<>();
         response.put("data",page.getContent());
@@ -163,6 +169,7 @@ public class SemestreResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the semestreDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('LECTURE_DETAILLE_SEMESTRE')")
     public ResponseEntity<SemestreDTO> getSemestre(@PathVariable("id") Long id) {
         LOG.debug("REST request to get Semestre : {}", id);
         Optional<SemestreDTO> semestreDTO = semestreService.findOne(id);
@@ -176,6 +183,7 @@ public class SemestreResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('SUPPRESSION_SEMESTRE')")
     public ResponseEntity<Void> deleteSemestre(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete Semestre : {}", id);
         semestreService.delete(id);

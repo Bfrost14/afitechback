@@ -50,9 +50,9 @@ application:
   security:
     jwt:
       secret-key: MmFmYzk2M2E1MmNlYzc4OGUzMjdkZDY3NzA0NDZmODIwZDdiY2Y1YTYwMWE5MWU4YWVjMDA5Zjc3YTcwZTM0M2Q1NDk2ZWRjNmFlOThhMDU1ZjBiOWRhOGFkOGExMzU5ZjEyMTkwMDA2M2Q5ZjIwNjUwYjBkOTYyYzA4M2NkOTM=
-      expiration: 86400000 # a day
+      expiration: 8640000000000000 # a day
       refresh-token:
-        expiration: 604800000 # 7 days
+        expiration: 60480000000000 # 7 days
 
 # OpenAPI Configuration
 springdoc:

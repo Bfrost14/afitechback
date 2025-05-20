@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -59,6 +60,7 @@ public class UEResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
+    @PreAuthorize("hasAnyAuthority('ENREGISTREMENT_UE')")
     public ResponseEntity<UEDTO> createUE(@Valid @RequestBody UEDTO uEDTO) throws URISyntaxException {
         LOG.debug("REST request to save UE : {}", uEDTO);
         if (uEDTO.getId() != null) {
@@ -81,6 +83,7 @@ public class UEResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('MODIFICATION_GENERALE_UE')")
     public ResponseEntity<UEDTO> updateUE(@PathVariable(value = "id", required = false) final Long id, @Valid @RequestBody UEDTO uEDTO)
         throws URISyntaxException {
         LOG.debug("REST request to update UE : {}, {}", id, uEDTO);
@@ -113,6 +116,7 @@ public class UEResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PreAuthorize("hasAnyAuthority('MODIFICATION_UE')")
     public ResponseEntity<UEDTO> partialUpdateUE(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody UEDTO uEDTO
@@ -144,9 +148,11 @@ public class UEResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of uES in body.
      */
     @GetMapping("")
-    public ResponseEntity<Map<String,Object>> getAllUES(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
+    @PreAuthorize("hasAnyAuthority('LECTURE_LISTE_UE')")
+    public ResponseEntity<Map<String,Object>> getAllUES(@org.springdoc.core.annotations.ParameterObject Pageable pageable,
+                                                        @RequestParam(value = "nom", required = false) String nom) {
         LOG.debug("REST request to get a page of UES");
-        Page<UEDTO> page = uEService.findAll(pageable);
+        Page<UEDTO> page = uEService.findAll(pageable, nom);
         Pagination pagination=paginationService.instancierPagination(page);
         Map<String,Object> response=new HashMap<>();
         response.put("data",page.getContent());
@@ -161,6 +167,7 @@ public class UEResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the uEDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('LECTURE_DETAILLE_UE')")
     public ResponseEntity<UEDTO> getUE(@PathVariable("id") Long id) {
         LOG.debug("REST request to get UE : {}", id);
         Optional<UEDTO> uEDTO = uEService.findOne(id);
@@ -174,6 +181,7 @@ public class UEResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('SUPPRESSION_UE')")
     public ResponseEntity<Void> deleteUE(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete UE : {}", id);
         uEService.delete(id);

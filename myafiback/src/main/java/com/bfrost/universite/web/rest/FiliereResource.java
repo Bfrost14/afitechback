@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -59,6 +60,7 @@ public class FiliereResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
+    @PreAuthorize("hasAnyAuthority('ENREGISTREMENT_FILIERE')")
     public ResponseEntity<FiliereDTO> createFiliere(@Valid @RequestBody FiliereDTO filiereDTO) throws URISyntaxException {
         LOG.debug("REST request to save Filiere : {}", filiereDTO);
         if (filiereDTO.getId() != null) {
@@ -81,6 +83,7 @@ public class FiliereResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('MODIFICATION_GENERALE_FILIERE')")
     public ResponseEntity<FiliereDTO> updateFiliere(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody FiliereDTO filiereDTO
@@ -115,6 +118,7 @@ public class FiliereResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PreAuthorize("hasAnyAuthority('MODIFICATION_FILIERE')")
     public ResponseEntity<FiliereDTO> partialUpdateFiliere(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody FiliereDTO filiereDTO
@@ -146,9 +150,11 @@ public class FiliereResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of filieres in body.
      */
     @GetMapping("")
-    public ResponseEntity<Map<String,Object>> getAllFilieres(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
+    @PreAuthorize("hasAnyAuthority('LECTURE_LISTE_FILIERE')")
+    public ResponseEntity<Map<String,Object>> getAllFilieres(@org.springdoc.core.annotations.ParameterObject Pageable pageable,
+                                                             @RequestParam(value = "nom", required = false) String nom) {
         LOG.debug("REST request to get a page of Filieres");
-        Page<FiliereDTO> page = filiereService.findAll(pageable);
+        Page<FiliereDTO> page = filiereService.findAll(pageable, nom);
         Pagination pagination=paginationService.instancierPagination(page);
         Map<String,Object> response=new HashMap<>();
         response.put("data",page.getContent());
@@ -163,6 +169,7 @@ public class FiliereResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the filiereDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('LECTURE_DETAILLE_FILIERE')")
     public ResponseEntity<FiliereDTO> getFiliere(@PathVariable("id") Long id) {
         LOG.debug("REST request to get Filiere : {}", id);
         Optional<FiliereDTO> filiereDTO = filiereService.findOne(id);
@@ -176,6 +183,7 @@ public class FiliereResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('SUPPRESSION_FILIERE')")
     public ResponseEntity<Void> deleteFiliere(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete Filiere : {}", id);
         filiereService.delete(id);

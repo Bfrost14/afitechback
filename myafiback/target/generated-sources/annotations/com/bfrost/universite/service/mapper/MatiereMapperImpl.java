@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-18T16:20:55+0000",
+    date = "2025-05-20T19:29:16+0000",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 21.0.4 (Oracle Corporation)"
 )
 @Component
@@ -31,6 +31,22 @@ public class MatiereMapperImpl implements MatiereMapper {
         matiere.ue( uEDTOToUE( dto.getUe() ) );
 
         return matiere;
+    }
+
+    @Override
+    public MatiereDTO toDto(Matiere entity) {
+        if ( entity == null ) {
+            return null;
+        }
+
+        MatiereDTO matiereDTO = new MatiereDTO();
+
+        matiereDTO.setId( entity.getId() );
+        matiereDTO.setNom( entity.getNom() );
+        matiereDTO.setCredit( entity.getCredit() );
+        matiereDTO.setUe( uEToUEDTO( entity.getUe() ) );
+
+        return matiereDTO;
     }
 
     @Override
@@ -84,35 +100,6 @@ public class MatiereMapperImpl implements MatiereMapper {
         }
     }
 
-    @Override
-    public MatiereDTO toDto(Matiere s) {
-        if ( s == null ) {
-            return null;
-        }
-
-        MatiereDTO matiereDTO = new MatiereDTO();
-
-        matiereDTO.setUe( toDtoUEId( s.getUe() ) );
-        matiereDTO.setId( s.getId() );
-        matiereDTO.setNom( s.getNom() );
-        matiereDTO.setCredit( s.getCredit() );
-
-        return matiereDTO;
-    }
-
-    @Override
-    public UEDTO toDtoUEId(UE uE) {
-        if ( uE == null ) {
-            return null;
-        }
-
-        UEDTO uEDTO = new UEDTO();
-
-        uEDTO.setId( uE.getId() );
-
-        return uEDTO;
-    }
-
     protected UE uEDTOToUE(UEDTO uEDTO) {
         if ( uEDTO == null ) {
             return null;
@@ -124,6 +111,19 @@ public class MatiereMapperImpl implements MatiereMapper {
         uE.setNom( uEDTO.getNom() );
 
         return uE;
+    }
+
+    protected UEDTO uEToUEDTO(UE uE) {
+        if ( uE == null ) {
+            return null;
+        }
+
+        UEDTO uEDTO = new UEDTO();
+
+        uEDTO.setId( uE.getId() );
+        uEDTO.setNom( uE.getNom() );
+
+        return uEDTO;
     }
 
     protected void uEDTOToUE1(UEDTO uEDTO, UE mappingTarget) {

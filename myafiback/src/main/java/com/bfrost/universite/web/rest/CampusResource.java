@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -59,6 +60,7 @@ public class CampusResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
+    @PreAuthorize("hasAnyAuthority('ENREGISTREMENT_CAMPUSES')")
     public ResponseEntity<CampusDTO> createCampus(@Valid @RequestBody CampusDTO campusDTO) throws URISyntaxException {
         LOG.debug("REST request to save Campus : {}", campusDTO);
         if (campusDTO.getId() != null) {
@@ -81,6 +83,7 @@ public class CampusResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('MODIFICATION_GENERALE_CAMPUSES')")
     public ResponseEntity<CampusDTO> updateCampus(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody CampusDTO campusDTO
@@ -115,6 +118,7 @@ public class CampusResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PreAuthorize("hasAnyAuthority('MODIFICATION_CAMPUSES')")
     public ResponseEntity<CampusDTO> partialUpdateCampus(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody CampusDTO campusDTO
@@ -146,9 +150,11 @@ public class CampusResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of campuses in body.
      */
     @GetMapping("")
-    public ResponseEntity<Map<String,Object>> getAllCampuses(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
+    @PreAuthorize("hasAnyAuthority('LECTURE_LISTE_CAMPUSES')")
+    public ResponseEntity<Map<String,Object>> getAllCampuses(@org.springdoc.core.annotations.ParameterObject Pageable pageable,
+                                                             @RequestParam(value = "nom", required = false) String nom) {
         LOG.debug("REST request to get a page of Campuses");
-        Page<CampusDTO> page = campusService.findAll(pageable);
+        Page<CampusDTO> page = campusService.findAll(pageable, nom);
         Pagination pagination=paginationService.instancierPagination(page);
         Map<String,Object> response=new HashMap<>();
         response.put("data",page.getContent());
@@ -163,6 +169,7 @@ public class CampusResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the campusDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('LECTURE_DETAILLE_CAMPUSES')")
     public ResponseEntity<CampusDTO> getCampus(@PathVariable("id") Long id) {
         LOG.debug("REST request to get Campus : {}", id);
         Optional<CampusDTO> campusDTO = campusService.findOne(id);
@@ -176,6 +183,7 @@ public class CampusResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('SUPPRESSION_CAMPUSES')")
     public ResponseEntity<Void> deleteCampus(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete Campus : {}", id);
         campusService.delete(id);

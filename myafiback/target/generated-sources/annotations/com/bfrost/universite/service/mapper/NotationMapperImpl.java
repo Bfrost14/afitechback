@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-18T16:20:55+0000",
+    date = "2025-05-20T19:29:15+0000",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 21.0.4 (Oracle Corporation)"
 )
 @Component
@@ -34,6 +34,23 @@ public class NotationMapperImpl implements NotationMapper {
         notation.etudiant( userDTOToUser( dto.getEtudiant() ) );
 
         return notation;
+    }
+
+    @Override
+    public NotationDTO toDto(Notation entity) {
+        if ( entity == null ) {
+            return null;
+        }
+
+        NotationDTO notationDTO = new NotationDTO();
+
+        notationDTO.setId( entity.getId() );
+        notationDTO.setNote( entity.getNote() );
+        notationDTO.setAppreciation( entity.getAppreciation() );
+        notationDTO.setCours( coursToCoursDTO( entity.getCours() ) );
+        notationDTO.setEtudiant( userToUserDTO( entity.getEtudiant() ) );
+
+        return notationDTO;
     }
 
     @Override
@@ -93,49 +110,6 @@ public class NotationMapperImpl implements NotationMapper {
         }
     }
 
-    @Override
-    public NotationDTO toDto(Notation s) {
-        if ( s == null ) {
-            return null;
-        }
-
-        NotationDTO notationDTO = new NotationDTO();
-
-        notationDTO.setCours( toDtoCoursId( s.getCours() ) );
-        notationDTO.setEtudiant( toDtoUserId( s.getEtudiant() ) );
-        notationDTO.setId( s.getId() );
-        notationDTO.setNote( s.getNote() );
-        notationDTO.setAppreciation( s.getAppreciation() );
-
-        return notationDTO;
-    }
-
-    @Override
-    public CoursDTO toDtoCoursId(Cours cours) {
-        if ( cours == null ) {
-            return null;
-        }
-
-        CoursDTO coursDTO = new CoursDTO();
-
-        coursDTO.setId( cours.getId() );
-
-        return coursDTO;
-    }
-
-    @Override
-    public UserDTO toDtoUserId(User user) {
-        if ( user == null ) {
-            return null;
-        }
-
-        UserDTO userDTO = new UserDTO();
-
-        userDTO.setId( user.getId() );
-
-        return userDTO;
-    }
-
     protected User userDTOToUser(UserDTO userDTO) {
         if ( userDTO == null ) {
             return null;
@@ -161,6 +135,33 @@ public class NotationMapperImpl implements NotationMapper {
         cours.professeur( userDTOToUser( coursDTO.getProfesseur() ) );
 
         return cours;
+    }
+
+    protected UserDTO userToUserDTO(User user) {
+        if ( user == null ) {
+            return null;
+        }
+
+        UserDTO userDTO = new UserDTO();
+
+        userDTO.setId( user.getId() );
+        userDTO.setLogin( user.getLogin() );
+
+        return userDTO;
+    }
+
+    protected CoursDTO coursToCoursDTO(Cours cours) {
+        if ( cours == null ) {
+            return null;
+        }
+
+        CoursDTO coursDTO = new CoursDTO();
+
+        coursDTO.setId( cours.getId() );
+        coursDTO.setIntitule( cours.getIntitule() );
+        coursDTO.setProfesseur( userToUserDTO( cours.getProfesseur() ) );
+
+        return coursDTO;
     }
 
     protected void userDTOToUser1(UserDTO userDTO, User mappingTarget) {

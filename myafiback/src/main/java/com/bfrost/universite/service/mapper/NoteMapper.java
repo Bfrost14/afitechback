@@ -18,23 +18,5 @@ import org.mapstruct.Named;
  */
 @Mapper(componentModel = "spring")
 public interface NoteMapper extends EntityMapper<NoteDTO, Note> {
-    @Mapping(target = "user", source = "user", qualifiedByName = "userId")
-    @Mapping(target = "matiere", source = "matiere", qualifiedByName = "matiereId")
-    @Mapping(target = "semestre", source = "semestre", qualifiedByName = "semestreId")
-    NoteDTO toDto(Note s);
 
-    @Named("userId")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    UserDTO toDtoUserId(User user);
-
-    @Named("matiereId")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    MatiereDTO toDtoMatiereId(Matiere matiere);
-
-    @Named("semestreId")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    SemestreDTO toDtoSemestreId(Semestre semestre);
 }

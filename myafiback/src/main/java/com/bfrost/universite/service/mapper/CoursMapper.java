@@ -14,11 +14,5 @@ import org.mapstruct.Named;
  */
 @Mapper(componentModel = "spring")
 public interface CoursMapper extends EntityMapper<CoursDTO, Cours> {
-    @Mapping(target = "professeur", source = "professeur", qualifiedByName = "userId")
-    CoursDTO toDto(Cours s);
 
-    @Named("userId")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    UserDTO toDtoUserId(User user);
 }

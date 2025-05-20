@@ -38,9 +38,10 @@ public interface CampusService {
      * Get all the campuses.
      *
      * @param pageable the pagination information.
+     * @param nom
      * @return the list of entities.
      */
-    Page<CampusDTO> findAll(Pageable pageable);
+    Page<CampusDTO> findAll(Pageable pageable, String nom);
 
     /**
      * Get the "id" campus.

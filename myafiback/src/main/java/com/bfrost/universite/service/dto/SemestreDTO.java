@@ -16,6 +16,8 @@ public class SemestreDTO implements Serializable {
     @NotNull
     private String nom;
 
+    private String annee;
+
     public Long getId() {
         return id;
     }
@@ -30,6 +32,14 @@ public class SemestreDTO implements Serializable {
 
     public void setNom(String nom) {
         this.nom = nom;
+    }
+
+    public String getAnnee() {
+        return annee;
+    }
+
+    public void setAnnee(String annee) {
+        this.annee = annee;
     }
 
     @Override

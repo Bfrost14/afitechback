@@ -16,17 +16,5 @@ import org.mapstruct.Named;
  */
 @Mapper(componentModel = "spring")
 public interface NotationMapper extends EntityMapper<NotationDTO, Notation> {
-    @Mapping(target = "cours", source = "cours", qualifiedByName = "coursId")
-    @Mapping(target = "etudiant", source = "etudiant", qualifiedByName = "userId")
-    NotationDTO toDto(Notation s);
 
-    @Named("coursId")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    CoursDTO toDtoCoursId(Cours cours);
-
-    @Named("userId")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    UserDTO toDtoUserId(User user);
 }

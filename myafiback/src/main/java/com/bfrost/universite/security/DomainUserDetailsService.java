@@ -40,7 +40,7 @@ public class DomainUserDetailsService implements UserDetailsService {
             return userRepository
                 .findOneWithAuthoritiesByEmailIgnoreCase(login)
                 .map(user -> createSpringSecurityUser(login, user))
-                .orElseThrow(() -> new UsernameNotFoundException("User with email " + login + " was not found in the database"));
+                .orElseThrow(() -> new UsernameNotFoundException("L'utilisateur avec le nom d'utilisateur suivant " + login + " n'est pas enregistré dans la base de donnée"));
         }
 
         String lowercaseLogin = login.toLowerCase(Locale.ENGLISH);
@@ -52,7 +52,7 @@ public class DomainUserDetailsService implements UserDetailsService {
 
     private org.springframework.security.core.userdetails.User createSpringSecurityUser(String lowercaseLogin, User user) {
         if (!user.isActivated()) {
-            throw new UserNotActivatedException("User " + lowercaseLogin + " was not activated");
+            throw new UserNotActivatedException("L'utilisateur " + lowercaseLogin + " n'est pas activé");
         }
         return UserWithId.fromUser(user);
     }

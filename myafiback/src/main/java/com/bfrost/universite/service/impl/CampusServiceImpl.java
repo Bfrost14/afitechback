@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.Optional;
 
@@ -65,8 +66,11 @@ public class CampusServiceImpl implements CampusService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<CampusDTO> findAll(Pageable pageable) {
+    public Page<CampusDTO> findAll(Pageable pageable, String nom) {
         LOG.debug("Request to get all Campuses");
+        if (StringUtils.hasText(nom)){
+            return campusRepository.findAllByNomContainingIgnoreCase(pageable,nom).map(campusMapper::toDto);
+        }
         return campusRepository.findAll(pageable).map(campusMapper::toDto);
     }
 

@@ -13,8 +13,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-18T16:20:55+0000",
-    comments = "version: 1.5.3.Final, compiler: javac, environment: Java 21.0.4 (Oracle Corporation)"
+    date = "2025-05-20T19:30:26+0000",
+    comments = "version: 1.5.3.Final, compiler: javac, environment: Java 17.0.10 (Oracle Corporation)"
 )
 @Component
 public class AbsenceMapperImpl implements AbsenceMapper {
@@ -34,6 +34,23 @@ public class AbsenceMapperImpl implements AbsenceMapper {
         absence.setUser( userDTOToUser( dto.getUser() ) );
 
         return absence;
+    }
+
+    @Override
+    public AbsenceDTO toDto(Absence entity) {
+        if ( entity == null ) {
+            return null;
+        }
+
+        AbsenceDTO absenceDTO = new AbsenceDTO();
+
+        absenceDTO.setId( entity.getId() );
+        absenceDTO.setDate( entity.getDate() );
+        absenceDTO.setJustifie( entity.getJustifie() );
+        absenceDTO.setCours( coursToCoursDTO( entity.getCours() ) );
+        absenceDTO.setUser( userToUserDTO( entity.getUser() ) );
+
+        return absenceDTO;
     }
 
     @Override
@@ -93,49 +110,6 @@ public class AbsenceMapperImpl implements AbsenceMapper {
         }
     }
 
-    @Override
-    public AbsenceDTO toDto(Absence s) {
-        if ( s == null ) {
-            return null;
-        }
-
-        AbsenceDTO absenceDTO = new AbsenceDTO();
-
-        absenceDTO.setCours( toDtoCoursId( s.getCours() ) );
-        absenceDTO.setUser( toDtoUserId( s.getUser() ) );
-        absenceDTO.setId( s.getId() );
-        absenceDTO.setDate( s.getDate() );
-        absenceDTO.setJustifie( s.getJustifie() );
-
-        return absenceDTO;
-    }
-
-    @Override
-    public CoursDTO toDtoCoursId(Cours cours) {
-        if ( cours == null ) {
-            return null;
-        }
-
-        CoursDTO coursDTO = new CoursDTO();
-
-        coursDTO.setId( cours.getId() );
-
-        return coursDTO;
-    }
-
-    @Override
-    public UserDTO toDtoUserId(User user) {
-        if ( user == null ) {
-            return null;
-        }
-
-        UserDTO userDTO = new UserDTO();
-
-        userDTO.setId( user.getId() );
-
-        return userDTO;
-    }
-
     protected User userDTOToUser(UserDTO userDTO) {
         if ( userDTO == null ) {
             return null;
@@ -161,6 +135,33 @@ public class AbsenceMapperImpl implements AbsenceMapper {
         cours.professeur( userDTOToUser( coursDTO.getProfesseur() ) );
 
         return cours;
+    }
+
+    protected UserDTO userToUserDTO(User user) {
+        if ( user == null ) {
+            return null;
+        }
+
+        UserDTO userDTO = new UserDTO();
+
+        userDTO.setId( user.getId() );
+        userDTO.setLogin( user.getLogin() );
+
+        return userDTO;
+    }
+
+    protected CoursDTO coursToCoursDTO(Cours cours) {
+        if ( cours == null ) {
+            return null;
+        }
+
+        CoursDTO coursDTO = new CoursDTO();
+
+        coursDTO.setId( cours.getId() );
+        coursDTO.setIntitule( cours.getIntitule() );
+        coursDTO.setProfesseur( userToUserDTO( cours.getProfesseur() ) );
+
+        return coursDTO;
     }
 
     protected void userDTOToUser1(UserDTO userDTO, User mappingTarget) {

@@ -38,10 +38,12 @@ public interface CoursService {
     /**
      * Get all the cours.
      *
-     * @param pageable the pagination information.
+     * @param pageable   the pagination information.
+     * @param intitule
+     * @param professeur
      * @return the list of entities.
      */
-    Page<CoursDTO> findAll(Pageable pageable);
+    Page<CoursDTO> findAll(Pageable pageable, String intitule, String professeur);
 
     /**
      * Get the "id" cours.

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-18T16:20:55+0000",
+    date = "2025-05-20T19:29:17+0000",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 21.0.4 (Oracle Corporation)"
 )
 @Component
@@ -25,6 +25,7 @@ public class SemestreMapperImpl implements SemestreMapper {
 
         semestre.setId( dto.getId() );
         semestre.setNom( dto.getNom() );
+        semestre.setAnnee( dto.getAnnee() );
 
         return semestre;
     }
@@ -39,6 +40,7 @@ public class SemestreMapperImpl implements SemestreMapper {
 
         semestreDTO.setId( entity.getId() );
         semestreDTO.setNom( entity.getNom() );
+        semestreDTO.setAnnee( entity.getAnnee() );
 
         return semestreDTO;
     }
@@ -82,6 +84,9 @@ public class SemestreMapperImpl implements SemestreMapper {
         }
         if ( dto.getNom() != null ) {
             entity.setNom( dto.getNom() );
+        }
+        if ( dto.getAnnee() != null ) {
+            entity.setAnnee( dto.getAnnee() );
         }
     }
 }

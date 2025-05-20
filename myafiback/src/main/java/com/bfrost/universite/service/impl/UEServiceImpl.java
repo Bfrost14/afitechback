@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 /**
  * Service Implementation for managing {@link UE}.
@@ -64,9 +65,14 @@ public class UEServiceImpl implements UEService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<UEDTO> findAll(Pageable pageable) {
+    public Page<UEDTO> findAll(Pageable pageable, String nom) {
         LOG.debug("Request to get all UES");
-        return uERepository.findAll(pageable).map(uEMapper::toDto);
+        if(StringUtils.hasText(nom)){
+            return uERepository.findAllByNomContainingIgnoreCase(pageable, nom).map(uEMapper::toDto);
+        }else {
+            return uERepository.findAll(pageable).map(uEMapper::toDto);
+        }
+
     }
 
     @Override

@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -59,6 +60,7 @@ public class MatiereResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
+    @PreAuthorize("hasAnyAuthority('ENREGISTREMENT_MATIERE')")
     public ResponseEntity<List<MatiereDTO>> createMatiere(@Valid @RequestBody List<MatiereDTO> matiereDTO) throws URISyntaxException {
         LOG.debug("REST request to save Matiere : {}", matiereDTO);
         if (matiereDTO.get(0).getId() != null) {
@@ -81,6 +83,7 @@ public class MatiereResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('MODIFICATION_GENERALE_MATIERE')")
     public ResponseEntity<MatiereDTO> updateMatiere(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody MatiereDTO matiereDTO
@@ -115,6 +118,7 @@ public class MatiereResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PreAuthorize("hasAnyAuthority('MODIFICATION_MATIERE')")
     public ResponseEntity<MatiereDTO> partialUpdateMatiere(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody MatiereDTO matiereDTO
@@ -146,9 +150,12 @@ public class MatiereResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of matieres in body.
      */
     @GetMapping("")
-    public ResponseEntity<Map<String,Object>> getAllMatieres(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
+    @PreAuthorize("hasAnyAuthority('LECTURE_LISTE_MATIERE')")
+    public ResponseEntity<Map<String,Object>> getAllMatieres(@org.springdoc.core.annotations.ParameterObject Pageable pageable,
+                                                             @RequestParam(value = "nom", required = false) String nom,
+                                                             @RequestParam(value = "ue", required = false) String ue) {
         LOG.debug("REST request to get a page of Matieres");
-        Page<MatiereDTO> page = matiereService.findAll(pageable);
+        Page<MatiereDTO> page = matiereService.findAll(pageable, nom, ue);
         Pagination pagination=paginationService.instancierPagination(page);
         Map<String,Object> response=new HashMap<>();
         response.put("data",page.getContent());
@@ -163,6 +170,7 @@ public class MatiereResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the matiereDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('LECTURE_DETAILLE_MATIERE')")
     public ResponseEntity<MatiereDTO> getMatiere(@PathVariable("id") Long id) {
         LOG.debug("REST request to get Matiere : {}", id);
         Optional<MatiereDTO> matiereDTO = matiereService.findOne(id);
@@ -176,6 +184,7 @@ public class MatiereResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('SUPPRESSION_MATIERE')")
     public ResponseEntity<Void> deleteMatiere(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete Matiere : {}", id);
         matiereService.delete(id);

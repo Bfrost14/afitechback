@@ -4,6 +4,7 @@ import com.bfrost.universite.config.Constants;
 import com.bfrost.universite.domain.Authority;
 import com.bfrost.universite.domain.User;
 import jakarta.validation.constraints.*;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 /**
  * A DTO representing a user, with his authorities.
  */
+@Data
 public class AdminUserDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -35,7 +37,7 @@ public class AdminUserDTO implements Serializable {
     @Size(min = 5, max = 254)
     private String email;
 
-    @NotNull
+
     private String matricule;
 
     @Size(max = 256)
@@ -66,6 +68,8 @@ public class AdminUserDTO implements Serializable {
 
     private CampusDTO campus;
 
+    private ProfilDTO profil;
+
     public AdminUserDTO() {
         // Empty constructor needed for Jackson.
     }
@@ -86,157 +90,6 @@ public class AdminUserDTO implements Serializable {
         this.authorities = user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toSet());
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    public boolean isActivated() {
-        return activated;
-    }
-
-    public void setActivated(boolean activated) {
-        this.activated = activated;
-    }
-
-    public String getLangKey() {
-        return langKey;
-    }
-
-    public void setLangKey(String langKey) {
-        this.langKey = langKey;
-    }
-
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public Instant getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(Instant createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public String getLastModifiedBy() {
-        return lastModifiedBy;
-    }
-
-    public void setLastModifiedBy(String lastModifiedBy) {
-        this.lastModifiedBy = lastModifiedBy;
-    }
-
-    public Instant getLastModifiedDate() {
-        return lastModifiedDate;
-    }
-
-    public void setLastModifiedDate(Instant lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
-    }
-
-    public Set<String> getAuthorities() {
-        return authorities;
-    }
-
-    public void setAuthorities(Set<String> authorities) {
-        this.authorities = authorities;
-    }
-
-    public @NotNull String getMatricule() {
-        return matricule;
-    }
-
-    public void setMatricule(@NotNull String matricule) {
-        this.matricule = matricule;
-    }
-
-    public LocalDate getDateDeNaissance() {
-        return dateDeNaissance;
-    }
-
-    public void setDateDeNaissance(LocalDate dateDeNaissance) {
-        this.dateDeNaissance = dateDeNaissance;
-    }
-
-    public String getTelephone() {
-        return telephone;
-    }
-
-    public void setTelephone(String telephone) {
-        this.telephone = telephone;
-    }
-
-    public Boolean getFirstConnection() {
-        return firstConnection;
-    }
-
-    public void setFirstConnection(Boolean firstConnection) {
-        this.firstConnection = firstConnection;
-    }
-
-    public FiliereDTO getFiliere() {
-        return filiere;
-    }
-
-    public void setFiliere(FiliereDTO filiere) {
-        this.filiere = filiere;
-    }
-
-    public CampusDTO getCampus() {
-        return campus;
-    }
-
-    public void setCampus(CampusDTO campus) {
-        this.campus = campus;
-    }
 
     // prettier-ignore
     @Override

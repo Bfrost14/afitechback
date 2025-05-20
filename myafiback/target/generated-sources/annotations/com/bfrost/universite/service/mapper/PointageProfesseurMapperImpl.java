@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-18T16:20:55+0000",
+    date = "2025-05-20T19:29:15+0000",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 21.0.4 (Oracle Corporation)"
 )
 @Component
@@ -31,6 +31,22 @@ public class PointageProfesseurMapperImpl implements PointageProfesseurMapper {
         pointageProfesseur.professeur( userDTOToUser( dto.getProfesseur() ) );
 
         return pointageProfesseur;
+    }
+
+    @Override
+    public PointageProfesseurDTO toDto(PointageProfesseur entity) {
+        if ( entity == null ) {
+            return null;
+        }
+
+        PointageProfesseurDTO pointageProfesseurDTO = new PointageProfesseurDTO();
+
+        pointageProfesseurDTO.setId( entity.getId() );
+        pointageProfesseurDTO.setHeureArrivee( entity.getHeureArrivee() );
+        pointageProfesseurDTO.setHeureDepart( entity.getHeureDepart() );
+        pointageProfesseurDTO.setProfesseur( userToUserDTO( entity.getProfesseur() ) );
+
+        return pointageProfesseurDTO;
     }
 
     @Override
@@ -84,35 +100,6 @@ public class PointageProfesseurMapperImpl implements PointageProfesseurMapper {
         }
     }
 
-    @Override
-    public PointageProfesseurDTO toDto(PointageProfesseur s) {
-        if ( s == null ) {
-            return null;
-        }
-
-        PointageProfesseurDTO pointageProfesseurDTO = new PointageProfesseurDTO();
-
-        pointageProfesseurDTO.setProfesseur( toDtoUserId( s.getProfesseur() ) );
-        pointageProfesseurDTO.setId( s.getId() );
-        pointageProfesseurDTO.setHeureArrivee( s.getHeureArrivee() );
-        pointageProfesseurDTO.setHeureDepart( s.getHeureDepart() );
-
-        return pointageProfesseurDTO;
-    }
-
-    @Override
-    public UserDTO toDtoUserId(User user) {
-        if ( user == null ) {
-            return null;
-        }
-
-        UserDTO userDTO = new UserDTO();
-
-        userDTO.setId( user.getId() );
-
-        return userDTO;
-    }
-
     protected User userDTOToUser(UserDTO userDTO) {
         if ( userDTO == null ) {
             return null;
@@ -124,6 +111,19 @@ public class PointageProfesseurMapperImpl implements PointageProfesseurMapper {
         user.setLogin( userDTO.getLogin() );
 
         return user;
+    }
+
+    protected UserDTO userToUserDTO(User user) {
+        if ( user == null ) {
+            return null;
+        }
+
+        UserDTO userDTO = new UserDTO();
+
+        userDTO.setId( user.getId() );
+        userDTO.setLogin( user.getLogin() );
+
+        return userDTO;
     }
 
     protected void userDTOToUser1(UserDTO userDTO, User mappingTarget) {

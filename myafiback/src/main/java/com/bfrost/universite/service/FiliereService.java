@@ -38,9 +38,10 @@ public interface FiliereService {
      * Get all the filieres.
      *
      * @param pageable the pagination information.
+     * @param nom
      * @return the list of entities.
      */
-    Page<FiliereDTO> findAll(Pageable pageable);
+    Page<FiliereDTO> findAll(Pageable pageable, String nom);
 
     /**
      * Get the "id" filiere.

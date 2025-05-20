@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-18T16:20:55+0000",
+    date = "2025-05-20T19:29:16+0000",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 21.0.4 (Oracle Corporation)"
 )
 @Component
@@ -41,6 +41,24 @@ public class CalendrierCoursMapperImpl implements CalendrierCoursMapper {
         calendrierCours.filiere( filiereDTOToFiliere( dto.getFiliere() ) );
 
         return calendrierCours;
+    }
+
+    @Override
+    public CalendrierCoursDTO toDto(CalendrierCours entity) {
+        if ( entity == null ) {
+            return null;
+        }
+
+        CalendrierCoursDTO calendrierCoursDTO = new CalendrierCoursDTO();
+
+        calendrierCoursDTO.setId( entity.getId() );
+        calendrierCoursDTO.setDateDebut( entity.getDateDebut() );
+        calendrierCoursDTO.setDateFin( entity.getDateFin() );
+        calendrierCoursDTO.setCours( coursToCoursDTO( entity.getCours() ) );
+        calendrierCoursDTO.setSalle( salleToSalleDTO( entity.getSalle() ) );
+        calendrierCoursDTO.setFiliere( filiereToFiliereDTO( entity.getFiliere() ) );
+
+        return calendrierCoursDTO;
     }
 
     @Override
@@ -104,63 +122,6 @@ public class CalendrierCoursMapperImpl implements CalendrierCoursMapper {
             }
             filiereDTOToFiliere1( dto.getFiliere(), entity.getFiliere() );
         }
-    }
-
-    @Override
-    public CalendrierCoursDTO toDto(CalendrierCours s) {
-        if ( s == null ) {
-            return null;
-        }
-
-        CalendrierCoursDTO calendrierCoursDTO = new CalendrierCoursDTO();
-
-        calendrierCoursDTO.setCours( toDtoCoursId( s.getCours() ) );
-        calendrierCoursDTO.setSalle( toDtoSalleId( s.getSalle() ) );
-        calendrierCoursDTO.setFiliere( toDtoFiliereId( s.getFiliere() ) );
-        calendrierCoursDTO.setId( s.getId() );
-        calendrierCoursDTO.setDateDebut( s.getDateDebut() );
-        calendrierCoursDTO.setDateFin( s.getDateFin() );
-
-        return calendrierCoursDTO;
-    }
-
-    @Override
-    public CoursDTO toDtoCoursId(Cours cours) {
-        if ( cours == null ) {
-            return null;
-        }
-
-        CoursDTO coursDTO = new CoursDTO();
-
-        coursDTO.setId( cours.getId() );
-
-        return coursDTO;
-    }
-
-    @Override
-    public SalleDTO toDtoSalleId(Salle salle) {
-        if ( salle == null ) {
-            return null;
-        }
-
-        SalleDTO salleDTO = new SalleDTO();
-
-        salleDTO.setId( salle.getId() );
-
-        return salleDTO;
-    }
-
-    @Override
-    public FiliereDTO toDtoFiliereId(Filiere filiere) {
-        if ( filiere == null ) {
-            return null;
-        }
-
-        FiliereDTO filiereDTO = new FiliereDTO();
-
-        filiereDTO.setId( filiere.getId() );
-
-        return filiereDTO;
     }
 
     protected User userDTOToUser(UserDTO userDTO) {
@@ -228,6 +189,73 @@ public class CalendrierCoursMapperImpl implements CalendrierCoursMapper {
         filiere.setNom( filiereDTO.getNom() );
 
         return filiere;
+    }
+
+    protected UserDTO userToUserDTO(User user) {
+        if ( user == null ) {
+            return null;
+        }
+
+        UserDTO userDTO = new UserDTO();
+
+        userDTO.setId( user.getId() );
+        userDTO.setLogin( user.getLogin() );
+
+        return userDTO;
+    }
+
+    protected CoursDTO coursToCoursDTO(Cours cours) {
+        if ( cours == null ) {
+            return null;
+        }
+
+        CoursDTO coursDTO = new CoursDTO();
+
+        coursDTO.setId( cours.getId() );
+        coursDTO.setIntitule( cours.getIntitule() );
+        coursDTO.setProfesseur( userToUserDTO( cours.getProfesseur() ) );
+
+        return coursDTO;
+    }
+
+    protected CampusDTO campusToCampusDTO(Campus campus) {
+        if ( campus == null ) {
+            return null;
+        }
+
+        CampusDTO campusDTO = new CampusDTO();
+
+        campusDTO.setId( campus.getId() );
+        campusDTO.setNom( campus.getNom() );
+
+        return campusDTO;
+    }
+
+    protected SalleDTO salleToSalleDTO(Salle salle) {
+        if ( salle == null ) {
+            return null;
+        }
+
+        SalleDTO salleDTO = new SalleDTO();
+
+        salleDTO.setId( salle.getId() );
+        salleDTO.setNumero( salle.getNumero() );
+        salleDTO.setCampus( campusToCampusDTO( salle.getCampus() ) );
+
+        return salleDTO;
+    }
+
+    protected FiliereDTO filiereToFiliereDTO(Filiere filiere) {
+        if ( filiere == null ) {
+            return null;
+        }
+
+        FiliereDTO filiereDTO = new FiliereDTO();
+
+        filiereDTO.setId( filiere.getId() );
+        filiereDTO.setNom( filiere.getNom() );
+
+        return filiereDTO;
     }
 
     protected void userDTOToUser1(UserDTO userDTO, User mappingTarget) {

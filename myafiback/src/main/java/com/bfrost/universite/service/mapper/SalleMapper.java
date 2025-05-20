@@ -14,11 +14,4 @@ import org.mapstruct.Named;
  */
 @Mapper(componentModel = "spring")
 public interface SalleMapper extends EntityMapper<SalleDTO, Salle> {
-    @Mapping(target = "campus", source = "campus", qualifiedByName = "campusId")
-    SalleDTO toDto(Salle s);
-
-    @Named("campusId")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    CampusDTO toDtoCampusId(Campus campus);
 }

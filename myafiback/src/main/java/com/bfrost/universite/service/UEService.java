@@ -37,9 +37,10 @@ public interface UEService {
      * Get all the uES.
      *
      * @param pageable the pagination information.
+     * @param nom
      * @return the list of entities.
      */
-    Page<UEDTO> findAll(Pageable pageable);
+    Page<UEDTO> findAll(Pageable pageable, String nom);
 
     /**
      * Get the "id" uE.

@@ -27,6 +27,9 @@ public class Semestre implements Serializable {
     @Column(name = "nom", nullable = false)
     private String nom;
 
+    @Column(name = "annee", nullable = false)
+    private String annee;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -53,6 +56,14 @@ public class Semestre implements Serializable {
 
     public void setNom(String nom) {
         this.nom = nom;
+    }
+
+    public String getAnnee() {
+        return annee;
+    }
+
+    public void setAnnee(String annee) {
+        this.annee = annee;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

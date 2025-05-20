@@ -18,23 +18,5 @@ import org.mapstruct.Named;
  */
 @Mapper(componentModel = "spring")
 public interface MatiereUserMapper extends EntityMapper<MatiereUserDTO, MatiereUser> {
-    @Mapping(target = "user", source = "user", qualifiedByName = "userId")
-    @Mapping(target = "matiere", source = "matiere", qualifiedByName = "matiereId")
-    @Mapping(target = "filiere", source = "filiere", qualifiedByName = "filiereId")
-    MatiereUserDTO toDto(MatiereUser s);
 
-    @Named("userId")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    UserDTO toDtoUserId(User user);
-
-    @Named("matiereId")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    MatiereDTO toDtoMatiereId(Matiere matiere);
-
-    @Named("filiereId")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    FiliereDTO toDtoFiliereId(Filiere filiere);
 }

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-18T16:20:55+0000",
+    date = "2025-05-20T19:29:15+0000",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 21.0.4 (Oracle Corporation)"
 )
 @Component
@@ -30,6 +30,21 @@ public class CoursMapperImpl implements CoursMapper {
         cours.professeur( userDTOToUser( dto.getProfesseur() ) );
 
         return cours;
+    }
+
+    @Override
+    public CoursDTO toDto(Cours entity) {
+        if ( entity == null ) {
+            return null;
+        }
+
+        CoursDTO coursDTO = new CoursDTO();
+
+        coursDTO.setId( entity.getId() );
+        coursDTO.setIntitule( entity.getIntitule() );
+        coursDTO.setProfesseur( userToUserDTO( entity.getProfesseur() ) );
+
+        return coursDTO;
     }
 
     @Override
@@ -80,34 +95,6 @@ public class CoursMapperImpl implements CoursMapper {
         }
     }
 
-    @Override
-    public CoursDTO toDto(Cours s) {
-        if ( s == null ) {
-            return null;
-        }
-
-        CoursDTO coursDTO = new CoursDTO();
-
-        coursDTO.setProfesseur( toDtoUserId( s.getProfesseur() ) );
-        coursDTO.setId( s.getId() );
-        coursDTO.setIntitule( s.getIntitule() );
-
-        return coursDTO;
-    }
-
-    @Override
-    public UserDTO toDtoUserId(User user) {
-        if ( user == null ) {
-            return null;
-        }
-
-        UserDTO userDTO = new UserDTO();
-
-        userDTO.setId( user.getId() );
-
-        return userDTO;
-    }
-
     protected User userDTOToUser(UserDTO userDTO) {
         if ( userDTO == null ) {
             return null;
@@ -119,6 +106,19 @@ public class CoursMapperImpl implements CoursMapper {
         user.setLogin( userDTO.getLogin() );
 
         return user;
+    }
+
+    protected UserDTO userToUserDTO(User user) {
+        if ( user == null ) {
+            return null;
+        }
+
+        UserDTO userDTO = new UserDTO();
+
+        userDTO.setId( user.getId() );
+        userDTO.setLogin( user.getLogin() );
+
+        return userDTO;
     }
 
     protected void userDTOToUser1(UserDTO userDTO, User mappingTarget) {

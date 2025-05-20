@@ -38,9 +38,10 @@ public interface SemestreService {
      * Get all the semestres.
      *
      * @param pageable the pagination information.
+     * @param nom
      * @return the list of entities.
      */
-    Page<SemestreDTO> findAll(Pageable pageable);
+    Page<SemestreDTO> findAll(Pageable pageable, String nom);
 
     /**
      * Get the "id" semestre.

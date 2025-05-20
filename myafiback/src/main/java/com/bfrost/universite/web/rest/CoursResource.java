@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -59,6 +60,7 @@ public class CoursResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
+    @PreAuthorize("hasAnyAuthority('ENREGISTREMENT_COURS')")
     public ResponseEntity<List<CoursDTO>> createCours(@Valid @RequestBody List<CoursDTO> coursDTO) throws URISyntaxException {
         LOG.debug("REST request to save Cours : {}", coursDTO);
         if (coursDTO.get(0).getId() != null) {
@@ -81,6 +83,7 @@ public class CoursResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('MODIFICATION_GENERALE_COURS')")
     public ResponseEntity<CoursDTO> updateCours(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody CoursDTO coursDTO
@@ -115,6 +118,7 @@ public class CoursResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PreAuthorize("hasAnyAuthority('MODIFICATION_COURS')")
     public ResponseEntity<CoursDTO> partialUpdateCours(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody CoursDTO coursDTO
@@ -146,9 +150,12 @@ public class CoursResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of cours in body.
      */
     @GetMapping("")
-    public ResponseEntity<Map<String,Object>> getAllCours(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
+    @PreAuthorize("hasAnyAuthority('LECTURE_LISTE_COURS')")
+    public ResponseEntity<Map<String,Object>> getAllCours(@org.springdoc.core.annotations.ParameterObject Pageable pageable,
+                                                          @RequestParam(value = "intitule", required = false) String intitule,
+                                                          @RequestParam(value = "professeur", required = false) String professeur) {
         LOG.debug("REST request to get a page of Cours");
-        Page<CoursDTO> page = coursService.findAll(pageable);
+        Page<CoursDTO> page = coursService.findAll(pageable, intitule, professeur);
         Pagination pagination=paginationService.instancierPagination(page);
         Map<String,Object> response=new HashMap<>();
         response.put("data",page.getContent());
@@ -163,6 +170,7 @@ public class CoursResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the coursDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('LECTURE_DETAILLE_COURS')")
     public ResponseEntity<CoursDTO> getCours(@PathVariable("id") Long id) {
         LOG.debug("REST request to get Cours : {}", id);
         Optional<CoursDTO> coursDTO = coursService.findOne(id);
@@ -176,6 +184,7 @@ public class CoursResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('SUPPRESSION_COURS')")
     public ResponseEntity<Void> deleteCours(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete Cours : {}", id);
         coursService.delete(id);

@@ -65,9 +65,9 @@ public class SalleServiceImpl implements SalleService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<SalleDTO> findAll(Pageable pageable) {
+    public Page<SalleDTO> findAll(Pageable pageable, String numero, String campus) {
         LOG.debug("Request to get all Salles");
-        return salleRepository.findAll(pageable).map(salleMapper::toDto);
+        return salleRepository.searchAllByCampusAndNumero(pageable, numero, campus).map(salleMapper::toDto);
     }
 
     @Override

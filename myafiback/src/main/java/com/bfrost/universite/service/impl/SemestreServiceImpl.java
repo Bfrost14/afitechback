@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.Optional;
 
@@ -65,9 +66,14 @@ public class SemestreServiceImpl implements SemestreService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<SemestreDTO> findAll(Pageable pageable) {
+    public Page<SemestreDTO> findAll(Pageable pageable, String nom) {
         LOG.debug("Request to get all Semestres");
-        return semestreRepository.findAll(pageable).map(semestreMapper::toDto);
+        if(StringUtils.hasText(nom)){
+            return semestreRepository.findAllByNomContainingIgnoreCase(pageable, nom).map(semestreMapper::toDto);
+        }else{
+            return semestreRepository.findAll(pageable).map(semestreMapper::toDto);
+        }
+
     }
 
     @Override

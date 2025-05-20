@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.Optional;
 
@@ -65,8 +66,11 @@ public class FiliereServiceImpl implements FiliereService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<FiliereDTO> findAll(Pageable pageable) {
+    public Page<FiliereDTO> findAll(Pageable pageable, String nom) {
         LOG.debug("Request to get all Filieres");
+        if(StringUtils.hasText(nom)){
+            return filiereRepository.findAllByNomContainingIgnoreCase(pageable,nom).map(filiereMapper::toDto);
+        }
         return filiereRepository.findAll(pageable).map(filiereMapper::toDto);
     }
 
