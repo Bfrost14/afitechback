@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.ZonedDateTime;
 import java.util.*;
 
 import org.slf4j.Logger;
@@ -17,8 +18,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -59,6 +62,7 @@ public class CalendrierCoursResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
+    @PreAuthorize("hasAnyAuthority('ENREGISTREMENT_CALENDRIER_COURS')")
     public ResponseEntity<List<CalendrierCoursDTO>> createCalendrierCours(@Valid @RequestBody List<CalendrierCoursDTO> calendrierCoursDTO)
         throws URISyntaxException {
         LOG.debug("REST request to save CalendrierCours : {}", calendrierCoursDTO);
@@ -82,6 +86,7 @@ public class CalendrierCoursResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('MODIFICATION_GENERALE_CALENDRIER_COURS')")
     public ResponseEntity<CalendrierCoursDTO> updateCalendrierCours(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody CalendrierCoursDTO calendrierCoursDTO
@@ -116,6 +121,7 @@ public class CalendrierCoursResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PreAuthorize("hasAnyAuthority('MODIFICATION_CALENDRIER_COURS')")
     public ResponseEntity<CalendrierCoursDTO> partialUpdateCalendrierCours(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody CalendrierCoursDTO calendrierCoursDTO
@@ -147,11 +153,19 @@ public class CalendrierCoursResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of calendrierCours in body.
      */
     @GetMapping("")
+    @PreAuthorize("hasAnyAuthority('LECTURE_LISTE_CALENDRIER_COURS')")
     public ResponseEntity<Map<String,Object>> getAllCalendrierCours(
-        @org.springdoc.core.annotations.ParameterObject Pageable pageable
+        @org.springdoc.core.annotations.ParameterObject Pageable pageable,
+        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime dateDebut,
+        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime dateFin,
+        @RequestParam(required = false) String matiere,
+        @RequestParam(required = false) String filiere,
+        @RequestParam(required = false) String salle,
+        @RequestParam(required = false) String professeur,
+        @RequestParam(required = false) String campus
     ) {
         LOG.debug("REST request to get a page of CalendrierCours");
-        Page<CalendrierCoursDTO> page = calendrierCoursService.findAll(pageable);
+        Page<CalendrierCoursDTO> page = calendrierCoursService.findAll(pageable, dateDebut, dateFin, matiere,filiere,salle, professeur, campus);
         Pagination pagination=paginationService.instancierPagination(page);
         Map<String,Object> response=new HashMap<>();
         response.put("data",page.getContent());
@@ -166,6 +180,7 @@ public class CalendrierCoursResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the calendrierCoursDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('LECTURE_DETAILLE_CALENDRIER_COURS')")
     public ResponseEntity<CalendrierCoursDTO> getCalendrierCours(@PathVariable("id") Long id) {
         LOG.debug("REST request to get CalendrierCours : {}", id);
         Optional<CalendrierCoursDTO> calendrierCoursDTO = calendrierCoursService.findOne(id);
@@ -179,6 +194,7 @@ public class CalendrierCoursResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('SUPPRESSION_CALENDRIER_COURS')")
     public ResponseEntity<Void> deleteCalendrierCours(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete CalendrierCours : {}", id);
         calendrierCoursService.delete(id);

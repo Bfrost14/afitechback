@@ -38,10 +38,15 @@ public interface MatiereUserService {
     /**
      * Get all the matiereUsers.
      *
-     * @param pageable the pagination information.
+     * @param pageable      the pagination information.
+     * @param professeur
+     * @param anneeScolaire
+     * @param matiere
+     * @param filiere
+     * @param semestre
      * @return the list of entities.
      */
-    Page<MatiereUserDTO> findAll(Pageable pageable);
+    Page<MatiereUserDTO> findAll(Pageable pageable, String professeur, String anneeScolaire, String matiere, String filiere, String semestre);
 
     /**
      * Get the "id" matiereUser.

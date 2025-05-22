@@ -1,7 +1,7 @@
 <div class="flex flex-col md:min-w-160 max-h-screen divide-y-8 divide-bleue-claire-1 w-full">
 
     <div class=" flex  h-10 text-white  w-full -mb-0.5 justify-between  bg-rouge-1 p-1">
-        <span class="mr-4 mt-1.5 font-bold">{{profileId == 0 ? ('Ajouter Profile' | titlecase) : ('Modifier Profile' | titlecase)}}</span>
+        <span class="mr-4 mt-1.5 font-bold">{{profile == undefined ? ('Ajouter Profile' | titlecase) : ('Modifier Profile' | titlecase)}}</span>
     </div>
     <!-- Compose form -->
     <form class="flex flex-col flex-auto sm:p-8 overflow-y-auto bg-bleue-claire-6 w-full" [formGroup]="form">

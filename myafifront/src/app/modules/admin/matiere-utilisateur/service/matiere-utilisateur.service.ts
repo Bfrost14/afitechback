@@ -17,9 +17,9 @@ export class MatiereUtilisateurService {
   protected readonly http = inject(HttpClient);
   protected readonly applicationConfigService = inject(ApplicationConfigService);
 
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('/api/matiere-utilisateurs');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('/api/matiere-users');
 
-  create(matiereUtilisateur: NewMatiereUtilisateur): Observable<any> {
+  create(matiereUtilisateur: NewMatiereUtilisateur[]): Observable<any> {
     return this.http.post<IMatiereUtilisateur>(this.resourceUrl, matiereUtilisateur, { observe: 'response' });
   }
 

@@ -4,6 +4,7 @@ import com.bfrost.universite.service.dto.PointageProfesseurDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.time.ZonedDateTime;
 import java.util.Optional;
 
 /**
@@ -37,10 +38,13 @@ public interface PointageProfesseurService {
     /**
      * Get all the pointageProfesseurs.
      *
-     * @param pageable the pagination information.
+     * @param pageable   the pagination information.
+     * @param dateDebut
+     * @param dateFin
+     * @param professeur
      * @return the list of entities.
      */
-    Page<PointageProfesseurDTO> findAll(Pageable pageable);
+    Page<PointageProfesseurDTO> findAll(Pageable pageable, ZonedDateTime dateDebut, ZonedDateTime dateFin, String professeur);
 
     /**
      * Get the "id" pointageProfesseur.

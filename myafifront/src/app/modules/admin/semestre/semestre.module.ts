@@ -27,7 +27,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTabsModule } from '@angular/material/tabs';
 import { QuillModule } from 'ngx-quill';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
-import { NoteModule } from '../note/note.module';
+
 import { SemestreRoutingModule } from './semestre-routing.module';
 import { ListeSemestreComponent } from './liste-semestre/liste-semestre.component';
 import { AjoutSemestreComponent } from './ajout-semestre/ajout-semestre.component';
@@ -68,8 +68,7 @@ import { AjoutSemestreComponent } from './ajout-semestre/ajout-semestre.componen
     MatTabsModule,
     QuillModule.forRoot(),
     FuseAlertModule,
-    SweetAlert2Module.forRoot(),
-    NoteModule
+    SweetAlert2Module.forRoot()
   ],
 schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

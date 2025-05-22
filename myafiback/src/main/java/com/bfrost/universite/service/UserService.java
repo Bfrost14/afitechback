@@ -9,6 +9,7 @@ import com.bfrost.universite.security.AuthoritiesConstants;
 import com.bfrost.universite.security.SecurityUtils;
 import com.bfrost.universite.service.dto.AdminUserDTO;
 import com.bfrost.universite.service.dto.UserDTO;
+import com.bfrost.universite.service.mapper.*;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tech.jhipster.security.RandomUtil;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -44,6 +46,13 @@ public class UserService {
 
     private final CacheManager cacheManager;
 
+    private final CampusMapper campusMapper;
+
+    private final FiliereMapper filiereMapper;
+
+    private final ProfilMapper profilMapper;
+    private final UserMapper userMapper;
+    private final AuthorityMapper authorityMapper;
 
 
     public Optional<User> activateRegistration(String key) {
@@ -119,12 +128,21 @@ public class UserService {
         newUser.setActivated(false);
         // new user gets registration key
         newUser.setActivationKey(RandomUtil.generateActivationKey());
-        Set<Authority> authorities = new HashSet<>();
-        authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
-        newUser.setAuthorities(authorities);
-        userRepository.save(newUser);
+        newUser.setAuthorities(authorityMapper.toEntity(userDTO.getAuthorities()));
+        newUser.setDateDeNaissance(userDTO.getDateDeNaissance());
+        newUser.setCampus(campusMapper.toEntity(userDTO.getCampus()));
+        newUser.setProfil(profilMapper.toEntity(userDTO.getProfil()));
+        newUser.setFiliere(filiereMapper.toEntity(userDTO.getFiliere()));
+        newUser.setTelephone(userDTO.getTelephone());
+        newUser.setMatricule(generateMatricule());
+        newUser.setCreatedBy(userDTO.getCreatedBy());
+        newUser.setFirstConnection(true);
+        newUser.setNationalite(userDTO.getNationalite());
+        newUser.setCampuses(campusMapper.toEntity(userDTO.getCampuses()));
+        LOG.info("avant save: {}", newUser);
+        newUser = userRepository.save(newUser);
+        LOG.info("apres save: {}", newUser);
         this.clearUserCaches(newUser);
-        LOG.debug("Created Information for User: {}", newUser);
         return newUser;
     }
 
@@ -157,9 +175,9 @@ public class UserService {
         user.setResetKey(RandomUtil.generateResetKey());
         user.setResetDate(Instant.now());
         user.setActivated(true);
-        if (userDTO.getAuthorities() != null) {
+        if (userDTO.getAuthoritie() != null) {
             Set<Authority> authorities = userDTO
-                .getAuthorities()
+                .getAuthoritie()
                 .stream()
                 .map(authorityRepository::findById)
                 .filter(Optional::isPresent)
@@ -167,9 +185,11 @@ public class UserService {
                 .collect(Collectors.toSet());
             user.setAuthorities(authorities);
         }
-        userRepository.save(user);
+        user.setMatricule(generateMatricule());
+        user.setCreatedBy(userDTO.getCreatedBy());
+        user.setFirstConnection(true);
+        user = userRepository.save(user);
         this.clearUserCaches(user);
-        LOG.debug("Created Information for User: {}", user);
         return user;
     }
 
@@ -194,21 +214,20 @@ public class UserService {
                 user.setImageUrl(userDTO.getImageUrl());
                 user.setActivated(userDTO.isActivated());
                 user.setLangKey(userDTO.getLangKey());
-                Set<Authority> managedAuthorities = user.getAuthorities();
-                managedAuthorities.clear();
-                userDTO
-                    .getAuthorities()
-                    .stream()
-                    .map(authorityRepository::findById)
-                    .filter(Optional::isPresent)
-                    .map(Optional::get)
-                    .forEach(managedAuthorities::add);
+                user.setDateDeNaissance(userDTO.getDateDeNaissance());
+                user.setCampus(campusMapper.toEntity(userDTO.getCampus()));
+                user.setProfil(profilMapper.toEntity(userDTO.getProfil()));
+                user.setFiliere(filiereMapper.toEntity(userDTO.getFiliere()));
+                user.setTelephone(userDTO.getTelephone());
+                user.getAuthorities().clear();
+                user.setNationalite(userDTO.getNationalite());
+                user.setCampuses(campusMapper.toEntity(userDTO.getCampuses()));
+                user.setAuthorities(authorityMapper.toEntity(userDTO.getAuthorities()));
                 userRepository.save(user);
                 this.clearUserCaches(user);
-                LOG.debug("Changed Information for User: {}", user);
                 return user;
             })
-            .map(AdminUserDTO::new);
+            .map(userMapper::toDto);
     }
 
     public void deleteUser(String login) {
@@ -217,7 +236,6 @@ public class UserService {
             .ifPresent(user -> {
                 userRepository.delete(user);
                 this.clearUserCaches(user);
-                LOG.debug("Deleted User: {}", user);
             });
     }
 
@@ -243,7 +261,6 @@ public class UserService {
                 user.setImageUrl(imageUrl);
                 userRepository.save(user);
                 this.clearUserCaches(user);
-                LOG.debug("Changed Information for User: {}", user);
             });
     }
 
@@ -259,13 +276,13 @@ public class UserService {
                 String encryptedPassword = passwordEncoder.encode(newPassword);
                 user.setPassword(encryptedPassword);
                 this.clearUserCaches(user);
-                LOG.debug("Changed password for User: {}", user);
             });
     }
 
     @Transactional(readOnly = true)
-    public Page<AdminUserDTO> getAllManagedUsers(Pageable pageable) {
-        return userRepository.findAll(pageable).map(AdminUserDTO::new);
+    public Page<AdminUserDTO> getAllManagedUsers(Pageable pageable, String prenom, String nom, String email, String telephone, String filiere, String campus, String matricule, String profil,Integer admin) {
+        //return userRepository.findAll(pageable).map(userMapper::userToAdminUserDTO);
+        return userRepository.managedUserBy(pageable, prenom, nom, email, telephone, filiere, campus, matricule, profil, admin).map(userMapper::toDto);
     }
 
     @Transactional(readOnly = true)
@@ -314,4 +331,35 @@ public class UserService {
             Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE)).evictIfPresent(user.getEmail());
         }
     }
+
+    private String generateMatricule() {
+        String anneeScolaire = getAnneeScolaire();
+
+        int length = new Random().nextInt(2) + 4; // 4 ou 5 lettres
+        StringBuilder lettres = new StringBuilder();
+        for (int i = 0; i < length; i++) {
+            char c = (char) ('A' + new Random().nextInt(26));
+            lettres.append(c);
+        }
+
+        return anneeScolaire + lettres;
+    }
+
+
+    private String getAnneeScolaire() {
+        LocalDate today = LocalDate.now();
+        int year = today.getYear();
+
+        int startYear, endYear;
+        if (today.getMonthValue() >= 9) { // Septembre à Décembre
+            startYear = year;
+            endYear = year + 1;
+        } else { // Janvier à Août
+            startYear = year - 1;
+            endYear = year;
+        }
+
+        return String.format("%02d%02d", startYear % 100, endYear % 100);
+    }
+
 }

@@ -19,7 +19,7 @@ export class DetailProfesseurComponent implements OnInit {
     };
     showAlert: boolean = false;
     @Output() actualiser: EventEmitter<number> = new EventEmitter<number>();
-    @Input() professeurId: number;
+    @Input() professeurId: string = "";
     professeur: NewUtilisateur;
     fiche: boolean = true;
 

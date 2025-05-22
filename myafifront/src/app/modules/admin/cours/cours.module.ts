@@ -27,18 +27,12 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTabsModule } from '@angular/material/tabs';
 import { QuillModule } from 'ngx-quill';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
-import { NoteModule } from '../note/note.module';
-import { CoursRoutingModule } from './cours-routing.module';
-import { ListeCoursComponent } from './liste-cours/liste-cours.component';
-import { DetailCoursComponent } from './detail-cours/detail-cours.component';
-import { AjoutCoursComponent } from './ajout-cours/ajout-cours.component';
 
+import { CoursRoutingModule } from './cours-routing.module';
 
 @NgModule({
   declarations: [
-    ListeCoursComponent,
-    DetailCoursComponent,
-    AjoutCoursComponent
+
   ],
   imports: [
     CommonModule,
@@ -70,8 +64,7 @@ import { AjoutCoursComponent } from './ajout-cours/ajout-cours.component';
     MatTabsModule,
     QuillModule.forRoot(),
     FuseAlertModule,
-    SweetAlert2Module.forRoot(),
-    NoteModule
+    SweetAlert2Module.forRoot()
   ],
 schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

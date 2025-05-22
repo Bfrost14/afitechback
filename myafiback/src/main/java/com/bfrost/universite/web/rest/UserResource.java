@@ -3,12 +3,12 @@ package com.bfrost.universite.web.rest;
 import com.bfrost.universite.config.Constants;
 import com.bfrost.universite.domain.User;
 import com.bfrost.universite.repository.UserRepository;
-import com.bfrost.universite.security.AuthoritiesConstants;
 import com.bfrost.universite.service.MailService;
 import com.bfrost.universite.service.PaginationService;
 import com.bfrost.universite.service.UserService;
 import com.bfrost.universite.service.dto.AdminUserDTO;
 import com.bfrost.universite.service.dto.Pagination;
+import com.bfrost.universite.service.mapper.UserMapper;
 import com.bfrost.universite.web.rest.errors.BadRequestAlertException;
 import com.bfrost.universite.web.rest.errors.EmailAlreadyUsedException;
 import com.bfrost.universite.web.rest.errors.LoginAlreadyUsedException;
@@ -20,14 +20,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
-import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
 import java.net.URI;
@@ -74,11 +70,13 @@ public class UserResource {
             "createdBy",
             "createdDate",
             "lastModifiedBy",
-            "lastModifiedDate"
+            "lastModifiedDate",
+                "matricule"
         )
     );
 
     private static final Logger LOG = LoggerFactory.getLogger(UserResource.class);
+    private final UserMapper userMapper;
 
     @Value("${spring.application.name}")
     private String applicationName;
@@ -91,11 +89,12 @@ public class UserResource {
 
     private final PaginationService paginationService;
 
-    public UserResource(UserService userService, UserRepository userRepository, MailService mailService, PaginationService paginationService) {
+    public UserResource(UserService userService, UserRepository userRepository, MailService mailService, PaginationService paginationService, UserMapper userMapper) {
         this .userService = userService;
         this.userRepository = userRepository;
         this.mailService = mailService;
         this.paginationService = paginationService;
+        this.userMapper = userMapper;
     }
 
     /**
@@ -123,7 +122,7 @@ public class UserResource {
         } else if (userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).isPresent()) {
             throw new EmailAlreadyUsedException();
         } else {
-            User newUser = userService.createUser(userDTO);
+            User newUser = userService.registerUser(userDTO, userDTO.getPassword());
             mailService.sendCreationEmail(newUser);
             return ResponseEntity.created(new URI("/api/admin/users/" + newUser.getLogin()))
                 .headers(HeaderUtil.createAlert(applicationName, "userManagement.created", newUser.getLogin()))
@@ -170,13 +169,23 @@ public class UserResource {
      */
     @GetMapping("/users")
     @PreAuthorize("hasAnyAuthority('LECTURE_LISTE_USER')")
-    public ResponseEntity<Map<String,Object>> getAllUsers(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
+    public ResponseEntity<Map<String,Object>> getAllUsers(@org.springdoc.core.annotations.ParameterObject Pageable pageable,
+                                                          @RequestParam(value = "prenom", required = false) String prenom,
+                                                          @RequestParam(value = "nom", required = false) String nom,
+                                                          @RequestParam(value = "email", required = false) String email,
+                                                          @RequestParam(value = "telephone", required = false) String telephone,
+                                                          @RequestParam(value = "filiere", required = false) String filiere,
+                                                          @RequestParam(value = "campus", required = false) String campus,
+                                                          @RequestParam(value = "matricule", required = false) String matricule,
+                                                          @RequestParam(value = "profil", required = false) String profil,
+                                                          @RequestParam(value = "admin", required = false) Integer admin
+                                                          ) {
         LOG.debug("REST request to get all User for an admin");
         if (!onlyContainsAllowedProperties(pageable)) {
             return ResponseEntity.badRequest().build();
         }
 
-        final Page<AdminUserDTO> page = userService.getAllManagedUsers(pageable);
+        final Page<AdminUserDTO> page = userService.getAllManagedUsers(pageable, prenom, nom, email, telephone, filiere, campus, matricule, profil, admin);
         Pagination pagination=paginationService.instancierPagination(page);
         Map<String,Object> response=new HashMap<>();
         response.put("data",page.getContent());
@@ -198,7 +207,7 @@ public class UserResource {
     @PreAuthorize("hasAnyAuthority('LECTURE_DETAILLE_USER')")
     public ResponseEntity<AdminUserDTO> getUser(@PathVariable("login") @Pattern(regexp = Constants.LOGIN_REGEX) String login) {
         LOG.debug("REST request to get User : {}", login);
-        return ResponseUtil.wrapOrNotFound(userService.getUserWithAuthoritiesByLogin(login).map(AdminUserDTO::new));
+        return ResponseUtil.wrapOrNotFound(userService.getUserWithAuthoritiesByLogin(login).map(userMapper::toDto));
     }
 
     /**

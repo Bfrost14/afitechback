@@ -2,13 +2,18 @@ package com.bfrost.universite.service.dto;
 
 import com.bfrost.universite.config.Constants;
 import com.bfrost.universite.domain.Authority;
+import com.bfrost.universite.domain.Campus;
 import com.bfrost.universite.domain.User;
+import com.bfrost.universite.service.mapper.CampusMapper;
+import com.bfrost.universite.service.mapper.FiliereMapper;
+import com.bfrost.universite.service.mapper.ProfilMapper;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -40,6 +45,8 @@ public class AdminUserDTO implements Serializable {
 
     private String matricule;
 
+    private String password;
+
     @Size(max = 256)
     private String imageUrl;
 
@@ -52,6 +59,8 @@ public class AdminUserDTO implements Serializable {
 
     private String telephone;
 
+    private String nationalite;
+
     private Boolean firstConnection;
 
     private String createdBy;
@@ -62,13 +71,16 @@ public class AdminUserDTO implements Serializable {
 
     private Instant lastModifiedDate;
 
-    private Set<String> authorities;
+    private Set<String> authoritie;
+    private Set<AuthorityDTO> authorities;
 
     private FiliereDTO filiere;
 
     private CampusDTO campus;
 
     private ProfilDTO profil;
+
+    private Set<CampusDTO> campuses;
 
     public AdminUserDTO() {
         // Empty constructor needed for Jackson.
@@ -87,7 +99,9 @@ public class AdminUserDTO implements Serializable {
         this.createdDate = user.getCreatedDate();
         this.lastModifiedBy = user.getLastModifiedBy();
         this.lastModifiedDate = user.getLastModifiedDate();
-        this.authorities = user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toSet());
+        this.authoritie = user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toSet());
+        this.matricule = user.getMatricule();
+        this.telephone = user.getTelephone();
     }
 
 

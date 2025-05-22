@@ -6,6 +6,7 @@ import com.bfrost.universite.service.CalendrierCoursService;
 import com.bfrost.universite.service.dto.CalendrierCoursDTO;
 import com.bfrost.universite.service.mapper.CalendrierCoursMapper;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -69,9 +70,9 @@ public class CalendrierCoursServiceImpl implements CalendrierCoursService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<CalendrierCoursDTO> findAll(Pageable pageable) {
+    public Page<CalendrierCoursDTO> findAll(Pageable pageable, ZonedDateTime dateDebut, ZonedDateTime dateFin, String matiere, String filiere, String salle, String professeur, String campus) {
         LOG.debug("Request to get all CalendrierCours");
-        return calendrierCoursRepository.findAll(pageable).map(calendrierCoursMapper::toDto);
+        return calendrierCoursRepository.managedUser(pageable,dateDebut,dateFin,matiere,filiere,salle,professeur,campus).map(calendrierCoursMapper::toDto);
     }
 
     @Override

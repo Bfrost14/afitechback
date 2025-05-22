@@ -2,6 +2,7 @@ package com.bfrost.universite.service.dto;
 
 import jakarta.persistence.Lob;
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -10,6 +11,7 @@ import java.util.Objects;
 /**
  * A DTO for the {@link com.bfrost.universite.domain.CahierTexte} entity.
  */
+@Data
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class CahierTexteDTO implements Serializable {
 
@@ -21,80 +23,8 @@ public class CahierTexteDTO implements Serializable {
     @Lob
     private String contenu;
 
-    private CoursDTO cours;
+    private CalendrierCoursDTO calendrierCours;
 
     private UserDTO user;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public String getContenu() {
-        return contenu;
-    }
-
-    public void setContenu(String contenu) {
-        this.contenu = contenu;
-    }
-
-    public CoursDTO getCours() {
-        return cours;
-    }
-
-    public void setCours(CoursDTO cours) {
-        this.cours = cours;
-    }
-
-    public UserDTO getUser() {
-        return user;
-    }
-
-    public void setUser(UserDTO user) {
-        this.user = user;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof CahierTexteDTO)) {
-            return false;
-        }
-
-        CahierTexteDTO cahierTexteDTO = (CahierTexteDTO) o;
-        if (this.id == null) {
-            return false;
-        }
-        return Objects.equals(this.id, cahierTexteDTO.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(this.id);
-    }
-
-    // prettier-ignore
-    @Override
-    public String toString() {
-        return "CahierTexteDTO{" +
-            "id=" + getId() +
-            ", date='" + getDate() + "'" +
-            ", contenu='" + getContenu() + "'" +
-            ", cours=" + getCours() +
-            ", user=" + getUser() +
-            "}";
-    }
 }

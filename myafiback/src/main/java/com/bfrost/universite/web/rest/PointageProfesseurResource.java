@@ -8,6 +8,7 @@ import com.bfrost.universite.service.dto.PointageProfesseurDTO;
 import com.bfrost.universite.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.ZonedDateTime;
 import java.util.*;
 
 import org.slf4j.Logger;
@@ -15,8 +16,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -60,6 +63,7 @@ public class PointageProfesseurResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
+    @PreAuthorize("hasAnyAuthority('ENREGISTREMENT_POINTAGE_PROFESSEUR')")
     public ResponseEntity<PointageProfesseurDTO> createPointageProfesseur(@RequestBody PointageProfesseurDTO pointageProfesseurDTO)
         throws URISyntaxException {
         LOG.debug("REST request to save PointageProfesseur : {}", pointageProfesseurDTO);
@@ -83,6 +87,7 @@ public class PointageProfesseurResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('MODIFICATION_GENERALE_POINTAGE_PROFESSEUR')")
     public ResponseEntity<PointageProfesseurDTO> updatePointageProfesseur(
         @PathVariable(value = "id", required = false) final Long id,
         @RequestBody PointageProfesseurDTO pointageProfesseurDTO
@@ -117,6 +122,7 @@ public class PointageProfesseurResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PreAuthorize("hasAnyAuthority('MODIFICATION_POINTAGE_PROFESSEUR')")
     public ResponseEntity<PointageProfesseurDTO> partialUpdatePointageProfesseur(
         @PathVariable(value = "id", required = false) final Long id,
         @RequestBody PointageProfesseurDTO pointageProfesseurDTO
@@ -148,11 +154,16 @@ public class PointageProfesseurResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of pointageProfesseurs in body.
      */
     @GetMapping("")
+    @PreAuthorize("hasAnyAuthority('LECTURE_LISTE_POINTAGE_PROFESSEUR')")
     public ResponseEntity<Map<String,Object>> getAllPointageProfesseurs(
-        @org.springdoc.core.annotations.ParameterObject Pageable pageable
+            @org.springdoc.core.annotations.ParameterObject Pageable pageable,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime dateDebut,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime dateFin,
+            @RequestParam(required = false) String professeur
+
     ) {
         LOG.debug("REST request to get a page of PointageProfesseurs");
-        Page<PointageProfesseurDTO> page = pointageProfesseurService.findAll(pageable);
+        Page<PointageProfesseurDTO> page = pointageProfesseurService.findAll(pageable, dateDebut, dateFin, professeur);
         Pagination pagination=paginationService.instancierPagination(page);
         Map<String,Object> response=new HashMap<>();
         response.put("data",page.getContent());
@@ -167,6 +178,7 @@ public class PointageProfesseurResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the pointageProfesseurDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('LECTURE_DETAILLE_POINTAGE_PROFESSEUR')")
     public ResponseEntity<PointageProfesseurDTO> getPointageProfesseur(@PathVariable("id") Long id) {
         LOG.debug("REST request to get PointageProfesseur : {}", id);
         Optional<PointageProfesseurDTO> pointageProfesseurDTO = pointageProfesseurService.findOne(id);
@@ -180,6 +192,7 @@ public class PointageProfesseurResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('SUPPRESSION_POINTAGE_PROFESSEUR')")
     public ResponseEntity<Void> deletePointageProfesseur(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete PointageProfesseur : {}", id);
         pointageProfesseurService.delete(id);

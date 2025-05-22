@@ -27,13 +27,16 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTabsModule } from '@angular/material/tabs';
 import { QuillModule } from 'ngx-quill';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
-import { NoteModule } from '../note/note.module';
+
 import { MatiereUtilisateurRoutingModule } from './matiere-utilisateur-routing.module';
+import { ListeMatiereUtilisateurComponent } from './liste-matiere-utilisateur/liste-matiere-utilisateur.component';
+import { AjoutMatiereUtilisateurComponent } from './ajout-matiere-utilisateur/ajout-matiere-utilisateur.component';
 
 
 @NgModule({
   declarations: [
-
+    ListeMatiereUtilisateurComponent,
+    AjoutMatiereUtilisateurComponent
   ],
   imports: [
     CommonModule,
@@ -65,8 +68,7 @@ import { MatiereUtilisateurRoutingModule } from './matiere-utilisateur-routing.m
     MatTabsModule,
     QuillModule.forRoot(),
     FuseAlertModule,
-    SweetAlert2Module.forRoot(),
-    NoteModule
+    SweetAlert2Module.forRoot()
   ],
 schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

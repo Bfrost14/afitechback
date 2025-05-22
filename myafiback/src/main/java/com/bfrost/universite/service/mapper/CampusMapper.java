@@ -4,8 +4,13 @@ import com.bfrost.universite.domain.Campus;
 import com.bfrost.universite.service.dto.CampusDTO;
 import org.mapstruct.Mapper;
 
+import java.util.Set;
+
 /**
  * Mapper for the entity {@link Campus} and its DTO {@link CampusDTO}.
  */
 @Mapper(componentModel = "spring")
-public interface CampusMapper extends EntityMapper<CampusDTO, Campus> {}
+public interface CampusMapper extends EntityMapper<CampusDTO, Campus> {
+
+    Set<Campus> toEntity(Set<CampusDTO> campus);
+}

@@ -124,7 +124,7 @@ export class AjoutMatiereComponent implements OnInit {
 
     modifier() {
 
-        this._matiereService.update(this.form.value).subscribe((data) => {
+        this._matiereService.update(this.detailFilds.getRawValue()[0]).subscribe((data) => {
             console.log(
                 'updated matiere  >>>>>>>>>>>>>>>>>>>>>>>>>>>>',
                 data.body

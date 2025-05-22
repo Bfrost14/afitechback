@@ -53,26 +53,25 @@ export class ListeEtudiantComponent implements OnInit, AfterViewInit {
         { key: 'prenom', value: null },
         { key: 'nom', value: null },
         { key: 'email', value: null },
-        { key: 'filiere', value: null },
     ];
 
     dataSource: NewUtilisateur[] = [];
-    columnsToDisplay = ['matricule', 'prenom', 'nom', 'email', 'filiere'];
-    displayedColumn: string[] = ['prenom', 'nom', 'email', 'filiere'];
-    displayedColumns: string[] = ['prenom', 'nom', 'email', 'filiere'];
+    columnsToDisplay = ['matricule', 'nom', 'email', 'telephone', 'filiere', 'campus'];
+    displayedColumn: string[] = ['nom', 'email', 'telephone', 'filiere', 'campus'];
+    displayedColumns: string[] = ['nom', 'email', 'telephone', 'filiere', 'campus'];
 
     columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
     expandedElement: NewUtilisateur | null;
     selectEtudiantEdit: NewUtilisateur
     selectedColumn = [
-        { key: 'matricule', value: '' },
         { key: 'email', value: '' },
-        { key: 'filiere', value: '' },
+        { key: 'prenom', value: '' },
+        { key: 'nom', value: '' },
     ];
     add: boolean = false
     edit: boolean = false
-    etudiantId: number = 0
-    etudiantIdEdit: number = 0
+    etudiantId: string = ""
+    etudiantIdEdit: string = ""
     // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     resultsLength = 0;
     isLoadingResults = true;
@@ -118,7 +117,6 @@ export class ListeEtudiantComponent implements OnInit, AfterViewInit {
         let matricule = '';
         let prenom = '';
         let nom = '';
-        let filiere = '';
         let email = '';
         column.forEach((col) => {
             switch (col.key) {
@@ -131,9 +129,6 @@ export class ListeEtudiantComponent implements OnInit, AfterViewInit {
                 case 'nom':
                     nom = col.value;
                     break;
-                case 'filiere':
-                    filiere = col.value;
-                    break;
                 case 'email':
                     email = col.value;
                     break;
@@ -142,16 +137,11 @@ export class ListeEtudiantComponent implements OnInit, AfterViewInit {
             }
         });
         return this._etudiantService
-            .getuser(
-                this.paginator.pageIndex,
-                this.paginator.pageSize,
-                this.sort.active,
-                this.sort.direction,
-                matricule,
-                email,
-                nom,
-                prenom,
-                filiere
+            .query(
+                 {page: this.paginator.pageIndex, 
+                            size: this.paginator.pageSize, 
+                            sort: this.sort.active+","+this.sort.direction,
+                        email:email, prenom: prenom, nom: nom, matricule: matricule, profil: "PROFESSEUR" }
             )
             .subscribe((data) => {
                 console.log(
@@ -217,12 +207,18 @@ export class ListeEtudiantComponent implements OnInit, AfterViewInit {
                 startWith({}),
                 switchMap(() => {
                     this.isLoadingResults = true;
-                    return this._etudiantService!.getuser(
-                        this.paginator.pageIndex,
-                        this.paginator.pageSize,
-                        this.sort.active,
-                        this.sort.direction
-                    ).pipe(catchError(() => observableOf(null)));
+                    if(this.sort.active == "prenom"){
+                        this.sort.active = "firstName"
+                    }
+
+                    if(this.sort.active == "nom"){
+                        this.sort.active = "lastName"
+                    }
+                    return this._etudiantService!.query(
+                 {page: this.paginator.pageIndex, 
+                            size: this.paginator.pageSize, 
+                            sort: this.sort.active+","+this.sort.direction, profil: "ETUDIANT"}
+            ).pipe(catchError(() => observableOf(null)));
                 }),
                 map((data) => {
                     // Flip flag to show that loading has finished.
@@ -271,7 +267,7 @@ export class ListeEtudiantComponent implements OnInit, AfterViewInit {
             this.fiche = false;
             this.data = [...this.dataSource];
         } else {
-            this.etudiantId = etudiant.id
+            this.etudiantId = etudiant.email
             this.fiche = true;
             this.data = [etudiant];
         }
@@ -291,7 +287,7 @@ export class ListeEtudiantComponent implements OnInit, AfterViewInit {
             this.add = false;
             this.data = [...this.dataSource];
         } else {
-            this.etudiantIdEdit = etudiant.id
+            this.etudiantIdEdit = etudiant.email
             this.selectEtudiantEdit = etudiant
             this.add = true;
             this.data = [etudiant];
@@ -303,3 +299,4 @@ export class ListeEtudiantComponent implements OnInit, AfterViewInit {
         this.allEtudiants()
       }
 }
+

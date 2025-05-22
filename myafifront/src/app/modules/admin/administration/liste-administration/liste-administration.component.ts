@@ -24,6 +24,7 @@ import { ActivatedRoute } from '@angular/router';
 import { NewUtilisateur } from '../../ue/ue.model';
 import { AdminService } from '../../user/service/admin.service';
 
+
 interface SearchFild {
     key: string;
     value: any;
@@ -53,26 +54,25 @@ export class ListeAdministrationComponent implements OnInit, AfterViewInit {
         { key: 'prenom', value: null },
         { key: 'nom', value: null },
         { key: 'email', value: null },
-        { key: 'filiere', value: null },
     ];
 
     dataSource: NewUtilisateur[] = [];
-    columnsToDisplay = ['matricule', 'prenom', 'nom', 'email', 'filiere'];
-    displayedColumn: string[] = ['prenom', 'nom', 'email', 'filiere'];
-    displayedColumns: string[] = ['prenom', 'nom', 'email', 'filiere'];
+    columnsToDisplay = ['matricule', 'prenom', 'nom', 'email', 'telephone', 'profil', 'campus'];
+    displayedColumn: string[] = ['prenom', 'nom', 'email', 'telephone', 'profil', 'campus'];
+    displayedColumns: string[] = ['prenom', 'nom', 'email', 'telephone', 'profil', 'campus'];
 
     columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
     expandedElement: NewUtilisateur | null;
     selectAdministrationEdit: NewUtilisateur
     selectedColumn = [
-        { key: 'matricule', value: '' },
         { key: 'email', value: '' },
-        { key: 'filiere', value: '' },
+        { key: 'prenom', value: '' },
+        { key: 'nom', value: '' },
     ];
     add: boolean = false
     edit: boolean = false
     administrationId: number = 0
-    administrationIdEdit: number = 0
+    administrationIdEdit: string = ""
     // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     resultsLength = 0;
     isLoadingResults = true;
@@ -94,7 +94,7 @@ export class ListeAdministrationComponent implements OnInit, AfterViewInit {
         private _administrationService: AdminService,
         private _formBuilder: UntypedFormBuilder,
         private _route: ActivatedRoute
-    ) {}
+    ) { }
 
     ngOnInit(): void {
         this.searchColumnForm = this._formBuilder.group({
@@ -103,6 +103,7 @@ export class ListeAdministrationComponent implements OnInit, AfterViewInit {
         this.searchFilds = this.searchColumnForm.get(
             'searchFilds'
         ) as FormArray;
+        
     }
 
     ngAfterViewInit() {
@@ -118,8 +119,8 @@ export class ListeAdministrationComponent implements OnInit, AfterViewInit {
         let matricule = '';
         let prenom = '';
         let nom = '';
-        let filiere = '';
         let email = '';
+        let profil = '';
         column.forEach((col) => {
             switch (col.key) {
                 case 'matricule':
@@ -131,27 +132,24 @@ export class ListeAdministrationComponent implements OnInit, AfterViewInit {
                 case 'nom':
                     nom = col.value;
                     break;
-                case 'filiere':
-                    filiere = col.value;
-                    break;
                 case 'email':
                     email = col.value;
+                    break;
+                case 'profil':
+                    profil = col.value;
                     break;
 
                 default:
             }
         });
         return this._administrationService
-            .getuser(
-                this.paginator.pageIndex,
-                this.paginator.pageSize,
-                this.sort.active,
-                this.sort.direction,
-                matricule,
-                email,
-                nom,
-                prenom,
-                filiere
+            .query(
+                {
+                    page: this.paginator.pageIndex,
+                    size: this.paginator.pageSize,
+                    sort: this.sort.active + "," + this.sort.direction,
+                    email: email, prenom: prenom, nom: nom, matricule: matricule, admin: 1, profil: profil
+                }
             )
             .subscribe((data) => {
                 console.log(
@@ -180,7 +178,7 @@ export class ListeAdministrationComponent implements OnInit, AfterViewInit {
         if (fields.length == 0) {
             this.searchFilds.clear();
             this.getAllAdministration(fields);
-            
+
         } else {
             this.searchFilds.clear();
             fields.forEach((field) => {
@@ -194,7 +192,7 @@ export class ListeAdministrationComponent implements OnInit, AfterViewInit {
         }
     }
 
-    
+
     public compareWith(object1: SearchFild, object2: SearchFild): boolean {
         return object1?.key === object2?.key;
     }
@@ -208,7 +206,7 @@ export class ListeAdministrationComponent implements OnInit, AfterViewInit {
             this.selectedColumn
         );
         this.getAllAdministration(column);
-      
+
     }
 
     allAdministrations() {
@@ -217,11 +215,19 @@ export class ListeAdministrationComponent implements OnInit, AfterViewInit {
                 startWith({}),
                 switchMap(() => {
                     this.isLoadingResults = true;
-                    return this._administrationService!.getuser(
-                        this.paginator.pageIndex,
-                        this.paginator.pageSize,
-                        this.sort.active,
-                        this.sort.direction
+                    if (this.sort.active == "prenom") {
+                        this.sort.active = "firstName"
+                    }
+
+                    if (this.sort.active == "nom") {
+                        this.sort.active = "lastName"
+                    }
+                    return this._administrationService!.query(
+                        {
+                            page: this.paginator.pageIndex,
+                            size: this.paginator.pageSize,
+                            sort: this.sort.active + "," + this.sort.direction, admin: 1
+                        }
                     ).pipe(catchError(() => observableOf(null)));
                 }),
                 map((data) => {
@@ -291,15 +297,15 @@ export class ListeAdministrationComponent implements OnInit, AfterViewInit {
             this.add = false;
             this.data = [...this.dataSource];
         } else {
-            this.administrationIdEdit = administration.id
+            this.administrationIdEdit = administration.email
             this.selectAdministrationEdit = administration
             this.add = true;
             this.data = [administration];
         }
     }
 
-    setAdd(event){
+    setAdd(event) {
         this.add = event
         this.allAdministrations()
-      }
+    }
 }

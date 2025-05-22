@@ -1,0 +1,137 @@
+<div class="flex flex-col h-[90vh] w-full bg-white rounded-lg shadow-lg overflow-hidden">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between px-6 py-4 bg-primary text-white">
+        <span class="text-xl font-semibold">Ajout multiple de cours</span>
+    </div>
+
+    <!-- Contenu principal avec scroll -->
+    <div class="flex-1 overflow-y-auto">
+        <form [formGroup]="form" class="flex flex-col gap-6 p-6">
+            <!-- Votre contenu existant avec les cartes de cours -->
+            <div formArrayName="coursArray" class="flex flex-col gap-6">
+                <div *ngFor="let cours of coursArray.controls; let i = index" [formGroupName]="i">
+                    <mat-card class="rounded-xl shadow-md border border-gray-200">
+                        <mat-card-header class="flex justify-between items-center p-4">
+                            <mat-card-title class="text-lg font-medium">Cours #{{ i + 1 }}</mat-card-title>
+                            <mat-card-actions *ngIf="coursArray.length > 1">
+                                <button mat-icon-button color="warn" (click)="removeCours(i)"
+                                    aria-label="Supprimer ce cours">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </mat-card-actions>
+                        </mat-card-header>
+
+                        <mat-divider></mat-divider>
+
+                        <mat-card-content class="p-4 space-y-6">
+                            <!-- Dates -->
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <mat-form-field appearance="outline" class="w-full">
+                                    <mat-label>Date de début</mat-label>
+                                    <input matInput type="datetime-local" formControlName="dateDebut" required>
+                                    <mat-error *ngIf="cours.get('dateDebut')?.hasError('required')">Ce champ est
+                                        obligatoire</mat-error>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" class="w-full">
+                                    <mat-label>Date de fin</mat-label>
+                                    <input matInput type="datetime-local" formControlName="dateFin" required>
+                                    <mat-error *ngIf="cours.get('dateFin')?.hasError('required')">Ce champ est
+                                        obligatoire</mat-error>
+                                </mat-form-field>
+
+                                <!-- Filière -->
+                                <mat-form-field appearance="outline" class="w-full">
+                                    <mat-label>Filière</mat-label>
+                                    <input matInput formControlName="filiere" [matAutocomplete]="autoFiliere"
+                                        (keyup)="getAllFiliere($event.target.value)">
+                                    <mat-autocomplete #autoFiliere="matAutocomplete" [displayWith]="displayFn">
+                                        <mat-option *ngFor="let option of filieres" [value]="option"
+                                            (click)="selectedFiliere = option; getAllMatiere();">
+                                            {{ option.nom }}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                    <mat-error *ngIf="cours.get('filiere')?.hasError('required')">La filière doit être
+                                        choisie</mat-error>
+                                </mat-form-field>
+                            </div>
+
+                            <!-- Filière, Matière, Salle -->
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+                                <!-- Matière -->
+                                <mat-form-field appearance="outline" class="w-full">
+                                    <mat-label>Matière</mat-label>
+                                    <input matInput formControlName="matiereUser" [matAutocomplete]="autoMatiere"
+                                        (keyup)="getAllMatiere($event.target.value)">
+                                    <mat-autocomplete #autoMatiere="matAutocomplete" [displayWith]="displayFn2">
+                                        <mat-option *ngFor="let option of matieres" [value]="option">
+                                            {{ option.matiere?.nom }}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                    <mat-error *ngIf="cours.get('matiereUser')?.hasError('required')">La matière doit
+                                        être
+                                        choisie</mat-error>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" class="w-full">
+                                    <mat-label>Campus</mat-label>
+                                    <input matInput formControlName="campus" [matAutocomplete]="autoCampus"
+                                        (keyup)="getAllCampus($event.target.value)">
+                                    <mat-autocomplete #autoCampus="matAutocomplete" [displayWith]="displayFn">
+                                        <mat-option *ngFor="let option of campuses" [value]="option"
+                                            (click)="selectedCampus = option.nom; getAllSalles()">
+                                            {{ option.nom }}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                    <mat-error *ngIf="form.get('campus')?.hasError('required')">
+                                        Le campus doit être choisie
+                                    </mat-error>
+                                </mat-form-field>
+
+                                <!-- Salle -->
+                                <mat-form-field appearance="outline" class="w-full">
+                                    <mat-label>Salle</mat-label>
+                                    <input matInput formControlName="salle" [matAutocomplete]="autoSalle"
+                                        (keyup)="getAllSalles($event.target.value)">
+                                    <mat-autocomplete #autoSalle="matAutocomplete" [displayWith]="displayFn3">
+                                        <mat-option *ngFor="let option of salles" [value]="option">
+                                            {{ option.numero }}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                    <mat-error *ngIf="cours.get('salle')?.hasError('required')">La salle doit être
+                                        choisie</mat-error>
+                                </mat-form-field>
+
+                                <!-- Lien -->
+                                <mat-form-field appearance="outline" class="w-full">
+                                    <mat-label>Lien du cours</mat-label>
+                                    <input matInput formControlName="lien">
+                                </mat-form-field>
+
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+            </div>
+
+            <!-- Bouton Ajouter -->
+            <div class="flex justify-center">
+                <button mat-stroked-button color="primary" type="button" (click)="addCours()">
+                    <mat-icon>add</mat-icon>
+                    Ajouter un autre cours
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Barre d'actions fixe en bas -->
+    <div class="sticky bottom-0 bg-white border-t border-gray-200 px-6 py-4 flex justify-end gap-4">
+        <button mat-button (click)="onCancel()">Annuler</button>
+        <button mat-raised-button color="primary" (click)="save()" [disabled]="form.invalid || isSaving">
+            <mat-spinner *ngIf="isSaving" diameter="20" class="mr-2"></mat-spinner>
+            Enregistrer
+        </button>
+    </div>
+</div>

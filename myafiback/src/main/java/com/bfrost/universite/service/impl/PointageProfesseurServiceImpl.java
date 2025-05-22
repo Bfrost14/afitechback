@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.ZonedDateTime;
 import java.util.Optional;
 
 /**
@@ -37,8 +38,9 @@ public class PointageProfesseurServiceImpl implements PointageProfesseurService 
 
     @Override
     public PointageProfesseurDTO save(PointageProfesseurDTO pointageProfesseurDTO) {
-        LOG.debug("Request to save PointageProfesseur : {}", pointageProfesseurDTO);
+        LOG.info("Request to save PointageProfesseur : {}", pointageProfesseurDTO.getProfesseur().getId());
         PointageProfesseur pointageProfesseur = pointageProfesseurMapper.toEntity(pointageProfesseurDTO);
+        LOG.info("Request to save PointageProfesseur : {}", pointageProfesseur.getProfesseur());
         pointageProfesseur = pointageProfesseurRepository.save(pointageProfesseur);
         return pointageProfesseurMapper.toDto(pointageProfesseur);
     }
@@ -68,9 +70,10 @@ public class PointageProfesseurServiceImpl implements PointageProfesseurService 
 
     @Override
     @Transactional(readOnly = true)
-    public Page<PointageProfesseurDTO> findAll(Pageable pageable) {
+    public Page<PointageProfesseurDTO> findAll(Pageable pageable, ZonedDateTime dateDebut, ZonedDateTime dateFin, String professeur) {
         LOG.debug("Request to get all PointageProfesseurs");
-        return pointageProfesseurRepository.findAll(pageable).map(pointageProfesseurMapper::toDto);
+        return pointageProfesseurRepository.findAllWithFilters(dateDebut, dateFin, professeur, pageable)
+                .map(pointageProfesseurMapper::toDto);
     }
 
     @Override

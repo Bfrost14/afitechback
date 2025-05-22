@@ -3,14 +3,16 @@ package com.bfrost.universite.service.mapper;
 import com.bfrost.universite.domain.Campus;
 import com.bfrost.universite.service.dto.CampusDTO;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-20T19:29:17+0000",
-    comments = "version: 1.5.3.Final, compiler: javac, environment: Java 21.0.4 (Oracle Corporation)"
+    date = "2025-05-22T02:38:37+0000",
+    comments = "version: 1.5.3.Final, compiler: javac, environment: Java 17.0.10 (Oracle Corporation)"
 )
 @Component
 public class CampusMapperImpl implements CampusMapper {
@@ -83,5 +85,19 @@ public class CampusMapperImpl implements CampusMapper {
         if ( dto.getNom() != null ) {
             entity.setNom( dto.getNom() );
         }
+    }
+
+    @Override
+    public Set<Campus> toEntity(Set<CampusDTO> campus) {
+        if ( campus == null ) {
+            return null;
+        }
+
+        Set<Campus> set = new LinkedHashSet<Campus>( Math.max( (int) ( campus.size() / .75f ) + 1, 16 ) );
+        for ( CampusDTO campusDTO : campus ) {
+            set.add( toEntity( campusDTO ) );
+        }
+
+        return set;
     }
 }

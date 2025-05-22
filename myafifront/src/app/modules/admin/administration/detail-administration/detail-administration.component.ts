@@ -19,7 +19,7 @@ export class DetailAdministrationComponent implements OnInit {
     };
     showAlert: boolean = false;
     @Output() actualiser: EventEmitter<number> = new EventEmitter<number>();
-    @Input() administrationId: number;
+    @Input() administrationId: string = "";
     administration: NewUtilisateur;
     fiche: boolean = true;
 

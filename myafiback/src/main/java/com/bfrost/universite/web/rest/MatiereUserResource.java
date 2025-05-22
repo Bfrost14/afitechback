@@ -4,6 +4,7 @@ import com.bfrost.universite.repository.MatiereUserRepository;
 import com.bfrost.universite.service.MatiereUserService;
 import com.bfrost.universite.service.PaginationService;
 import com.bfrost.universite.service.dto.MatiereUserDTO;
+import com.bfrost.universite.service.dto.Pagination;
 import com.bfrost.universite.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -22,9 +24,7 @@ import tech.jhipster.web.util.ResponseUtil;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * REST controller for managing {@link com.bfrost.universite.domain.MatiereUser}.
@@ -63,6 +63,7 @@ public class MatiereUserResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
+    @PreAuthorize("hasAnyAuthority('ENREGISTREMENT_MATIERE_USER')")
     public ResponseEntity<List<MatiereUserDTO>> createMatiereUser(@Valid @RequestBody List<MatiereUserDTO> matiereUserDTO)
         throws URISyntaxException {
         LOG.debug("REST request to save MatiereUser : {}", matiereUserDTO);
@@ -86,6 +87,7 @@ public class MatiereUserResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('MODIFICATION_GENERALE_MATIERE_USER')")
     public ResponseEntity<MatiereUserDTO> updateMatiereUser(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody MatiereUserDTO matiereUserDTO
@@ -120,6 +122,7 @@ public class MatiereUserResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PreAuthorize("hasAnyAuthority('MODIFICATION_MATIERE_USER')")
     public ResponseEntity<MatiereUserDTO> partialUpdateMatiereUser(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody MatiereUserDTO matiereUserDTO
@@ -151,13 +154,22 @@ public class MatiereUserResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of matiereUsers in body.
      */
     @GetMapping("")
-    public ResponseEntity<List<MatiereUserDTO>> getAllMatiereUsers(
-        @org.springdoc.core.annotations.ParameterObject Pageable pageable
+    @PreAuthorize("hasAnyAuthority('LECTURE_LISTE_MATIERE_USER')")
+    public ResponseEntity<Map<String,Object>> getAllMatiereUsers(
+        @org.springdoc.core.annotations.ParameterObject Pageable pageable,
+        @RequestParam(value = "professeur", required = false) String professeur,
+        @RequestParam(value = "anneeScolaire", required = false) String anneeScolaire,
+        @RequestParam(value = "matiere", required = false) String matiere,
+        @RequestParam(value = "filiere", required = false) String filiere,
+        @RequestParam(value = "semestre", required = false) String semestre
     ) {
         LOG.debug("REST request to get a page of MatiereUsers");
-        Page<MatiereUserDTO> page = matiereUserService.findAll(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-        return ResponseEntity.ok().headers(headers).body(page.getContent());
+        Page<MatiereUserDTO> page = matiereUserService.findAll(pageable, professeur, anneeScolaire, matiere, filiere, semestre);
+        Pagination pagination=paginationService.instancierPagination(page);
+        Map<String,Object> response=new HashMap<>();
+        response.put("data",page.getContent());
+        response.put("pagination",pagination);
+        return ResponseEntity.ok().body(response);
     }
 
     /**
@@ -167,6 +179,7 @@ public class MatiereUserResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the matiereUserDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('LECTURE_DETAILLE_MATIERE_USER')")
     public ResponseEntity<MatiereUserDTO> getMatiereUser(@PathVariable("id") Long id) {
         LOG.debug("REST request to get MatiereUser : {}", id);
         Optional<MatiereUserDTO> matiereUserDTO = matiereUserService.findOne(id);
@@ -180,6 +193,7 @@ public class MatiereUserResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('SUPPRESSION_MATIERE_USER')")
     public ResponseEntity<Void> deleteMatiereUser(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete MatiereUser : {}", id);
         matiereUserService.delete(id);

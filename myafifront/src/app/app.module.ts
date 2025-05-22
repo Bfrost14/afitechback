@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ExtraOptions, PreloadAllModules, RouterModule } from '@angular/router';
@@ -20,6 +20,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSortModule } from '@angular/material/sort';
 import { MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { NGX_MAT_DATE_FORMATS } from '@angular-material-components/datetime-picker';
+import { DatePipe, registerLocaleData } from '@angular/common';
+import localeFr from '@angular/common/locales/fr';
+import { CalendarDateFormatter } from 'angular-calendar';
+import { CustomDateFormatter } from './shared/custom-date-formatter';
+registerLocaleData(localeFr);
 
 const MY_DATE_FORMATS = {
     parse: {
@@ -31,6 +37,18 @@ const MY_DATE_FORMATS = {
       dateA11yLabel: 'DD/MM/YYYY',
       monthYearA11yLabel: 'MMMM YYYY',
     },
+  };
+
+  const MY_FORMATS = {
+      parse: {
+          dateInput: 'DD/MM/YYYY HH:mm',
+      },
+      display: {
+          dateInput: 'DD/MM/YYYY HH:mm',
+          monthYearLabel: 'MMM YYYY',
+          dateA11yLabel: 'LL',
+          monthYearA11yLabel: 'MMMM YYYY',
+      },
   };
 
 const routerConfig: ExtraOptions = {
@@ -72,6 +90,10 @@ const routerConfig: ExtraOptions = {
     providers: [
         { provide: MAT_DATE_LOCALE, useValue: 'fr-FR' }, // Langue en français
         { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS }, // Formats personnalisés
+        { provide: NGX_MAT_DATE_FORMATS, useValue: MY_FORMATS },
+        { provide: LOCALE_ID, useValue: 'fr-FR' },
+        DatePipe,
+         { provide: CalendarDateFormatter, useClass: CustomDateFormatter }
       ],
 })
 export class AppModule

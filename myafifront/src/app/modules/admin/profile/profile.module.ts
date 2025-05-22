@@ -27,7 +27,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTabsModule } from '@angular/material/tabs';
 import { QuillModule } from 'ngx-quill';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
-import { NoteModule } from '../note/note.module';
+
 import { ProfileRoutingModule } from './profile-routing.module';
 import { ListeProfileComponent } from './liste-profile/liste-profile.component';
 import { DetailProfileComponent } from './detail-profile/detail-profile.component';
@@ -70,8 +70,7 @@ import { AjoutProfileComponent } from './ajout-profile/ajout-profile.component';
     MatTabsModule,
     QuillModule.forRoot(),
     FuseAlertModule,
-    SweetAlert2Module.forRoot(),
-    NoteModule
+    SweetAlert2Module.forRoot()
   ],
 schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

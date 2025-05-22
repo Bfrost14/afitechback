@@ -2,10 +2,13 @@ package com.bfrost.universite.service;
 
 import com.bfrost.universite.service.dto.CalendrierCoursDTO;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * Service Interface for managing {@link com.bfrost.universite.domain.CalendrierCours}.
@@ -38,10 +41,24 @@ public interface CalendrierCoursService {
     /**
      * Get all the calendrierCours.
      *
-     * @param pageable the pagination information.
+     * @param pageable   the pagination information.
+     * @param dateDebut
+     * @param dateFin
+     * @param matiere
+     * @param filiere
+     * @param salle
+     * @param professeur
+     * @param campus
      * @return the list of entities.
      */
-    Page<CalendrierCoursDTO> findAll(Pageable pageable);
+    Page<CalendrierCoursDTO> findAll(Pageable pageable,
+                                     ZonedDateTime dateDebut,
+                                     ZonedDateTime dateFin,
+                                     String matiere,
+                                     String filiere,
+                                     String salle,
+                                     String professeur,
+                                     String campus);
 
     /**
      * Get the "id" calendrierCours.

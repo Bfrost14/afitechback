@@ -14,17 +14,19 @@ export type NewUE = Omit<IUE, 'id'> & { id: null };
 
 export interface IUtilisateur {
   id: number;
-  nom?: string | null;
-  prenom?: string | null;
+  lastName?: string | null;
+  firstName?: string | null;
   password?: string | null;
   matricule?: string | null;
+  nationalite?: string | null;
   email?: string | null;
-  profile?: Pick<IProfile, 'id'> | null;
+  profil?: Pick<IProfile, 'id'> | null;
   dateDeNaissance?: dayjs.Dayjs | null;
   telephone?: string | null;
   firstConnection?: boolean | null;
   filiere?: Pick<IFiliere, 'id'> | null;
   campus?: Pick<ICampus, 'id'> | null;
+  campuses?: ICampus[] | [];
 }
 
 export type NewUtilisateur = Omit<IUtilisateur, 'id'> & { id: null };

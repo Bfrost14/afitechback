@@ -101,6 +101,8 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
     @Column(name = "matricule", nullable = false)
     private String matricule;
 
+    private String nationalite;
+
     @JsonIgnore
     @ManyToMany
     @JoinTable(
@@ -120,6 +122,17 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Profil profil;
+
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+            name = "user_campus",
+            joinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "id") },
+            inverseJoinColumns = { @JoinColumn(name = "campus_id", referencedColumnName = "id") }
+    )
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @BatchSize(size = 20)
+    private Set<Campus> campuses = new HashSet<>();
 
 
 

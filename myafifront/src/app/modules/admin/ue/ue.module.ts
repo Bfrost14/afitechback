@@ -27,7 +27,6 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTabsModule } from '@angular/material/tabs';
 import { QuillModule } from 'ngx-quill';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
-import { NoteModule } from '../note/note.module';
 import { UeRoutingModule } from './ue-routing.module';
 import { ListeUeComponent } from './liste-ue/liste-ue.component';
 import { AjoutUeComponent } from './ajout-ue/ajout-ue.component';
@@ -68,8 +67,7 @@ import { AjoutUeComponent } from './ajout-ue/ajout-ue.component';
     MatTabsModule,
     QuillModule.forRoot(),
     FuseAlertModule,
-    SweetAlert2Module.forRoot(),
-    NoteModule
+    SweetAlert2Module.forRoot()
   ],
 schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

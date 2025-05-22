@@ -10,11 +10,11 @@ export const defaultNavigation: FuseNavigationItem[] = [
         icon    : 'heroicons_outline:home',
         children: [
             {
-                id   : 'professeur.pointage',
+                id   : 'gestionprofesseur.pointage',
                 title: 'Pointage',
                 type : 'basic',
                 icon : 'heroicons_outline:clipboard-check',
-                link : '/professeur/pointage'
+                link : '/gestionprofesseur/pointage/liste'
             }
         ]
     },
@@ -26,46 +26,25 @@ export const defaultNavigation: FuseNavigationItem[] = [
         icon    : 'heroicons_outline:home',
         children: [
             {
-                id   : 'gestion.absence',
-                title: 'Présence',
-                type : 'basic',
-                icon : 'heroicons_outline:user-group',
-                link : '/gestion/absence'
-            },
-            {
-                id   : 'gestion.absence',
-                title: 'Présence',
-                type : 'basic',
-                icon : 'heroicons_outline:user-group',
-                link : '/gestion/absence'
-            },
-            {
                 id   : 'gestion.calendrier',
                 title: 'Calendrier de cours',
                 type : 'basic',
                 icon : 'heroicons_outline:chat-alt',
-                link : '/gestion/calendrier'
+                link : '/gestion/calendrier/liste'
             },
             {
-                id   : 'gestion.cahier-texte',
-                title: 'Cahier de texte',
+                id   : 'gestion.cours',
+                title: 'Cours',
                 type : 'basic',
                 icon : 'heroicons_outline:user-group',
-                link : '/gestion/cahier-texte'
+                link : '/gestion/mesnotes'
             },
             {
-                id      : 'gestion.notation',
-                title   : 'Notation de cours',
-                type    : 'basic',
-                icon    : 'heroicons_outline:view-boards',
-                link : '/gestion/notation'
-            },
-            {
-                id   : 'gestion.note',
-                title: 'Notes',
+                id   : 'gestion.mesnotes',
+                title: 'Mon espace',
                 type : 'basic',
-                icon : 'heroicons_outline:pencil-alt',
-                link : '/gestion/note'
+                icon : 'heroicons_outline:user-group',
+                link : '/gestion/mesnotes'
             },
         ]
     }, 
@@ -77,12 +56,13 @@ export const defaultNavigation: FuseNavigationItem[] = [
         icon    : 'heroicons_outline:document',
         children: [
            
+            
             {
                 id      : 'admin.etudiant',
                 title   : 'Etudiant',
                 type    : 'basic',
                 icon    : 'heroicons_outline:academic-cap',
-                link : '/admin/etudiant'
+                link : '/admin/etudiant/liste'
             },
             
             {
@@ -90,15 +70,14 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 title   : 'Administration',
                 type    : 'basic',
                 icon    : 'heroicons_outline:user-circle',
-                link : '/admin/administration'
+                link : '/admin/administration/liste'
             },
-            {
-                id      : 'admin.cours',
-                title   : 'Cours',
+           {
+                id      : 'admin.affectation',
+                title   : 'Affectation matière',
                 type    : 'basic',
                 icon    : 'heroicons_outline:cog',
-                link    : '/admin/cours/liste',
-            
+                link : '/admin/affectation/liste'
             },
             {
                 id      : 'admin.professeur',
@@ -122,6 +101,15 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 icon    : 'heroicons_outline:cog',
                 link    : '/admin/matiere/liste',
             },
+
+            {
+                id      : 'admin.annee',
+                title   : 'Année scolaire',
+                type    : 'basic',
+                icon    : 'heroicons_outline:cog',
+                link    : '/admin/annee/liste',
+            },
+            
             
             {
                 id      : 'admin.salle',

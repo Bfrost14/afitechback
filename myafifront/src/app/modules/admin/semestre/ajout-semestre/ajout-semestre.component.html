@@ -2,7 +2,7 @@
 
     <div class=" flex  h-10 text-white  w-full -mb-0.5 justify-between  bg-rouge-1 p-1">
         
-        <span class="mr-4 mt-1.5 font-bold">{{semestreId == 0 ? ('Ajouter Semestre' | titlecase) : ('Modifier Semestre' | titlecase)}}</span>
+        <span class="mr-4 mt-1.5 font-bold">{{semestre == undefined ? ('Ajouter Semestre' | titlecase) : ('Modifier Semestre' | titlecase)}}</span>
       </div>
     <!-- Compose form -->
     <form class="flex flex-col flex-auto sm:p-8 overflow-y-auto bg-bleue-claire-6 w-full" [formGroup]="form">

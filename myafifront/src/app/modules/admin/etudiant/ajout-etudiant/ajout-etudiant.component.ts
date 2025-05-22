@@ -6,6 +6,10 @@ import { AlertToastService } from 'app/core/util/alertToast.service';
 import { environment } from 'environments/environment';
 import { NewUtilisateur } from '../../ue/ue.model';
 import { AdminService } from '../../user/service/admin.service';
+import { AuthService } from 'app/core/auth/auth.service';
+import { CampusService } from '../../campus/service/campus.service';
+import { FiliereService } from '../../filiere/service/filiere.service';
+import { ProfileService } from '../../profile/service/profile.service';
 @Component({
     selector: 'app-ajout-etudiant',
     templateUrl: './ajout-etudiant.component.html',
@@ -58,7 +62,7 @@ export class AjoutEtudiantComponent implements OnInit {
     };
 
     form: UntypedFormGroup;
-    @Input() etudiantId: number;
+    @Input() etudiantId: string;
     @Input() etudiant: NewUtilisateur;
     @Output() edit = new EventEmitter<boolean>();
     @Output() add = new EventEmitter<boolean>();
@@ -72,32 +76,49 @@ export class AjoutEtudiantComponent implements OnInit {
     buttonMessage: string;
 
     adresse: any[] = [];
+    filieres: any[] = [];
+    campus: any[] = [];
+    profiles: any[] = [];
     constructor(
         private _formBuilder: UntypedFormBuilder,
         private _etudiantService: AdminService,
-        private _alertToastService: AlertToastService
+        private _alertToastService: AlertToastService,
+        private _authService: AuthService,
+        private _campusService: CampusService,
+        private _filiereService: FiliereService,
+        private _profileService: ProfileService
     ) {
-       
+
     }
 
     ngOnInit(): void {
 
         this.form = this._formBuilder.group({
-          id: [null],
-          matricule: [null],
-          nom: [null, Validators.required],
-          prenom: [null, Validators.required],
-          email: [null, Validators.required],
-          dateDeNaissance: [null, Validators.required],
-          role: ["ROLE_ETUDIANT", Validators.required],
-          filiere: [null, Validators.required],
-          telephone: [null, Validators.required],
+            id: [null],
+            matricule: [null],
+            firstName: [null, Validators.required],
+            lastName: [null, Validators.required],
+            email: [null, Validators.required],
+            telephone: [null, Validators.required],
+            createdBy: [this._authService.getUtilisateur().email],
+            login: [null],
+            profil: [null],
+            campus: [null, Validators.required],
+            nationalite: [null, Validators.required],
+            campuses: [[]],
+            filiere: [null, Validators.required],
+            dateDeNaissance: [null, Validators.required],
+            authorities: [null],
 
-      });
-        if(this.etudiant != undefined){
-          this.form.patchValue(this.etudiant)
+        });
+        if (this.etudiant != undefined) {
+            this.form.patchValue(this.etudiant)
         }
-        
+
+        this.getAllCampus()
+        this.getAllFiliere("")
+        this.getAllProfile()
+
     }
 
     public compareWith(object1: any, object2: any): boolean {
@@ -111,8 +132,18 @@ export class AjoutEtudiantComponent implements OnInit {
             'etudiant form >>>>>>>>>>>>>>>>>>>>>>>>>>>>',
             this.form.value
         );
-
+         this.form.value.login = this.form.value.email
+        let profile = this.profiles.find(profile => profile.nom == "ETUDIANT")
+        if(profile == undefined){
+            return this._alertToastService.toastDanger('Profil étudiant inéxistant','Profile non trouvé')
+        }
+        this.form.value.profil = profile
+        this.form.value.authorities = profile.authorities
+        this.form.value.langKey = 'fr'
         this.form.value.password = environment.defaultPassword
+
+        this.form.value.campuses = []
+        this.form.value.campuses.push(this.form.value.campus)
         this._etudiantService.saveuser(this.form.value).subscribe((data) => {
             console.log(
                 'saved etudiant  >>>>>>>>>>>>>>>>>>>>>>>>>>>>',
@@ -125,7 +156,7 @@ export class AjoutEtudiantComponent implements OnInit {
 
     modifier() {
 
-        this._etudiantService.updateuser(this.etudiantId,this.form.value).subscribe((data) => {
+        this._etudiantService.updateuser(this.etudiantId, this.form.value).subscribe((data) => {
             console.log(
                 'updated etudiant  >>>>>>>>>>>>>>>>>>>>>>>>>>>>',
                 data.body
@@ -165,18 +196,41 @@ export class AjoutEtudiantComponent implements OnInit {
             this.etudiant
         );
         // Open the confirmation dialog
-        
-                // Delete the etudiant on the server
-                this._etudiantService
-                    .deleteuser(this.etudiant.id)
-                    .subscribe(() => {
-                        this._alertToastService.toastSuccess(
-                            'Réussie',
-                            'Suppression étudiant'
-                        );
-                        this.add.emit(false);
-                    });
+
+        // Delete the etudiant on the server
+        this._etudiantService
+            .deleteuser(this.etudiant.id)
+            .subscribe(() => {
+                this._alertToastService.toastSuccess(
+                    'Réussie',
+                    'Suppression étudiant'
+                );
+                this.add.emit(false);
+            });
+    }
+
+    getAllFiliere(nom: string){
+        this._filiereService.query({page: 0, size: 10, sort: 'id,desc', nom: nom}).subscribe(data =>{
+            this.filieres = data.body.data;
+        })
+    }
+
+    displayFn(profil: any): string {
+        return profil && profil.nom ? profil.nom : '';
+    }
+
+    getAllCampus(nom: string = ""){
+        this._campusService.query({page: 0, size: 10, nom: nom}).subscribe(
+            response => {
+                this.campus = response.body["data"];
             }
-    
-    
+        )
+    }
+
+    getAllProfile(){
+        this._profileService.query({page: 0, size: 10, sort: 'id,desc', nom: "ETUDIANT"}).subscribe(data =>{
+            this.profiles = data.body.data;
+        })
+    }
+
 }

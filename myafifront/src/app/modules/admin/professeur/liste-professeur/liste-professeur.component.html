@@ -3,12 +3,13 @@
     <!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ search @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
 
     <ng-template #addProfesseur>
-      <app-ajout-professeur [professeurId]="professeurIdEdit" [professeur]="selectProfesseurEdit" (add)="setAdd($event)"></app-ajout-professeur>
+      <app-ajout-professeur [professeurId]="professeurIdEdit" [professeur]="selectProfesseurEdit"
+        (add)="setAdd($event)"></app-ajout-professeur>
 
     </ng-template>
     <ng-container *ngIf="!add; else addProfesseur;">
       <ng-container *ngIf="!fiche">
-        <div class="grid grid-cols-12  w-full max-w-xs sm:max-w-none mb-4">
+        <div class="grid grid-cols-12  w-full max-w-xs sm:max-w-none mb-4 ">
           <div>
             <mat-form-field class=" fuse-mat-no-subscript w-full sm:w-0 " appearance="none">
               <button mat-mini-fab matSuffix class="bg-rouge-1  ">
@@ -77,7 +78,7 @@
         </div>
 
 
-        <div class="flex justify-end mb-2 -mt-4">
+        <div class="flex justify-end mb-2">
 
           <button class="ml-4" mat-flat-button class="bg-rouge-1 text-white" (click)="add = true">
             <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
@@ -112,10 +113,19 @@
           </ng-container>
 
           <ng-template #elseMat>
-            <td mat-cell *matCellDef="let element">
-              {{element[column]}}
+            <ng-container *ngIf="column == 'prenom' || column == 'nom'; else elseMat2">
+              <td mat-cell *matCellDef="let element">
+                {{element[column == 'prenom' ? 'firstName' : 'lastName']}}
 
-            </td>
+              </td>
+            </ng-container>
+            <ng-template #elseMat2>
+              <td mat-cell *matCellDef="let element">
+                {{element[column]}}
+
+              </td>
+            </ng-template>
+
           </ng-template>
 
 
@@ -155,7 +165,7 @@
             <div class="example-element-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
 
               <div class="flex justify-center w-full bg-slate-300">
-                <app-detail-professeur class="w-full" [professeurId]="element.id"
+                <app-detail-professeur class="w-full" [professeurId]="element.email"
                   *ngIf="expandedElement === element"></app-detail-professeur>
               </div>
             </div>

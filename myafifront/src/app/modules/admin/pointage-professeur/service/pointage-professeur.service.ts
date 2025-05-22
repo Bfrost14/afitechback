@@ -33,19 +33,17 @@ export class PointageProfesseurService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('/api/pointage-professeurs');
 
   create(pointageProfesseur: NewPointageProfesseur): Observable<any> {
-    const copy = this.convertDateFromClient(pointageProfesseur);
+    
     return this.http
-      .post<RestPointageProfesseur>(this.resourceUrl, copy, { observe: 'response' })
-      .pipe(map(res => this.convertResponseFromServer(res)));
+      .post<RestPointageProfesseur>(this.resourceUrl, pointageProfesseur, { observe: 'response' });
   }
 
   update(pointageProfesseur: IPointageProfesseur): Observable<any> {
-    const copy = this.convertDateFromClient(pointageProfesseur);
+   
     return this.http
-      .put<RestPointageProfesseur>(`${this.resourceUrl}/${this.getPointageProfesseurIdentifier(pointageProfesseur)}`, copy, {
+      .put<RestPointageProfesseur>(`${this.resourceUrl}/${this.getPointageProfesseurIdentifier(pointageProfesseur)}`, pointageProfesseur, {
         observe: 'response',
-      })
-      .pipe(map(res => this.convertResponseFromServer(res)));
+      });
   }
 
   partialUpdate(pointageProfesseur: PartialUpdatePointageProfesseur): Observable<any> {
@@ -53,21 +51,20 @@ export class PointageProfesseurService {
     return this.http
       .patch<RestPointageProfesseur>(`${this.resourceUrl}/${this.getPointageProfesseurIdentifier(pointageProfesseur)}`, copy, {
         observe: 'response',
-      })
-      .pipe(map(res => this.convertResponseFromServer(res)));
+      });
   }
 
   find(id: number): Observable<any> {
     return this.http
       .get<RestPointageProfesseur>(`${this.resourceUrl}/${id}`, { observe: 'response' })
-      .pipe(map(res => this.convertResponseFromServer(res)));
+      ;
   }
 
   query(req?: any): Observable<any> {
     const options = createRequestOption(req);
     return this.http
       .get<RestPointageProfesseur[]>(this.resourceUrl, { params: options, observe: 'response' })
-      .pipe(map(res => this.convertResponseArrayFromServer(res)));
+      ;
   }
 
   delete(id: number): Observable<HttpResponse<{}>> {

@@ -1,0 +1,97 @@
+<!-- calendrier-cours-dialog.component.html -->
+<h2 mat-dialog-title>{{ data.mode === 'add' ? 'Ajouter' : 'Modifier' }} un cours</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- Date Début -->
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Date de début</mat-label>
+        <input matInput type="datetime-local" formControlName="dateDebut" required>
+        <mat-error *ngIf="form.get('dateDebut')?.hasError('required')">Ce champ est obligatoire</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Date de fin</mat-label>
+        <input matInput type="datetime-local" formControlName="dateFin" required>
+        <mat-error *ngIf="form.get('dateFin')?.hasError('required')">Ce champ est obligatoire</mat-error>
+      </mat-form-field>
+
+      <!-- Filière -->
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Filière</mat-label>
+        <input type="text" matInput formControlName="filiere" [matAutocomplete]="autoFiliere"
+          (input)="getAllFiliere($event.target.value)">
+        <mat-autocomplete #autoFiliere="matAutocomplete" [displayWith]="displayFn">
+          <mat-option *ngFor="let option of filieres" [value]="option" (click)="selectedFiliere = option; getAllMatiere()">
+            {{option.nom}}
+          </mat-option>
+        </mat-autocomplete>
+        <mat-error *ngIf="form.get('filiere')?.hasError('required')">
+          La filière doit être choisie
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+
+
+    <!-- Matière -->
+    <mat-form-field appearance="outline" class="w-full mt-4">
+      <mat-label>Matière</mat-label>
+      <input type="text" matInput formControlName="matiereUser" [matAutocomplete]="autoMatiere"
+        (input)="getAllMatiere($event.target.value)">
+      <mat-autocomplete #autoMatiere="matAutocomplete" [displayWith]="displayFn2">
+        <mat-option *ngFor="let option of matieres" [value]="option">
+          {{option.matiere?.nom}}
+        </mat-option>
+      </mat-autocomplete>
+      <mat-error *ngIf="form.get('matiereUser')?.hasError('required')">
+        La matière doit être choisie
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="w-full mt-4">
+      <mat-label>Campus</mat-label>
+      <input matInput formControlName="campus" [matAutocomplete]="autoCampus"
+        (keyup)="getAllCampus($event.target.value)">
+      <mat-autocomplete #autoCampus="matAutocomplete" [displayWith]="displayFn">
+        <mat-option *ngFor="let option of campuses" [value]="option.nom"
+          (click)="selectedCampus = option.nom; getAllSalles()">
+          {{ option.nom }}
+        </mat-option>
+      </mat-autocomplete>
+      <mat-error *ngIf="form.get('campus')?.hasError('required')">
+        Le campus doit être choisie
+      </mat-error>
+    </mat-form-field>
+    <!-- Salle -->
+    <mat-form-field appearance="outline" class="w-full mt-4">
+      <mat-label>Salle</mat-label>
+      <input type="text" matInput formControlName="salle" [matAutocomplete]="autoSalle"
+        (input)="getAllSalles($event.target.value)">
+      <mat-autocomplete #autoSalle="matAutocomplete" [displayWith]="displayFn3">
+        <mat-option *ngFor="let option of salles" [value]="option">
+          {{ option.numero }}
+        </mat-option>
+      </mat-autocomplete>
+      <mat-error *ngIf="form.get('salle')?.hasError('required')">
+        La salle doit être choisie
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full mt-4">
+      <mat-label>Lien du cours</mat-label>
+      <input matInput formControlName="lien">
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="mt-4">
+  <button mat-button (click)="onCancel()">Annuler</button>
+  <button mat-raised-button color="primary" (click)="save()" [disabled]="form.invalid || isSaving" class="ml-2">
+    <mat-icon *ngIf="isSaving">
+      <mat-spinner diameter="20"></mat-spinner>
+    </mat-icon>
+    {{ isSaving ? 'Enregistrement...' : 'Enregistrer' }}
+  </button>
+</mat-dialog-actions>

@@ -18,7 +18,7 @@ export class DetailEtudiantComponent implements OnInit {
     };
     showAlert: boolean = false;
     @Output() actualiser: EventEmitter<number> = new EventEmitter<number>();
-    @Input() etudiantId: number;
+    @Input() etudiantId: string;
     etudiant: NewUtilisateur;
     fiche: boolean = true;
 

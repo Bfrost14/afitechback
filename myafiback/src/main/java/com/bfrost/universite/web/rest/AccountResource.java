@@ -7,6 +7,7 @@ import com.bfrost.universite.service.MailService;
 import com.bfrost.universite.service.UserService;
 import com.bfrost.universite.service.dto.AdminUserDTO;
 import com.bfrost.universite.service.dto.PasswordChangeDTO;
+import com.bfrost.universite.service.mapper.UserMapper;
 import com.bfrost.universite.web.rest.errors.*;
 import com.bfrost.universite.web.rest.vm.KeyAndPasswordVM;
 import com.bfrost.universite.web.rest.vm.ManagedUserVM;
@@ -26,6 +27,8 @@ import java.util.Optional;
 @RequestMapping("/api")
 public class AccountResource {
 
+    private final UserMapper userMapper;
+
     private static class AccountResourceException extends RuntimeException {
 
         private AccountResourceException(String message) {
@@ -41,10 +44,11 @@ public class AccountResource {
 
     private final MailService mailService;
 
-    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService) {
+    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService, UserMapper userMapper) {
         this.userRepository = userRepository;
         this.userService = userService;
         this.mailService = mailService;
+        this.userMapper = userMapper;
     }
 
     /**
@@ -89,7 +93,7 @@ public class AccountResource {
     public AdminUserDTO getAccount() {
         return userService
             .getUserWithAuthorities()
-            .map(AdminUserDTO::new)
+            .map(userMapper::toDto)
             .orElseThrow(() -> new AccountResourceException("User could not be found"));
     }
 

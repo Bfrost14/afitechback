@@ -85,10 +85,11 @@ public class MailService {
             LOG.debug("Email doesn't exist for user '{}'", user.getLogin());
             return;
         }
+        LOG.debug("Email exist '{}'", user.getLogin());
         Locale locale = Locale.forLanguageTag(user.getLangKey());
         Context context = new Context(locale);
         context.setVariable(USER, user);
-        context.setVariable(BASE_URL, "baseUrl");
+        context.setVariable(BASE_URL, "http://localhost:4200");
         String content = templateEngine.process(templateName, context);
         String subject = messageSource.getMessage(titleKey, null, locale);
         sendEmailSync(user.getEmail(), subject, content, false, true);

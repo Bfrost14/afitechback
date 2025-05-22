@@ -20,7 +20,6 @@ export type RestCalendrierCours = RestOf<ICalendrierCours>;
 
 export type NewRestCalendrierCours = RestOf<NewCalendrierCours>;
 
-export type PartialUpdateRestCalendrierCours = RestOf<PartialUpdateCalendrierCours>;
 
 export type EntityResponseType = HttpResponse<ICalendrierCours>;
 export type EntityArrayResponseType = HttpResponse<ICalendrierCours[]>;
@@ -32,40 +31,40 @@ export class CalendrierCoursService {
 
   protected resourceUrl = this.applicationConfigService.getEndpointFor('/api/calendrier-cours');
 
-  create(calendrierCours: NewCalendrierCours): Observable<any> {
-    const copy = this.convertDateFromClient(calendrierCours);
+  create(calendrierCours: NewCalendrierCours[]): Observable<any> {
+   
     return this.http
-      .post<RestCalendrierCours>(this.resourceUrl, copy, { observe: 'response' })
-      .pipe(map(res => this.convertResponseFromServer(res)));
+      .post<RestCalendrierCours>(this.resourceUrl, calendrierCours, { observe: 'response' })
+      ;
   }
 
   update(calendrierCours: ICalendrierCours): Observable<any> {
-    const copy = this.convertDateFromClient(calendrierCours);
+   
     return this.http
-      .put<RestCalendrierCours>(`${this.resourceUrl}/${this.getCalendrierCoursIdentifier(calendrierCours)}`, copy, { observe: 'response' })
-      .pipe(map(res => this.convertResponseFromServer(res)));
+      .put<RestCalendrierCours>(`${this.resourceUrl}/${this.getCalendrierCoursIdentifier(calendrierCours)}`, calendrierCours, { observe: 'response' })
+      ;
   }
 
   partialUpdate(calendrierCours: PartialUpdateCalendrierCours): Observable<any> {
-    const copy = this.convertDateFromClient(calendrierCours);
+   
     return this.http
-      .patch<RestCalendrierCours>(`${this.resourceUrl}/${this.getCalendrierCoursIdentifier(calendrierCours)}`, copy, {
+      .patch<RestCalendrierCours>(`${this.resourceUrl}/${this.getCalendrierCoursIdentifier(calendrierCours)}`, calendrierCours, {
         observe: 'response',
       })
-      .pipe(map(res => this.convertResponseFromServer(res)));
+      ;
   }
 
   find(id: number): Observable<any> {
     return this.http
       .get<RestCalendrierCours>(`${this.resourceUrl}/${id}`, { observe: 'response' })
-      .pipe(map(res => this.convertResponseFromServer(res)));
+      ;
   }
 
   query(req?: any): Observable<any> {
     const options = createRequestOption(req);
     return this.http
       .get<RestCalendrierCours[]>(this.resourceUrl, { params: options, observe: 'response' })
-      .pipe(map(res => this.convertResponseArrayFromServer(res)));
+      ;
   }
 
   delete(id: number): Observable<HttpResponse<{}>> {
@@ -102,33 +101,5 @@ export class CalendrierCoursService {
     return calendrierCoursCollection;
   }
 
-  protected convertDateFromClient<T extends ICalendrierCours | NewCalendrierCours | PartialUpdateCalendrierCours>(
-    calendrierCours: T,
-  ): RestOf<T> {
-    return {
-      ...calendrierCours,
-      dateDebut: calendrierCours.dateDebut?.toJSON() ?? null,
-      dateFin: calendrierCours.dateFin?.toJSON() ?? null,
-    };
-  }
 
-  protected convertDateFromServer(restCalendrierCours: RestCalendrierCours): ICalendrierCours {
-    return {
-      ...restCalendrierCours,
-      dateDebut: restCalendrierCours.dateDebut ? dayjs(restCalendrierCours.dateDebut) : undefined,
-      dateFin: restCalendrierCours.dateFin ? dayjs(restCalendrierCours.dateFin) : undefined,
-    };
-  }
-
-  protected convertResponseFromServer(res: HttpResponse<RestCalendrierCours>): HttpResponse<ICalendrierCours> {
-    return res.clone({
-      body: res.body ? this.convertDateFromServer(res.body) : null,
-    });
-  }
-
-  protected convertResponseArrayFromServer(res: HttpResponse<RestCalendrierCours[]>): HttpResponse<ICalendrierCours[]> {
-    return res.clone({
-      body: res.body ? res.body.map(item => this.convertDateFromServer(item)) : null,
-    });
-  }
 }

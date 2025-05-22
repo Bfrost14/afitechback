@@ -1,12 +1,15 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-
 import { SweetAlertOptions } from 'sweetalert2';
 import { AlertToastService } from 'app/core/util/alertToast.service';
 import { environment } from 'environments/environment';
-import { NewUtilisateur } from '../../ue/ue.model';
-import { UserService } from '../../user/service/user.service';
 import { AdminService } from '../../user/service/admin.service';
+import { NewUtilisateur } from '../../ue/ue.model';
+import { ProfileService } from '../../profile/service/profile.service';
+
+import { AuthService } from 'app/core/auth/auth.service';
+import { CampusService } from '../../campus/service/campus.service';
+
 @Component({
     selector: 'app-ajout-administration',
     templateUrl: './ajout-administration.component.html',
@@ -59,7 +62,7 @@ export class AjoutAdministrationComponent implements OnInit {
     };
 
     form: UntypedFormGroup;
-    @Input() administrationId: number;
+    @Input() administrationId: string;
     @Input() administration: NewUtilisateur;
     @Output() edit = new EventEmitter<boolean>();
     @Output() add = new EventEmitter<boolean>();
@@ -73,32 +76,43 @@ export class AjoutAdministrationComponent implements OnInit {
     buttonMessage: string;
 
     adresse: any[] = [];
+    profiles: any;
+    campus: any[] = [];
+    campuses: any[] = [];
     constructor(
         private _formBuilder: UntypedFormBuilder,
         private _administrationService: AdminService,
-        private _alertToastService: AlertToastService
+        private _alertToastService: AlertToastService,
+        private _profileService: ProfileService,
+        private _authService: AuthService,
+        private _campusService: CampusService
     ) {
-       
+
     }
 
     ngOnInit(): void {
 
         this.form = this._formBuilder.group({
-          id: [null],
-          matricule: [null],
-          nom: [null, Validators.required],
-          prenom: [null, Validators.required],
-          email: [null, Validators.required],
-          dateDeNaissance: [null, Validators.required],
-          role: ["ROLE_ETUDIANT", Validators.required],
-          filiere: [null, Validators.required],
-          telephone: [null, Validators.required],
-
-      });
-        if(this.administration != undefined){
-          this.form.patchValue(this.administration)
+            id: [null],
+            matricule: [null],
+            firstName: [null, Validators.required],
+            lastName: [null, Validators.required],
+            email: [null, Validators.required],
+            telephone: [null, Validators.required],
+            createdBy: [this._authService.getUtilisateur().email],
+            login: [null],
+            profil:[null, Validators.required],
+            campus:[null, Validators.required],
+            campuses:[null, Validators.required],
+            authorities: [null],
+        });
+        if (this.administration != undefined) {
+            this.form.patchValue(this.administration)
         }
-        
+
+        this.getAllProfile("")
+        this.getAllCampus()
+
     }
 
     public compareWith(object1: any, object2: any): boolean {
@@ -112,7 +126,9 @@ export class AjoutAdministrationComponent implements OnInit {
             'administration form >>>>>>>>>>>>>>>>>>>>>>>>>>>>',
             this.form.value
         );
-
+        this.form.value.login = this.form.value.email
+        this.form.value.authorities = this.form.value.profil.authorities
+        this.form.value.langKey = 'fr'
         this.form.value.password = environment.defaultPassword
         this._administrationService.saveuser(this.form.value).subscribe((data) => {
             console.log(
@@ -125,8 +141,8 @@ export class AjoutAdministrationComponent implements OnInit {
     }
 
     modifier() {
-
-        this._administrationService.updateuser(this.administrationId,this.form.value).subscribe((data) => {
+        this.form.value.lastModifiedBy = this._authService.getUtilisateur().email
+        this._administrationService.updateuser(this.administrationId, this.form.value).subscribe((data) => {
             console.log(
                 'updated administration  >>>>>>>>>>>>>>>>>>>>>>>>>>>>',
                 data.body
@@ -166,18 +182,35 @@ export class AjoutAdministrationComponent implements OnInit {
             this.administration
         );
         // Open the confirmation dialog
-        
-                // Delete the administration on the server
-                this._administrationService
-                    .deleteuser(this.administration.id)
-                    .subscribe(() => {
-                        this._alertToastService.toastSuccess(
-                            'Réussie',
-                            'Suppression étudiant'
-                        );
-                        this.add.emit(false);
-                    });
+
+        // Delete the administration on the server
+        this._administrationService
+            .deleteuser(this.administration.id)
+            .subscribe(() => {
+                this._alertToastService.toastSuccess(
+                    'Réussie',
+                    'Suppression administration'
+                );
+                this.add.emit(false);
+            });
+    }
+
+    getAllProfile(nom: string){
+        this._profileService.query({page: 0, size: 10, sort: 'id,desc', nom: nom}).subscribe(data =>{
+            this.profiles = data.body.data;
+        })
+    }
+
+    displayFn(profil: any): string {
+        return profil && profil.nom ? profil.nom : '';
+    }
+
+    getAllCampus(nom: string = ""){
+        this._campusService.query({page: 0, size: 10, nom: nom}).subscribe(
+            response => {
+                this.campus = response.body["data"];
+                this.campuses = response.body["data"];
             }
-    
-    
+        )
+    }
 }

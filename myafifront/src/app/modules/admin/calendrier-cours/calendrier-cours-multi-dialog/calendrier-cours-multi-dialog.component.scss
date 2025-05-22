@@ -1,0 +1,66 @@
+// calendrier-cours-multi-dialog.component.scss
+.mat-card {
+  transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.mat-form-field {
+  width: 100%;
+}
+
+.mat-dialog-actions {
+  padding: 16px 24px;
+  margin-top: 16px;
+  border-top: 1px solid #e0e0e0;
+  justify-content: flex-end;
+}
+
+.bg-red-600 {
+  background-color: #e53e3e;
+}
+
+.bg-blue-50 {
+  background-color: #f8fafc;
+}
+
+.divide-blue-100 > :not([hidden]) ~ :not([hidden]) {
+  border-color: #dbeafe;
+}
+/* Dans votre fichier de styles */
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.mat-spinner {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+/* Pour le header */
+.bg-primary {
+  background-color: #3f51b5; /* Couleur primaire Material */
+}
+
+/* Pour le contenu scrollable */
+.overflow-y-auto {
+  scrollbar-width: thin;
+  scrollbar-color: #c1c1c1 #f1f1f1;
+}
+
+.overflow-y-auto::-webkit-scrollbar {
+  width: 8px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  background-color: #c1c1c1;
+  border-radius: 4px;
+}

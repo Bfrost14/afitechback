@@ -72,9 +72,9 @@ public class MatiereUserServiceImpl implements MatiereUserService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<MatiereUserDTO> findAll(Pageable pageable) {
+    public Page<MatiereUserDTO> findAll(Pageable pageable, String professeur, String anneeScolaire, String matiere, String filiere, String semestre) {
         LOG.debug("Request to get all MatiereUsers");
-        return matiereUserRepository.findAll(pageable).map(matiereUserMapper::toDto);
+        return matiereUserRepository.manageUser(pageable, professeur, anneeScolaire,matiere, filiere, semestre).map(matiereUserMapper::toDto);
     }
 
     @Override

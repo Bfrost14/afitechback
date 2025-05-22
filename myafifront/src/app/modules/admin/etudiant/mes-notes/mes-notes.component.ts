@@ -22,10 +22,12 @@ import {
     UntypedFormGroup,
 } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Note } from '../../note/note';
-import { NoteService } from '../../note/note.service';
+
+import { NoteService } from '../../cours/service/note.service';
 import { AuthService } from 'app/core/auth/auth.service';
-import { UserAll } from '../user-all';
+import { NewUtilisateur } from '../../ue/ue.model';
+import { NewNote } from '../../cours/models/note';
+
 
 interface SearchFild {
     key: string;
@@ -52,19 +54,19 @@ interface SearchFild {
 })
 export class MesNotesComponent implements OnInit, AfterViewInit {
     @Input() userEmail: string;
-    @Input() user: UserAll;
+    @Input() user: NewUtilisateur;
     searchFieldList: SearchFild[] = [
         { key: 'matiere', value: null },
         { key: 'semestre', value: null },
     ];
 
-    dataSource: Note[] = [];
+    dataSource: NewNote[] = [];
     columnsToDisplay = ['matiere', 'semestre', 'valeur'];
     displayedColumn: string[] = ['semestre', 'valeur'];
     displayedColumns: string[] = ['semestre', 'valeur'];
 
-    expandedElement: Note | null;
-    selectNoteEdit: Note;
+    expandedElement: NewNote | null;
+    selectNoteEdit: NewNote;
     selectedColumn = [
         { key: 'matiere', value: '' },
         { key: 'semestre', value: '' },
@@ -81,7 +83,7 @@ export class MesNotesComponent implements OnInit, AfterViewInit {
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
     exampleDatabase: any | null;
-    data: Note[] = [];
+    data: NewNote[] = [];
     pageSize = 25;
     pageSizeOptions: number[] = [25, 50, 100];
     // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -256,7 +258,7 @@ export class MesNotesComponent implements OnInit, AfterViewInit {
     }
 
     fiche: boolean = false;
-    setDataSource(note: Note) {
+    setDataSource(note: NewNote) {
         console.log('>>>>>>>>>>>>>>>.. data set >>>>>>>>>>>>>>>>>>', note);
         if (this.fiche) {
             this.noteId = null;
@@ -275,7 +277,7 @@ export class MesNotesComponent implements OnInit, AfterViewInit {
         );
     }
 
-    setDataSourceEdit(note: Note) {
+    setDataSourceEdit(note: NewNote) {
         console.log('>>>>>>>>>>>>>>>.. data set >>>>>>>>>>>>>>>>>>', note);
         if (this.add) {
             this.noteIdEdit = null;

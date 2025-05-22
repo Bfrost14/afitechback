@@ -1,0 +1,158 @@
+<div class="grid grid-cols-1 justify-center w-full">
+  <mat-card class="main-card">
+    <mat-card-header>
+      <mat-card-title>📅 Calendrier des Cours</mat-card-title>
+      <mat-card-subtitle>Gestion des plannings des filières</mat-card-subtitle>
+    </mat-card-header>
+
+    <div class="text-right mb-2">
+      <button mat-stroked-button color="primary" (click)="toggleFilters()">
+        <mat-icon>{{ showFilters ? 'expand_less' : 'expand_more' }}</mat-icon>
+        {{ showFilters ? 'Masquer les filtres' : 'Afficher les filtres' }}
+      </button>
+    </div>
+    <mat-card-content>
+      <!-- Filtres -->
+      <mat-card class="filter-card mb-4" *ngIf="showFilters">
+        <mat-card-header>
+          <mat-card-title>🔍 Filtres</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <form [formGroup]="filterForm" class="filter-form">
+            <div class="flex">
+              <mat-form-field appearance="fill" class="w-1/3 pr-2">
+                <mat-label>Date de début</mat-label>
+                <input matInput [matDatepicker]="picker1" formControlName="dateDebut">
+                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                <mat-datepicker #picker1></mat-datepicker>
+              </mat-form-field>
+              <mat-form-field appearance="fill" class="w-1/3 pl-2">
+                <mat-label>Date de fin</mat-label>
+                <input matInput [matDatepicker]="picker2" formControlName="dateFin">
+                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                <mat-datepicker #picker2></mat-datepicker>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="w-1/3 px-2">
+                <mat-label>Filière</mat-label>
+                <input matInput formControlName="filiere" [matAutocomplete]="autoFiliere"
+                  (keyup)="getAllFiliere($event.target.value)">
+                <mat-autocomplete #autoFiliere="matAutocomplete">
+                  <mat-option *ngFor="let option of filieres" [value]="option.nom"
+                    (click)="selectedFiliere = option.nom; getAllMatiere()">
+                    {{ option.nom }}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+            </div>
+            <div class="flex">
+
+
+              <mat-form-field appearance="fill" class="w-1/3 pr-2">
+                <mat-label>Matière</mat-label>
+                <input matInput formControlName="matiere" [matAutocomplete]="autoMatiere"
+                  (keyup)="getAllMatiere($event.target.value)">
+                <mat-autocomplete #autoMatiere="matAutocomplete">
+                  <mat-option *ngFor="let option of matieres" [value]="option.nom">
+                    {{ option.nom }}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="w-1/3 pl-2">
+                <mat-label>Campus</mat-label>
+                <input matInput formControlName="campus" [matAutocomplete]="autoCampus"
+                  (keyup)="getAllCampus($event.target.value)">
+                <mat-autocomplete #autoCampus="matAutocomplete">
+                  <mat-option *ngFor="let option of campuses" [value]="option.nom"
+                    (click)="selectedCampus = option.nom; getAllSalles()">
+                    {{ option.nom }}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="w-1/3 px-2">
+                <mat-label>Salle</mat-label>
+                <input matInput formControlName="salle" [matAutocomplete]="autoSalle"
+                  (keyup)="getAllSalles($event.target.value)">
+                <mat-autocomplete #autoSalle="matAutocomplete">
+                  <mat-option *ngFor="let option of salles" [value]="option.numero">
+                    {{ option.numero }}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+            </div>
+
+
+            <div class="row mt-3 text-right">
+              <div class="col-md-12">
+                <button mat-stroked-button color="warn" (click)="resetFilters()" class="mr-2">
+                  <mat-icon>refresh</mat-icon> Réinitialiser
+                </button>
+                <button mat-raised-button color="primary" (click)="applyFilters()">
+                  <mat-icon>filter_alt</mat-icon> Appliquer
+                </button>
+              </div>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+
+      <div style="display: flex; flex-direction: row; justify-content: center;">
+        <div>
+          <button mat-raised-button color="primary" (click)="openAddDialog()" class="mr-2">
+            <mat-icon>add</mat-icon> Ajouter un cours
+          </button>
+          <button mat-raised-button color="accent" (click)="openAddMultipleDialog()">
+            <mat-icon>post_add</mat-icon> Ajout multiple
+          </button>
+        </div>
+      </div>
+
+      <!-- Actions -->
+
+      <div class="mb-6 d-flex justify-content-between align-items-center">
+        <div>
+          <button mat-icon-button (click)="previous()">
+            <mat-icon>chevron_left</mat-icon>
+          </button>
+          <button mat-stroked-button (click)="today()" class="mx-2">
+            Aujourd'hui
+          </button>
+          <button mat-icon-button (click)="next()">
+            <mat-icon>chevron_right</mat-icon>
+          </button>
+        </div>
+
+        <h3 class="m-0">{{ viewDate | date:'MMMM y' }}</h3>
+
+        <div>
+          <button mat-stroked-button (click)="setView(CalendarView.Day)" [class.active]="view === CalendarView.Day">
+            Jour
+          </button>
+          <button mat-stroked-button (click)="setView(CalendarView.Week)" [class.active]="view === CalendarView.Week">
+            Semaine
+          </button>
+          <button mat-stroked-button (click)="setView(CalendarView.Month)" [class.active]="view === CalendarView.Month">
+            Mois
+          </button>
+        </div>
+      </div>
+
+      <!-- Calendrier -->
+      <div class="calendar-container">
+        <mwl-calendar-week-view [dayStartHour]="8" [dayEndHour]="22" *ngIf="view === CalendarView.Week"
+          [viewDate]="viewDate" [events]="events" (eventClicked)="openEditDialog($event.event)">
+        </mwl-calendar-week-view>
+
+        <mwl-calendar-day-view [dayStartHour]="8" [dayEndHour]="22" *ngIf="view === CalendarView.Day"
+          [viewDate]="viewDate" [events]="events" (eventClicked)="openEditDialog($event.event)">
+        </mwl-calendar-day-view>
+
+        <mwl-calendar-month-view [dayStartHour]="8" [dayEndHour]="22" *ngIf="view === CalendarView.Month"
+          [viewDate]="viewDate" [events]="events" (eventClicked)="openEditDialog($event.event)">
+        </mwl-calendar-month-view>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
