@@ -8,14 +8,12 @@ import { AuthService } from 'app/core/auth/auth.service';
 @Injectable({
     providedIn: 'root'
 })
-export class NavigationMockApi
-{
+export class NavigationMockApi {
 
     /**
      * Constructor
      */
-    constructor(private _fuseMockApiService: FuseMockApiService, private _authService: AuthService)
-    {
+    constructor(private _fuseMockApiService: FuseMockApiService, private _authService: AuthService) {
         // Register Mock API handlers
         this.registerHandlers();
     }
@@ -26,26 +24,43 @@ export class NavigationMockApi
     /**
      * Register Mock API handlers
      */
-    registerHandlers(): void
-    {
+    registerHandlers(): void {
         // -----------------------------------------------------------------------------------------------------
         // @ Navigation - GET
         // -----------------------------------------------------------------------------------------------------
         this._fuseMockApiService
             .onGet('api/common/navigation')
             .reply(() => {
-                let liste : any = []
-                // if(this._authService.getUtilisateur().role == "ROLE_ETUDIANT"){
-                //     liste = defaultNavigation.filter(def => def.id.includes('etudiant.'))
-                // }else{
-                //     liste = defaultNavigation.filter(def => def.id.includes('secretaire.'))
-                // }
-                
+                let liste: any[] = [];
+                const roleUtilisateur = this._authService.getUtilisateur().role;
+
+                defaultNavigation.forEach(nav => {
+                    // Vérifier les enfants autorisés
+                    let enfantsAutorises = [];
+
+                    if (nav.children && nav.children.length > 0) {
+                        enfantsAutorises = nav.children.filter(child =>
+                            roleUtilisateur.includes(child.authority)
+                        );
+                    }
+
+                    // Vérifier si le parent est autorisé OU s'il a au moins un enfant autorisé
+                    if (roleUtilisateur.includes(nav.authority) || enfantsAutorises.length > 0) {
+                        // Ajouter le groupe avec seulement les enfants autorisés
+                        const itemAvecEnfantsFiltres = {
+                            ...nav,
+                            children: enfantsAutorises.length > 0 ? enfantsAutorises : undefined
+                        };
+                        liste.push(itemAvecEnfantsFiltres);
+                    }
+                });
+
+
                 // Return the response
                 return [
                     200,
                     {
-                        default   : cloneDeep(defaultNavigation )
+                        default: cloneDeep(liste)
                     }
                 ];
             });

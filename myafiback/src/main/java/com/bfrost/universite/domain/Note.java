@@ -1,5 +1,6 @@
 package com.bfrost.universite.domain;
 
+import com.bfrost.universite.domain.enumeration.TypeNote;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -27,6 +28,8 @@ public class Note implements Serializable {
 
     @Column(name = "valeur")
     private Float valeur;
+
+    private TypeNote typeNote;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "filiere", "campus" }, allowSetters = true)

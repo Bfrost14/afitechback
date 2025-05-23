@@ -65,9 +65,9 @@ public class NotationServiceImpl implements NotationService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<NotationDTO> findAll(Pageable pageable) {
+    public Page<NotationDTO> findAll(Pageable pageable, String etudiant, Long idCalendrier, String matiere) {
         LOG.debug("Request to get all Notations");
-        return notationRepository.findAll(pageable).map(notationMapper::toDto);
+        return notationRepository.manageNotation(pageable,etudiant,idCalendrier,matiere).map(notationMapper::toDto);
     }
 
     @Override

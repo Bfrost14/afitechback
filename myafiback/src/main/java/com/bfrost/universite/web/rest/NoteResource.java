@@ -11,12 +11,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
-import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
 import java.net.URI;
@@ -57,6 +55,7 @@ public class NoteResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
+    @PreAuthorize("hasAnyAuthority('ENREGISTREMENT_NOTE')")
     public ResponseEntity<List<NoteDTO>> createNote(@RequestBody List<NoteDTO> noteDTO) throws URISyntaxException {
         LOG.debug("REST request to save Note : {}", noteDTO);
         if (noteDTO.get(0).getId() != null) {
@@ -79,6 +78,7 @@ public class NoteResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('MODIFICATION_GENERALE_NOTE')")
     public ResponseEntity<NoteDTO> updateNote(@PathVariable(value = "id", required = false) final Long id, @RequestBody NoteDTO noteDTO)
         throws URISyntaxException {
         LOG.debug("REST request to update Note : {}, {}", id, noteDTO);
@@ -111,6 +111,7 @@ public class NoteResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PreAuthorize("hasAnyAuthority('MODIFICATION_NOTE')")
     public ResponseEntity<NoteDTO> partialUpdateNote(
         @PathVariable(value = "id", required = false) final Long id,
         @RequestBody NoteDTO noteDTO
@@ -142,9 +143,15 @@ public class NoteResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of notes in body.
      */
     @GetMapping("")
-    public ResponseEntity<Map<String,Object>> getAllNotes(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
+    @PreAuthorize("hasAnyAuthority('LECTURE_LISTE_NOTE')")
+    public ResponseEntity<Map<String,Object>> getAllNotes(@org.springdoc.core.annotations.ParameterObject Pageable pageable,
+                                                          @RequestParam(required = false) String etudiant,
+                                                          @RequestParam(required = false) String semestre,
+                                                          @RequestParam(required = false) String typeNote,
+                                                          @RequestParam(required = false) Long idMatiereUser,
+                                                          @RequestParam(required = false) String matiere) {
         LOG.debug("REST request to get a page of Notes");
-        Page<NoteDTO> page = noteService.findAll(pageable);
+        Page<NoteDTO> page = noteService.findAll(pageable,etudiant,semestre,matiere, typeNote, idMatiereUser);
         Pagination pagination=paginationService.instancierPagination(page);
         Map<String,Object> response=new HashMap<>();
         response.put("data",page.getContent());
@@ -159,6 +166,7 @@ public class NoteResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the noteDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('LECTURE_DETAILLE_NOTE')")
     public ResponseEntity<NoteDTO> getNote(@PathVariable("id") Long id) {
         LOG.debug("REST request to get Note : {}", id);
         Optional<NoteDTO> noteDTO = noteService.findOne(id);
@@ -172,6 +180,7 @@ public class NoteResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('SUPPRESSION_NOTE')")
     public ResponseEntity<Void> deleteNote(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete Note : {}", id);
         noteService.delete(id);

@@ -35,6 +35,8 @@ public class Absence implements Serializable {
     @Column(name = "justifie")
     private Boolean justifie;
 
+    private Boolean presence;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "professeur" }, allowSetters = true)
     private CalendrierCours calendrierCours;

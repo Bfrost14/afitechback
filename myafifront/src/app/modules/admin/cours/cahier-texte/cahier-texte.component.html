@@ -1,0 +1,22 @@
+<div class="p-4">
+  <form [formGroup]="form">
+    <label class="block font-semibold mb-2">Contenu du cahier de texte :</label>
+    <textarea
+      rows="8"
+      formControlName="contenu"
+      class="w-full border border-gray-300 rounded p-2"
+      [readonly]="!isWithinEditWindow"
+    ></textarea>
+
+    <div class="mt-4" *ngIf="isWithinEditWindow">
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="save()"
+        [disabled]="form.invalid"
+      >
+        Enregistrer
+      </button>
+    </div>
+  </form>
+</div>

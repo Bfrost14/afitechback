@@ -53,44 +53,29 @@ public class UserService {
     private final ProfilMapper profilMapper;
     private final UserMapper userMapper;
     private final AuthorityMapper authorityMapper;
+    private final MailService mailService;
 
 
-    public Optional<User> activateRegistration(String key) {
-        LOG.debug("Activating user for activation key {}", key);
+    public Optional<User> activateRegistration(String email) {
+        LOG.debug("Activating user for activation key {}", email);
         return userRepository
-            .findOneByActivationKey(key)
+            .findOneByLogin(email)
             .map(user -> {
                 // activate given user for the registration key.
-                user.setActivated(true);
+                user.setActivated(!user.isActivated());
                 user.setActivationKey(null);
                 this.clearUserCaches(user);
                 LOG.debug("Activated user: {}", user);
-                return user;
-            });
-    }
-
-    public Optional<User> completePasswordReset(String newPassword, String key) {
-        LOG.debug("Reset user password for reset key {}", key);
-        return userRepository
-            .findOneByResetKey(key)
-            .filter(user -> user.getResetDate().isAfter(Instant.now().minus(1, ChronoUnit.DAYS)))
-            .map(user -> {
-                user.setPassword(passwordEncoder.encode(newPassword));
-                user.setResetKey(null);
-                user.setResetDate(null);
-                this.clearUserCaches(user);
-                return user;
-            });
-    }
-
-    public Optional<User> requestPasswordReset(String mail) {
-        return userRepository
-            .findOneByEmailIgnoreCase(mail)
-            .filter(User::isActivated)
-            .map(user -> {
-                user.setResetKey(RandomUtil.generateResetKey());
-                user.setResetDate(Instant.now());
-                this.clearUserCaches(user);
+                String title = "";
+                String content = "";
+                if(user.isActivated()){
+                    title = "Activation de compte";
+                    content = "Votre compte MyAfi a été activé. Veuillez vous connectez";
+                }else{
+                    title = "Désactivation de compte";
+                    content = "Votre compte MyAfi a été désactivé. Veuillez vous rapprochez de l'administration pour plus d'information.";
+                }
+                mailService.sendEmail(user.getEmail(),title,content, false, false);
                 return user;
             });
     }
@@ -125,7 +110,7 @@ public class UserService {
         newUser.setImageUrl(userDTO.getImageUrl());
         newUser.setLangKey(userDTO.getLangKey());
         // new user is not active
-        newUser.setActivated(false);
+        newUser.setActivated(true);
         // new user gets registration key
         newUser.setActivationKey(RandomUtil.generateActivationKey());
         newUser.setAuthorities(authorityMapper.toEntity(userDTO.getAuthorities()));
@@ -156,43 +141,6 @@ public class UserService {
         return true;
     }
 
-    public User createUser(AdminUserDTO userDTO) {
-        User user = new User();
-        user.setLogin(userDTO.getLogin().toLowerCase());
-        user.setFirstName(userDTO.getFirstName());
-        user.setLastName(userDTO.getLastName());
-        if (userDTO.getEmail() != null) {
-            user.setEmail(userDTO.getEmail().toLowerCase());
-        }
-        user.setImageUrl(userDTO.getImageUrl());
-        if (userDTO.getLangKey() == null) {
-            user.setLangKey(Constants.DEFAULT_LANGUAGE); // default language
-        } else {
-            user.setLangKey(userDTO.getLangKey());
-        }
-        String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
-        user.setPassword(encryptedPassword);
-        user.setResetKey(RandomUtil.generateResetKey());
-        user.setResetDate(Instant.now());
-        user.setActivated(true);
-        if (userDTO.getAuthoritie() != null) {
-            Set<Authority> authorities = userDTO
-                .getAuthoritie()
-                .stream()
-                .map(authorityRepository::findById)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .collect(Collectors.toSet());
-            user.setAuthorities(authorities);
-        }
-        user.setMatricule(generateMatricule());
-        user.setCreatedBy(userDTO.getCreatedBy());
-        user.setFirstConnection(true);
-        user = userRepository.save(user);
-        this.clearUserCaches(user);
-        return user;
-    }
-
     /**
      * Update all information for a specific user, and return the modified user.
      *
@@ -221,6 +169,7 @@ public class UserService {
                 user.setTelephone(userDTO.getTelephone());
                 user.getAuthorities().clear();
                 user.setNationalite(userDTO.getNationalite());
+                user.setActivated(true);
                 user.setCampuses(campusMapper.toEntity(userDTO.getCampuses()));
                 user.setAuthorities(authorityMapper.toEntity(userDTO.getAuthorities()));
                 userRepository.save(user);
@@ -239,44 +188,24 @@ public class UserService {
             });
     }
 
-    /**
-     * Update basic information (first name, last name, email, language) for the current user.
-     *
-     * @param firstName first name of user.
-     * @param lastName  last name of user.
-     * @param email     email id of user.
-     * @param langKey   language key.
-     * @param imageUrl  image URL of user.
-     */
-    public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl) {
-        SecurityUtils.getCurrentUserLogin()
-            .flatMap(userRepository::findOneByLogin)
-            .ifPresent(user -> {
-                user.setFirstName(firstName);
-                user.setLastName(lastName);
-                if (email != null) {
-                    user.setEmail(email.toLowerCase());
-                }
-                user.setLangKey(langKey);
-                user.setImageUrl(imageUrl);
-                userRepository.save(user);
-                this.clearUserCaches(user);
-            });
-    }
 
     @Transactional
-    public void changePassword(String currentClearTextPassword, String newPassword) {
-        SecurityUtils.getCurrentUserLogin()
-            .flatMap(userRepository::findOneByLogin)
-            .ifPresent(user -> {
-                String currentEncryptedPassword = user.getPassword();
-                if (!passwordEncoder.matches(currentClearTextPassword, currentEncryptedPassword)) {
-                    throw new InvalidPasswordException();
-                }
-                String encryptedPassword = passwordEncoder.encode(newPassword);
-                user.setPassword(encryptedPassword);
-                this.clearUserCaches(user);
-            });
+    public void changePassword(String email) {
+        LOG.debug("Reset user for account {}", email);
+        userRepository
+                .findOneByLogin(email)
+                .map(user -> {
+                    // activate given user for the registration key.
+                    user.setFirstConnection(true);
+                    user.setPassword(passwordEncoder.encode("Passer@123"));
+                    user.setActivationKey(null);
+                    this.clearUserCaches(user);
+                    LOG.debug("Activated user: {}", user);
+                    mailService.sendEmail(user.getEmail(),"Restauration de mot de passe","Votre mot de passe MyAFI a été restauré.\nVeuillez vous connecter avec Passer@123 puis le changer", false, false);
+                    return user;
+                });
+
+
     }
 
     @Transactional(readOnly = true)

@@ -4,6 +4,7 @@ import dayjs from "dayjs";
 export interface IProfile {
   id: number;
   nom?: string | null;
+  redirection?: string | null;
   authorities?: any[] | []
 }
 

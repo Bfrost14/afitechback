@@ -21,8 +21,10 @@ public class AbsenceDTO implements Serializable {
 
     private Boolean justifie;
 
+    private Boolean presence;
+
     private CalendrierCoursDTO calendrierCours;
 
-    private UserDTO user;
+    private AdminUserDTO user;
 
 }

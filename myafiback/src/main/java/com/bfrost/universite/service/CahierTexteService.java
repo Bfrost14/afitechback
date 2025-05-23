@@ -40,7 +40,7 @@ public interface CahierTexteService {
      * @param pageable the pagination information.
      * @return the list of entities.
      */
-    Page<CahierTexteDTO> findAll(Pageable pageable);
+    Page<CahierTexteDTO> findAll(Pageable pageable, String professeur, Long idCalendrier, String matiere);
 
     /**
      * Get the "id" cahierTexte.

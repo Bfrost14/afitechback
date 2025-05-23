@@ -1,4 +1,6 @@
 spring:
+  messages:
+    basename: i18n/messages
   mail:
     host: smtp.gmail.com
     port: 587

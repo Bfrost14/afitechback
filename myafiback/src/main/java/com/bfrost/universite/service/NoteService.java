@@ -38,10 +38,15 @@ public interface NoteService {
     /**
      * Get all the notes.
      *
-     * @param pageable the pagination information.
+     * @param pageable      the pagination information.
+     * @param etudiant
+     * @param semestre
+     * @param matiere
+     * @param typeNote
+     * @param idMatiereUser
      * @return the list of entities.
      */
-    Page<NoteDTO> findAll(Pageable pageable);
+    Page<NoteDTO> findAll(Pageable pageable, String etudiant, String semestre, String matiere, String typeNote, Long idMatiereUser);
 
     /**
      * Get the "id" note.

@@ -7,6 +7,7 @@ export interface IAbsence {
   id: number;
   date?: dayjs.Dayjs | null;
   justifie?: boolean | null;
+  presence?: boolean | null;
   calendierCours?: Pick<ICalendrierCours, 'id'> | null;
   utilisateur?: Pick<IUtilisateur, 'id'> | null;
 }

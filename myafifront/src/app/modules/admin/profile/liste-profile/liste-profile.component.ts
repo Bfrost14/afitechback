@@ -52,10 +52,97 @@ export class ListeProfileComponent implements OnInit, AfterViewInit {
         { key: 'nom', value: null },
     ];
 
+      allLinks = [
+        {
+            title: 'Pointage',
+            link: '/gestionprofesseur/pointage/liste'
+        },
+        {
+            title: 'Absences',
+            link: '/gestion/absence/liste'
+        },
+        {
+            title: 'Espace étudiant',
+            link: '/gestion/espace'
+        },
+        {
+            title: 'Calendrier de cours',
+            link: '/gestion/calendrier/liste'
+        },
+        {
+            title: 'Cours',
+            link: '/gestion/cours/liste'
+        },
+        {
+            title: 'Notes',
+            link: '/gestion/note/liste'
+        },
+        {
+            title: 'Cahier de texte',
+            link: '/gestion/cahiertexte/liste'
+        },
+        {
+            title: 'Notations',
+            link: '/gestion/notation/liste'
+        },
+        {
+            title: 'Étudiants',
+            link: '/admin/etudiant/liste'
+        },
+        {
+            title: 'Professeurs',
+            link: '/admin/professeur/liste'
+        },
+        {
+            title: 'Administrateurs',
+            link: '/admin/administration/liste'
+        },
+        {
+            title: 'Affectations matières',
+            link: '/admin/affectation/liste'
+        },
+        {
+            title: 'Filières',
+            link: '/admin/filiere/liste'
+        },
+        {
+            title: 'Matières',
+            link: '/admin/matiere/liste'
+        },
+        {
+            title: 'Unités d\'enseignement',
+            link: '/admin/ue/liste'
+        },
+        {
+            title: 'Salles',
+            link: '/admin/salle/liste'
+        },
+        {
+            title: 'Campus',
+            link: '/admin/campus/liste'
+        },
+        {
+            title: 'Semestres',
+            link: '/admin/semestre/liste'
+        },
+        {
+            title: 'Années scolaires',
+            link: '/admin/annee/liste'
+        },
+        {
+            title: 'Profils',
+            link: '/admin/profiles/liste'
+        },
+        {
+            title: 'Autorisations',
+            link: '/admin/authority/liste'
+        }
+    ];
+
     dataSource: NewProfile[] = [];
-    columnsToDisplay = [ 'nom',];
-    displayedColumn: string[] = ['nom'];
-    displayedColumns: string[] = ['nom'];
+    columnsToDisplay = [ 'nom', "pageredirection"];
+    displayedColumn: string[] = ['nom', "pageredirection"];
+    displayedColumns: string[] = ['nom', "pageredirection"];
 
     columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
     expandedElement: NewProfile | null;
@@ -272,5 +359,9 @@ export class ListeProfileComponent implements OnInit, AfterViewInit {
     setAdd(event){
         this.add = event
         this.allProfiles()
+      }
+
+      findPage(link: string){
+        return this.allLinks.find(value => value.link == link)?.title || link
       }
 }

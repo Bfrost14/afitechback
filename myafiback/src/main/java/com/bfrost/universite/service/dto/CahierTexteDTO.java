@@ -25,6 +25,6 @@ public class CahierTexteDTO implements Serializable {
 
     private CalendrierCoursDTO calendrierCours;
 
-    private UserDTO user;
+    private AdminUserDTO user;
 
 }

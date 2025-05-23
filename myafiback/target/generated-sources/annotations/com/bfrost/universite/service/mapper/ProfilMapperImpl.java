@@ -13,8 +13,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-22T02:38:37+0000",
-    comments = "version: 1.5.3.Final, compiler: javac, environment: Java 17.0.10 (Oracle Corporation)"
+    date = "2025-05-23T20:34:40+0000",
+    comments = "version: 1.5.3.Final, compiler: javac, environment: Java 21.0.4 (Oracle Corporation)"
 )
 @Component
 public class ProfilMapperImpl implements ProfilMapper {
@@ -29,6 +29,7 @@ public class ProfilMapperImpl implements ProfilMapper {
 
         profil.setId( dto.getId() );
         profil.setNom( dto.getNom() );
+        profil.setRedirection( dto.getRedirection() );
         profil.setAuthorities( authorityDTOSetToAuthoritySet( dto.getAuthorities() ) );
 
         return profil;
@@ -44,6 +45,7 @@ public class ProfilMapperImpl implements ProfilMapper {
 
         profilDTO.setId( entity.getId() );
         profilDTO.setNom( entity.getNom() );
+        profilDTO.setRedirection( entity.getRedirection() );
         profilDTO.setAuthorities( authoritySetToAuthorityDTOSet( entity.getAuthorities() ) );
 
         return profilDTO;
@@ -88,6 +90,9 @@ public class ProfilMapperImpl implements ProfilMapper {
         }
         if ( dto.getNom() != null ) {
             entity.setNom( dto.getNom() );
+        }
+        if ( dto.getRedirection() != null ) {
+            entity.setRedirection( dto.getRedirection() );
         }
         if ( entity.getAuthorities() != null ) {
             Set<Authority> set = authorityDTOSetToAuthoritySet( dto.getAuthorities() );

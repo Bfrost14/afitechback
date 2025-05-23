@@ -20,6 +20,9 @@ public class ProfilDTO implements Serializable {
     @NotNull
     private String nom;
 
+    @NotNull
+    private String redirection;
+
     private Set<AuthorityDTO> authorities;
 
 }

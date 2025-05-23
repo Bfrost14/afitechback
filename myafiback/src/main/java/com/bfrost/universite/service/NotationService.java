@@ -37,10 +37,13 @@ public interface NotationService {
     /**
      * Get all the notations.
      *
-     * @param pageable the pagination information.
+     * @param pageable     the pagination information.
+     * @param etudiant
+     * @param idCalendrier
+     * @param matiere
      * @return the list of entities.
      */
-    Page<NotationDTO> findAll(Pageable pageable);
+    Page<NotationDTO> findAll(Pageable pageable, String etudiant, Long idCalendrier, String matiere);
 
     /**
      * Get the "id" notation.

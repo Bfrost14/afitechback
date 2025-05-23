@@ -1,0 +1,7 @@
+export enum TypeNote {
+  EXAMEN = 'EXAMEN',
+
+  EVALUATION = 'EVALUATION',
+
+  RATTRAPAGE = 'RATTRAPAGE',
+}

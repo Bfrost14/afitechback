@@ -1,7 +1,6 @@
 import dayjs from "dayjs";
 import { ICampus } from "../campus/campus.model";
 import { IFiliere } from "../filiere/filiere.model";
-import { Role } from "../enumerations/role.model";
 import { IProfile } from "../profile/profile.model";
 
 export interface IUE {

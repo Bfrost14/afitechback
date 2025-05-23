@@ -30,6 +30,7 @@ com\bfrost\universite\domain\PointageProfesseur.class
 com\bfrost\universite\domain\Campus.class
 com\bfrost\universite\service\mapper\UserMapperImpl.class
 com\bfrost\universite\web\rest\errors\BadRequestAlertException.class
+com\bfrost\universite\domain\enumeration\TypeNote.class
 com\bfrost\universite\service\impl\AnneeScolaireUserServiceImpl.class
 com\bfrost\universite\repository\AuthorityRepository.class
 com\bfrost\universite\service\impl\CampusServiceImpl.class
@@ -48,7 +49,6 @@ com\bfrost\universite\service\mapper\CampusMapperImpl.class
 com\bfrost\universite\repository\AnneeScolaireUserRepository.class
 com\bfrost\universite\service\SalleService.class
 com\bfrost\universite\service\mapper\AnneeScolaireUserMapper.class
-com\bfrost\universite\service\dto\RegisterRequest$RegisterRequestBuilder.class
 com\bfrost\universite\service\mapper\NotationMapper.class
 com\bfrost\universite\service\dto\ProfilDTO.class
 com\bfrost\universite\web\rest\SalleResource.class
@@ -88,7 +88,6 @@ com\bfrost\universite\service\mapper\CahierTexteMapper.class
 com\bfrost\universite\service\UserService.class
 com\bfrost\universite\web\rest\CahierTexteResource.class
 com\bfrost\universite\domain\Salle.class
-com\bfrost\universite\domain\enumeration\Role.class
 com\bfrost\universite\service\NoteService.class
 com\bfrost\universite\domain\AnneeScolaireUser.class
 com\bfrost\universite\service\dto\PasswordChangeDTO.class
@@ -123,7 +122,6 @@ com\bfrost\universite\service\mapper\SemestreMapperImpl.class
 com\bfrost\universite\web\rest\errors\LoginAlreadyUsedException.class
 com\bfrost\universite\web\rest\vm\LoginVM.class
 com\bfrost\universite\web\rest\AccountResource.class
-com\bfrost\universite\service\dto\RegisterRequest.class
 com\bfrost\universite\domain\Absence.class
 com\bfrost\universite\service\mapper\PointageProfesseurMapper.class
 com\bfrost\universite\service\impl\UEServiceImpl.class

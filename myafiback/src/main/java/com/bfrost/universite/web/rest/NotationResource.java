@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -57,6 +58,7 @@ public class NotationResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
+    @PreAuthorize("hasAnyAuthority('ENREGISTREMENT_NOTATION')")
     public ResponseEntity<NotationDTO> createNotation(@RequestBody NotationDTO notationDTO) throws URISyntaxException {
         LOG.debug("REST request to save Notation : {}", notationDTO);
         if (notationDTO.getId() != null) {
@@ -79,6 +81,7 @@ public class NotationResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('MODIFICATION_GENERALE_NOTATION')")
     public ResponseEntity<NotationDTO> updateNotation(
         @PathVariable(value = "id", required = false) final Long id,
         @RequestBody NotationDTO notationDTO
@@ -113,6 +116,7 @@ public class NotationResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PreAuthorize("hasAnyAuthority('MODIFICATION_NOTATION')")
     public ResponseEntity<NotationDTO> partialUpdateNotation(
         @PathVariable(value = "id", required = false) final Long id,
         @RequestBody NotationDTO notationDTO
@@ -144,9 +148,14 @@ public class NotationResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of notations in body.
      */
     @GetMapping("")
-    public ResponseEntity<Map<String,Object>> getAllNotations(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
+    @PreAuthorize("hasAnyAuthority('LECTURE_LISTE_NOTATION')")
+    public ResponseEntity<Map<String,Object>> getAllNotations(@org.springdoc.core.annotations.ParameterObject Pageable pageable,
+                                                              @RequestParam(required = false) String etudiant,
+                                                              @RequestParam(required = false) Long idCalendrier,
+                                                              @RequestParam(required = false) String matiere
+    ) {
         LOG.debug("REST request to get a page of Notations");
-        Page<NotationDTO> page = notationService.findAll(pageable);
+        Page<NotationDTO> page = notationService.findAll(pageable, etudiant, idCalendrier, matiere);
         Pagination pagination=paginationService.instancierPagination(page);
         Map<String,Object> response=new HashMap<>();
         response.put("data",page.getContent());
@@ -161,6 +170,7 @@ public class NotationResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the notationDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('LECTURE_DETAILLE_NOTATION')")
     public ResponseEntity<NotationDTO> getNotation(@PathVariable("id") Long id) {
         LOG.debug("REST request to get Notation : {}", id);
         Optional<NotationDTO> notationDTO = notationService.findOne(id);
@@ -174,6 +184,7 @@ public class NotationResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('SUPPRESSION_NOTATION')")
     public ResponseEntity<Void> deleteNotation(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete Notation : {}", id);
         notationService.delete(id);

@@ -1,0 +1,95 @@
+<div class="grid grid-cols-1 justify-center w-full">
+  <div class="m-4">
+    <div class="grid grid-col-1 divide-y-8 divide-blue-100">
+      <!-- En-tête -->
+       <div *ngIf="!canEditPresence" class="text-sm italic text-gray-600">
+        ⚠️ La période de saisie est terminée. Vous pouvez encore justifier les absences.
+      </div>
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-red-600 p-3 text-white">
+        <span class="font-bold">{{'Total Etudiants' | titlecase}}: {{resultsLength}}</span>
+        <span *ngIf="!canEditPresence" class="text-sm mt-1 sm:mt-0">
+          Période de saisie: {{cours.dateDebut | date:'dd/MM/yyyy HH:mm'}} -
+          {{editWindowEnd | date:'dd/MM/yyyy HH:mm'}}
+        </span>
+      </div>
+    
+
+      <!-- Tableau -->
+      <form [formGroup]="presenceForm">
+        <table mat-table [dataSource]="dataSource" matSort matSortDisableClear class="mat-elevation-z8 w-full">
+
+          <!-- Colonne Sélection -->
+          <ng-container matColumnDef="select">
+            <th mat-header-cell *matHeaderCellDef class="bg-blue-50 text-gray-700 font-semibold">
+              <mat-checkbox (change)="$event ? masterToggle() : null"
+                [checked]="selection.hasValue() && isAllSelected()"
+                [indeterminate]="selection.hasValue() && !isAllSelected()" [disabled]="!canEditPresence">
+              </mat-checkbox>
+            </th>
+            <td mat-cell *matCellDef="let row">
+              <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+                [checked]="selection.isSelected(row)" [disabled]="!canEditPresence">
+              </mat-checkbox>
+            </td>
+          </ng-container>
+
+          <!-- Colonnes étudiantes -->
+          <ng-container *ngFor="let column of ['matricule', 'nom']" [matColumnDef]="column">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-blue-50 text-gray-700 font-semibold">
+              {{column | titlecase}}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <ng-container [ngSwitch]="column">
+                <ng-container *ngSwitchCase="'matricule'">{{element.matricule ||
+                  element?.user?.matricule}}</ng-container>
+                <ng-container *ngSwitchCase="'nom'">
+                  {{element.firstName || element?.user?.firstName}} {{element.lastName || element?.user?.lastName}}
+                </ng-container>
+              </ng-container>
+            </td>
+          </ng-container>
+
+          <!-- Colonne Présence -->
+          <ng-container matColumnDef="presence">
+            <th mat-header-cell *matHeaderCellDef class="bg-blue-50 text-gray-700 font-semibold">
+              Présence
+            </th>
+            <td mat-cell *matCellDef="let element; let i = index">
+              <div [formGroup]="presences.at(i)">
+                <mat-checkbox formControlName="presence" (change)="toggleJustification(i)"
+                  [disabled]="!canEditPresence">
+                  Présent
+                </mat-checkbox>
+
+                <ng-container *ngIf="hasPresences">
+                  <div *ngIf="!presences.at(i).value.presence" class="ml-4">
+                    <mat-radio-group formControlName="justifie">
+                      <mat-radio-button [value]="true">Justifié</mat-radio-button>
+                      <mat-radio-button [value]="false">Non justifié</mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                </ng-container>
+
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </form>
+
+      <!-- Pagination -->
+      <mat-paginator [length]="resultsLength" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
+        showFirstLastButtons class="flex justify-end">
+      </mat-paginator>
+
+      <!-- Bouton de sauvegarde -->
+      <div class="flex justify-end mt-4" *ngIf="showSaveButton && selection.hasValue() && canEditPresence">
+        <button mat-raised-button color="primary" (click)="savePresences()">
+          Enregistrer les présences sélectionnées
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

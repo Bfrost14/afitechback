@@ -22,7 +22,6 @@ import com.bfrost.universite.service.dto.NoteDTO;
 import com.bfrost.universite.service.dto.ProfilDTO;
 import com.bfrost.universite.service.dto.SemestreDTO;
 import com.bfrost.universite.service.dto.UEDTO;
-import com.bfrost.universite.service.dto.UserDTO;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -32,8 +31,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-22T02:38:42+0000",
-    comments = "version: 1.5.3.Final, compiler: javac, environment: Java 17.0.10 (Oracle Corporation)"
+    date = "2025-05-23T20:34:37+0000",
+    comments = "version: 1.5.3.Final, compiler: javac, environment: Java 21.0.4 (Oracle Corporation)"
 )
 @Component
 public class NoteMapperImpl implements NoteMapper {
@@ -48,7 +47,8 @@ public class NoteMapperImpl implements NoteMapper {
 
         note.setId( dto.getId() );
         note.setValeur( dto.getValeur() );
-        note.setUser( userDTOToUser( dto.getUser() ) );
+        note.setTypeNote( dto.getTypeNote() );
+        note.setUser( adminUserDTOToUser( dto.getUser() ) );
         note.setMatiereUser( matiereUserDTOToMatiereUser( dto.getMatiereUser() ) );
 
         return note;
@@ -64,7 +64,8 @@ public class NoteMapperImpl implements NoteMapper {
 
         noteDTO.setId( entity.getId() );
         noteDTO.setValeur( entity.getValeur() );
-        noteDTO.setUser( userToUserDTO( entity.getUser() ) );
+        noteDTO.setTypeNote( entity.getTypeNote() );
+        noteDTO.setUser( userToAdminUserDTO( entity.getUser() ) );
         noteDTO.setMatiereUser( matiereUserToMatiereUserDTO( entity.getMatiereUser() ) );
 
         return noteDTO;
@@ -110,11 +111,14 @@ public class NoteMapperImpl implements NoteMapper {
         if ( dto.getValeur() != null ) {
             entity.setValeur( dto.getValeur() );
         }
+        if ( dto.getTypeNote() != null ) {
+            entity.setTypeNote( dto.getTypeNote() );
+        }
         if ( dto.getUser() != null ) {
             if ( entity.getUser() == null ) {
                 entity.setUser( new User() );
             }
-            userDTOToUser1( dto.getUser(), entity.getUser() );
+            adminUserDTOToUser1( dto.getUser(), entity.getUser() );
         }
         if ( dto.getMatiereUser() != null ) {
             if ( entity.getMatiereUser() == null ) {
@@ -122,32 +126,6 @@ public class NoteMapperImpl implements NoteMapper {
             }
             matiereUserDTOToMatiereUser1( dto.getMatiereUser(), entity.getMatiereUser() );
         }
-    }
-
-    protected User userDTOToUser(UserDTO userDTO) {
-        if ( userDTO == null ) {
-            return null;
-        }
-
-        User user = new User();
-
-        user.setId( userDTO.getId() );
-        user.setLogin( userDTO.getLogin() );
-
-        return user;
-    }
-
-    protected AnneeScolaire anneeScolaireDTOToAnneeScolaire(AnneeScolaireDTO anneeScolaireDTO) {
-        if ( anneeScolaireDTO == null ) {
-            return null;
-        }
-
-        AnneeScolaire anneeScolaire = new AnneeScolaire();
-
-        anneeScolaire.setId( anneeScolaireDTO.getId() );
-        anneeScolaire.setNom( anneeScolaireDTO.getNom() );
-
-        return anneeScolaire;
     }
 
     protected Authority authorityDTOToAuthority(AuthorityDTO authorityDTO) {
@@ -210,6 +188,7 @@ public class NoteMapperImpl implements NoteMapper {
 
         profil.setId( profilDTO.getId() );
         profil.setNom( profilDTO.getNom() );
+        profil.setRedirection( profilDTO.getRedirection() );
         profil.setAuthorities( authorityDTOSetToAuthoritySet( profilDTO.getAuthorities() ) );
 
         return profil;
@@ -260,6 +239,19 @@ public class NoteMapperImpl implements NoteMapper {
         user.setCampuses( campusDTOSetToCampusSet( adminUserDTO.getCampuses() ) );
 
         return user;
+    }
+
+    protected AnneeScolaire anneeScolaireDTOToAnneeScolaire(AnneeScolaireDTO anneeScolaireDTO) {
+        if ( anneeScolaireDTO == null ) {
+            return null;
+        }
+
+        AnneeScolaire anneeScolaire = new AnneeScolaire();
+
+        anneeScolaire.setId( anneeScolaireDTO.getId() );
+        anneeScolaire.setNom( anneeScolaireDTO.getNom() );
+
+        return anneeScolaire;
     }
 
     protected UE uEDTOToUE(UEDTO uEDTO) {
@@ -319,32 +311,6 @@ public class NoteMapperImpl implements NoteMapper {
         matiereUser.setSemestre( semestreDTOToSemestre( matiereUserDTO.getSemestre() ) );
 
         return matiereUser;
-    }
-
-    protected UserDTO userToUserDTO(User user) {
-        if ( user == null ) {
-            return null;
-        }
-
-        UserDTO userDTO = new UserDTO();
-
-        userDTO.setId( user.getId() );
-        userDTO.setLogin( user.getLogin() );
-
-        return userDTO;
-    }
-
-    protected AnneeScolaireDTO anneeScolaireToAnneeScolaireDTO(AnneeScolaire anneeScolaire) {
-        if ( anneeScolaire == null ) {
-            return null;
-        }
-
-        AnneeScolaireDTO anneeScolaireDTO = new AnneeScolaireDTO();
-
-        anneeScolaireDTO.setId( anneeScolaire.getId() );
-        anneeScolaireDTO.setNom( anneeScolaire.getNom() );
-
-        return anneeScolaireDTO;
     }
 
     protected AuthorityDTO authorityToAuthorityDTO(Authority authority) {
@@ -407,6 +373,7 @@ public class NoteMapperImpl implements NoteMapper {
 
         profilDTO.setId( profil.getId() );
         profilDTO.setNom( profil.getNom() );
+        profilDTO.setRedirection( profil.getRedirection() );
         profilDTO.setAuthorities( authoritySetToAuthorityDTOSet( profil.getAuthorities() ) );
 
         return profilDTO;
@@ -457,6 +424,19 @@ public class NoteMapperImpl implements NoteMapper {
         adminUserDTO.setCampuses( campusSetToCampusDTOSet( user.getCampuses() ) );
 
         return adminUserDTO;
+    }
+
+    protected AnneeScolaireDTO anneeScolaireToAnneeScolaireDTO(AnneeScolaire anneeScolaire) {
+        if ( anneeScolaire == null ) {
+            return null;
+        }
+
+        AnneeScolaireDTO anneeScolaireDTO = new AnneeScolaireDTO();
+
+        anneeScolaireDTO.setId( anneeScolaire.getId() );
+        anneeScolaireDTO.setNom( anneeScolaire.getNom() );
+
+        return anneeScolaireDTO;
     }
 
     protected UEDTO uEToUEDTO(UE uE) {
@@ -518,24 +498,6 @@ public class NoteMapperImpl implements NoteMapper {
         return matiereUserDTO;
     }
 
-    protected void userDTOToUser1(UserDTO userDTO, User mappingTarget) {
-        if ( userDTO == null ) {
-            return;
-        }
-
-        mappingTarget.setId( userDTO.getId() );
-        mappingTarget.setLogin( userDTO.getLogin() );
-    }
-
-    protected void anneeScolaireDTOToAnneeScolaire1(AnneeScolaireDTO anneeScolaireDTO, AnneeScolaire mappingTarget) {
-        if ( anneeScolaireDTO == null ) {
-            return;
-        }
-
-        mappingTarget.setId( anneeScolaireDTO.getId() );
-        mappingTarget.setNom( anneeScolaireDTO.getNom() );
-    }
-
     protected void filiereDTOToFiliere1(FiliereDTO filiereDTO, Filiere mappingTarget) {
         if ( filiereDTO == null ) {
             return;
@@ -561,6 +523,7 @@ public class NoteMapperImpl implements NoteMapper {
 
         mappingTarget.setId( profilDTO.getId() );
         mappingTarget.setNom( profilDTO.getNom() );
+        mappingTarget.setRedirection( profilDTO.getRedirection() );
         if ( mappingTarget.getAuthorities() != null ) {
             Set<Authority> set = authorityDTOSetToAuthoritySet( profilDTO.getAuthorities() );
             if ( set != null ) {
@@ -661,6 +624,15 @@ public class NoteMapperImpl implements NoteMapper {
                 mappingTarget.setCampuses( set1 );
             }
         }
+    }
+
+    protected void anneeScolaireDTOToAnneeScolaire1(AnneeScolaireDTO anneeScolaireDTO, AnneeScolaire mappingTarget) {
+        if ( anneeScolaireDTO == null ) {
+            return;
+        }
+
+        mappingTarget.setId( anneeScolaireDTO.getId() );
+        mappingTarget.setNom( anneeScolaireDTO.getNom() );
     }
 
     protected void uEDTOToUE1(UEDTO uEDTO, UE mappingTarget) {

@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -60,6 +61,7 @@ public class CahierTexteResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
+    @PreAuthorize("hasAnyAuthority('ENREGISTREMENT_CAHIER_TEXTE')")
     public ResponseEntity<CahierTexteDTO> createCahierTexte(@Valid @RequestBody CahierTexteDTO cahierTexteDTO) throws URISyntaxException {
         LOG.debug("REST request to save CahierTexte : {}", cahierTexteDTO);
         if (cahierTexteDTO.getId() != null) {
@@ -82,6 +84,7 @@ public class CahierTexteResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('MODIFICATION_CAHIER_TEXTE')")
     public ResponseEntity<CahierTexteDTO> updateCahierTexte(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody CahierTexteDTO cahierTexteDTO
@@ -116,6 +119,7 @@ public class CahierTexteResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PreAuthorize("hasAnyAuthority('MODIFICATION_CAHIER_TEXTE')")
     public ResponseEntity<CahierTexteDTO> partialUpdateCahierTexte(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody CahierTexteDTO cahierTexteDTO
@@ -147,9 +151,15 @@ public class CahierTexteResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of cahierTextes in body.
      */
     @GetMapping("")
-    public ResponseEntity<Map<String,Object>> getAllCahierTextes(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
+    @PreAuthorize("hasAnyAuthority('LECTURE_LISTE_CAHIER_TEXTE')")
+    public ResponseEntity<Map<String,Object>> getAllCahierTextes(@org.springdoc.core.annotations.ParameterObject Pageable pageable,
+                                                                 @RequestParam(required = false) String professeur,
+                                                                 @RequestParam(required = false) Long idCalendrier,
+                                                                 @RequestParam(required = false) String matiere
+
+                                                                 ) {
         LOG.debug("REST request to get a page of CahierTextes");
-        Page<CahierTexteDTO> page = cahierTexteService.findAll(pageable);
+        Page<CahierTexteDTO> page = cahierTexteService.findAll(pageable, professeur, idCalendrier, matiere);
         Pagination pagination=paginationService.instancierPagination(page);
         Map<String,Object> response=new HashMap<>();
         response.put("data",page.getContent());
@@ -164,6 +174,7 @@ public class CahierTexteResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the cahierTexteDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('LECTURE_DETAILLE_CAHIER_TEXTE')")
     public ResponseEntity<CahierTexteDTO> getCahierTexte(@PathVariable("id") Long id) {
         LOG.debug("REST request to get CahierTexte : {}", id);
         Optional<CahierTexteDTO> cahierTexteDTO = cahierTexteService.findOne(id);
@@ -177,6 +188,7 @@ public class CahierTexteResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('SUPPRESSION_CAHIER_TEXTE')")
     public ResponseEntity<Void> deleteCahierTexte(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete CahierTexte : {}", id);
         cahierTexteService.delete(id);

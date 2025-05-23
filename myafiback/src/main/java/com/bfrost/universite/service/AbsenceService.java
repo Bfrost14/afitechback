@@ -38,10 +38,13 @@ public interface AbsenceService {
     /**
      * Get all the absences.
      *
-     * @param pageable the pagination information.
+     * @param pageable     the pagination information.
+     * @param etudiant
+     * @param idCalendrier
+     * @param filiere
      * @return the list of entities.
      */
-    Page<AbsenceDTO> findAll(Pageable pageable);
+    Page<AbsenceDTO> findAll(Pageable pageable, String etudiant, Long idCalendrier, String filiere);
 
     /**
      * Get the "id" absence.

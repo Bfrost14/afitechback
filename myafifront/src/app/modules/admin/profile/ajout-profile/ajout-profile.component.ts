@@ -61,6 +61,93 @@ export class AjoutProfileComponent implements OnInit {
         cancelButtonText: 'Annuler',
     };
 
+    allLinks = [
+        {
+            title: 'Pointage',
+            link: '/gestionprofesseur/pointage/liste'
+        },
+        {
+            title: 'Absences',
+            link: '/gestion/absence/liste'
+        },
+        {
+            title: 'Espace étudiant',
+            link: '/gestion/espace'
+        },
+        {
+            title: 'Calendrier de cours',
+            link: '/gestion/calendrier/liste'
+        },
+        {
+            title: 'Cours',
+            link: '/gestion/cours/liste'
+        },
+        {
+            title: 'Notes',
+            link: '/gestion/note/liste'
+        },
+        {
+            title: 'Cahier de texte',
+            link: '/gestion/cahiertexte/liste'
+        },
+        {
+            title: 'Notations',
+            link: '/gestion/notation/liste'
+        },
+        {
+            title: 'Étudiants',
+            link: '/admin/etudiant/liste'
+        },
+        {
+            title: 'Professeurs',
+            link: '/admin/professeur/liste'
+        },
+        {
+            title: 'Administrateurs',
+            link: '/admin/administration/liste'
+        },
+        {
+            title: 'Affectations matières',
+            link: '/admin/affectation/liste'
+        },
+        {
+            title: 'Filières',
+            link: '/admin/filiere/liste'
+        },
+        {
+            title: 'Matières',
+            link: '/admin/matiere/liste'
+        },
+        {
+            title: 'Unités d\'enseignement',
+            link: '/admin/ue/liste'
+        },
+        {
+            title: 'Salles',
+            link: '/admin/salle/liste'
+        },
+        {
+            title: 'Campus',
+            link: '/admin/campus/liste'
+        },
+        {
+            title: 'Semestres',
+            link: '/admin/semestre/liste'
+        },
+        {
+            title: 'Années scolaires',
+            link: '/admin/annee/liste'
+        },
+        {
+            title: 'Profils',
+            link: '/admin/profiles/liste'
+        },
+        {
+            title: 'Autorisations',
+            link: '/admin/authority/liste'
+        }
+    ];
+
     form: UntypedFormGroup;
     @Input() profileId: number = 0;
     @Input() profile: NewProfile;
@@ -79,17 +166,19 @@ export class AjoutProfileComponent implements OnInit {
         private _profileService: ProfileService,
         private _alertToastService: AlertToastService,
         private _authoritiesService: AuthorityService
-    ) {}
+    ) { }
 
     ngOnInit(): void {
         this.form = this._formBuilder.group({
             id: [null],
             nom: [null, Validators.required],
+            redirection: [null, Validators.required],
             authorities: [[], Validators.required],
         });
 
         if (this.profile != undefined) {
             this.form.patchValue(this.profile);
+            //this.form.get("redirection").setValue(this.allLinks.find(value => value.link == this.profile.redirection))
         }
 
         this.getAllAuthorites();
@@ -115,7 +204,7 @@ export class AjoutProfileComponent implements OnInit {
         if (!this.authorities) {
             return;
         }
-        
+
         let search = this.authorityFilterCtrl.value;
         if (!search) {
             this.filteredAuthorities.next(this.authorities.slice());
@@ -123,9 +212,9 @@ export class AjoutProfileComponent implements OnInit {
         } else {
             search = search.toLowerCase();
         }
-        
+
         this.filteredAuthorities.next(
-            this.authorities.filter(authority => 
+            this.authorities.filter(authority =>
                 authority.name.toLowerCase().indexOf(search) > -1
             )
         );
@@ -137,10 +226,10 @@ export class AjoutProfileComponent implements OnInit {
                 console.log(response)
                 this.authorities = response.body;
                 this.filteredAuthorities.next(this.authorities.slice());
-                
+
                 // If editing, set the initial value for authorities
                 if (this.profile && this.profile.authorities) {
-                    const selectedAuthorities = this.authorities.filter(auth => 
+                    const selectedAuthorities = this.authorities.filter(auth =>
                         this.profile.authorities.some((selectedAuth: any) => selectedAuth.name === auth.name)
                     );
                     this.form.get('authorities').setValue(selectedAuthorities);

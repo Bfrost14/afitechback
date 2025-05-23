@@ -19,7 +19,7 @@ export class NotationService {
 
   protected resourceUrl = this.applicationConfigService.getEndpointFor('/api/notations');
 
-  create(notation: NewNotation): Observable<any> {
+  create(notation: any): Observable<any> {
     return this.http.post<INotation>(this.resourceUrl, notation, { observe: 'response' });
   }
 

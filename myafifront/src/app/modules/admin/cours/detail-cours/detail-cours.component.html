@@ -1,0 +1,123 @@
+<div class="-mr-4 -ml-4">
+  <div
+    class=" w-full  border-solid border-bleu-foncee bg-white border-b-4 border-r-4 border-l-4 divide-y-8 divide-bleue-claire-1">
+
+    <p class="flex bg-bleu-foncee h-10 text-white justify-between w-full -mb-0.5 justify-between">
+      <span class="ml-4 mt-2 ">Détails cours</span>
+    </p>
+
+    <div class="grid grid-cols-1 gap-1 divide-y-8 divide-bleue-claire-1">
+
+      <div class="flex flex-col gt-xs:flex-row">
+
+        <mat-card>
+
+          <mat-card-content class=" flex justify-center">
+
+            <mat-tab-group class="w-full">
+
+
+              <mat-tab>
+                <ng-template mat-tab-label>
+                  <button class="btspan">{{'Identification'}}</button>
+
+                </ng-template>
+
+                <div class=" w-full rounded-md  bg-white border-4 ">
+                  <mat-card>
+                    <div class="grid grid-cols-2 gap-4 divide-x-4 ">
+                      <div class="flex flex-col gt-xs:flex-row">
+
+
+                        <div class="truncate hover:text-clip flex justify-between">
+                          <span>
+
+                            <p>
+                              <span class=" ml-2  text-black">{{'Matiere'}}:</span>
+                              <span class="ml-2 text-slate-500">{{cours?.matiereUser?.matiere?.nom}}</span>
+                            </p>
+                            <p>
+                              <span class=" ml-2  text-black">{{'Prénom du professeur'}}:</span>
+                              <span class="ml-2 text-slate-500">{{cours?.matiereUser?.user?.firstName}}</span>
+                            </p>
+                            <p>
+                              <span class=" ml-2  text-black">{{'Nom du professeur'}}:</span>
+                              <span class="ml-2 text-slate-500">{{cours?.matiereUser?.user?.lastName}}</span>
+                            </p>
+                            <p>
+                              <span class=" ml-2  text-black">{{'Campus'}}:</span>
+                              <span class="ml-2 text-slate-500">{{cours?.salle?.campus?.nom}}</span>
+                            </p>
+                          </span>
+
+
+                        </div>
+
+
+                      </div>
+
+                      <div class="flex flex-col gt-xs:flex-row">
+
+
+                        <p><span class=" ml-2 text-black">{{'Filière'}}:</span><span
+                            class="ml-2 text-slate-500">{{cours?.matiereUser?.filiere?.nom}}</span></p>
+                        <p class="truncate hover:text-clip"> <span
+                            class=" ml-2  text-black">{{'Téléphone'}}:</span><span
+                            class="ml-2 text-slate-500">{{cours?.dateDebut | date:'dd/MM/YYYY à HH:mm'}}</span></p>
+                        <p class="truncate hover:text-clip"> <span class=" ml-2  text-black">{{'Date de
+                            naissance'}}:</span><span class="ml-2 text-slate-500">{{cours?.dateFin | date:'dd/MM/YYYY à
+                            HH:mm'}}</span></p>
+                        <p class="truncate hover:text-clip">
+                          <span class=" ml-2 text-black">{{'Salle'}}:</span>
+                          <span class="ml-2 text-slate-500">{{cours?.salle?.numero}}</span>
+
+                        <p class="truncate hover:text-clip" *ngIf="cours?.lien != null">
+                          <span class=" ml-2 text-black">{{'Salle'}}:</span>
+                          <span class="ml-2 text-slate-500">{{cours?.lien}}</span>
+
+                        </p>
+                      </div>
+
+                    </div>
+                  </mat-card>
+                </div>
+              </mat-tab>
+              <!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ les notes @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
+              <mat-tab>
+                <ng-template mat-tab-label>
+                  <button class="btspan">{{'Fiche de présence'}}</button>
+
+                </ng-template>
+                <app-liste-presence *ngIf="cours != undefined" [cours]="cours"></app-liste-presence>
+              </mat-tab>
+              <mat-tab>
+                <ng-template mat-tab-label>
+                  <button class="btspan">{{'Cahier de texte'}}</button>
+
+                </ng-template>
+                <app-cahier-texte *ngIf="cours != undefined" [cours]="cours"></app-cahier-texte>
+              </mat-tab>
+
+              <mat-tab>
+                <ng-template mat-tab-label>
+                  <button class="btspan">{{'Notation du cours'}}</button>
+
+                </ng-template>
+                <app-notation *ngIf="cours != undefined" [cours]="cours"></app-notation>
+              </mat-tab>
+
+              <mat-tab>
+                <ng-template mat-tab-label>
+                  <button class="btspan">{{'Liste des cours'}}</button>
+
+                </ng-template>
+                <app-liste-notation *ngIf="cours != undefined" [cours]="cours"></app-liste-notation>
+              </mat-tab>
+
+            </mat-tab-group>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>

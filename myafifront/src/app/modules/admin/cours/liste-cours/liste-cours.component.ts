@@ -1,10 +1,4 @@
-import {
-    ViewChild,
-    AfterViewInit,
-    Component,
-    OnInit,
-    Input,
-} from '@angular/core';
+import { ViewChild, AfterViewInit, Component, OnInit } from '@angular/core';
 import {
     animate,
     state,
@@ -15,19 +9,19 @@ import {
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortable } from '@angular/material/sort';
 import { merge, of as observableOf } from 'rxjs';
-import { catchError, map, startWith, switchMap } from 'rxjs/operators';
+import {
+    catchError,
+    map,
+    startWith,
+    switchMap,
+} from 'rxjs/operators';
 import {
     FormArray,
     UntypedFormBuilder,
     UntypedFormGroup,
 } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-
-import { NoteService } from '../../cours/service/note.service';
-import { AuthService } from 'app/core/auth/auth.service';
-import { NewUtilisateur } from '../../ue/ue.model';
-import { NewNote } from '../../cours/models/note';
-
+import { NewCalendrierCours } from '../../calendrier-cours/calendrier-cours.model';
+import { CalendrierCoursService } from '../../calendrier-cours/service/calendrier-cours.service';
 
 interface SearchFild {
     key: string;
@@ -38,9 +32,9 @@ interface SearchFild {
  * @title Table with expandable rows
  */
 @Component({
-    selector: 'app-mes-notes',
-    styleUrls: ['./mes-notes.component.css'],
-    templateUrl: './mes-notes.component.html',
+    selector: 'app-liste-cours',
+    styleUrls: ['./liste-cours.component.scss'],
+    templateUrl: './liste-cours.component.html',
     animations: [
         trigger('detailExpand', [
             state('collapsed', style({ height: '0px', minHeight: '0' })),
@@ -52,30 +46,31 @@ interface SearchFild {
         ]),
     ],
 })
-export class MesNotesComponent implements OnInit, AfterViewInit {
-    @Input() userEmail: string;
-    @Input() user: NewUtilisateur;
+export class ListeCoursComponent implements OnInit, AfterViewInit {
     searchFieldList: SearchFild[] = [
+        { key: 'salle', value: null },
+        { key: 'filiere', value: null },
         { key: 'matiere', value: null },
-        { key: 'semestre', value: null },
+        { key: 'campus', value: null },
     ];
 
-    dataSource: NewNote[] = [];
-    columnsToDisplay = ['matiere', 'semestre', 'valeur'];
-    displayedColumn: string[] = ['semestre', 'valeur'];
-    displayedColumns: string[] = ['semestre', 'valeur'];
+    dataSource: NewCalendrierCours[] = [];
+    columnsToDisplay = ['matiere', 'professeur', 'campus', 'salle','dateDebut', 'dateFin' ];
+    displayedColumn: string[] = ['matiere', 'professeur', 'campus', 'salle','dateDebut', 'dateFin' ];
+    displayedColumns: string[] = ['matiere', 'professeur', 'campus', 'salle','dateDebut', 'dateFin' ];
 
-    expandedElement: NewNote | null;
-    selectNoteEdit: NewNote;
+    columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
+    expandedElement: NewCalendrierCours | null;
+    selectCalendrierCoursEdit: NewCalendrierCours
     selectedColumn = [
-        { key: 'matiere', value: '' },
-        { key: 'semestre', value: '' },
+        { key: 'matiere', value: null },
+        { key: 'filiere', value: null },
+        { key: 'campus', value: null },
     ];
-    columnsToDisplayWithExpand = [...this.columnsToDisplay];
-    add: boolean = false;
-    edit: boolean = false;
-    noteId: number = 0;
-    noteIdEdit: number = 0;
+    add: boolean = false
+    edit: boolean = false
+    matiereUtilisateurId: number = 0
+    matiereUtilisateurIdEdit: number = 0
     // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     resultsLength = 0;
     isLoadingResults = true;
@@ -83,7 +78,7 @@ export class MesNotesComponent implements OnInit, AfterViewInit {
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
     exampleDatabase: any | null;
-    data: NewNote[] = [];
+    data: NewCalendrierCours[] = [];
     pageSize = 25;
     pageSizeOptions: number[] = [25, 50, 100];
     // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -94,64 +89,64 @@ export class MesNotesComponent implements OnInit, AfterViewInit {
      */
 
     constructor(
-        private _noteService: NoteService,
-        private _formBuilder: UntypedFormBuilder,
-        private _authService: AuthService
-    ) {}
+        private _matiereService: CalendrierCoursService,
+        private _formBuilder: UntypedFormBuilder
+    ) { }
 
     ngOnInit(): void {
-      if(this._authService.getUtilisateur().role == "ROLE_SECRETAIRE"){
-        this.columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
-      }
         this.searchColumnForm = this._formBuilder.group({
             searchFilds: this._formBuilder.array([]),
         });
         this.searchFilds = this.searchColumnForm.get(
             'searchFilds'
         ) as FormArray;
-        
-        if(this.userEmail == undefined){
-          this.userEmail = this._authService.getUtilisateur().email;
-        }
     }
 
     ngAfterViewInit() {
         this.addSearchFiels(this.selectedColumn);
-        this.sort.sort({ id: 'matiere', start: 'asc' } as MatSortable);
+        this.sort.sort({ id: 'id', start: 'desc' } as MatSortable);
 
         this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
 
-        this.allNotes();
+        this.allCalendrierCourss();
     }
 
-    getAllNote(column: SearchFild[]) {
+    getAllCalendrierCours(column: SearchFild[]) {
+        let salle = '';
         let matiere = '';
-        let semestre = '';
+        let filiere = '';
+        let campus = '';
         column.forEach((col) => {
             switch (col.key) {
+
+                case 'salle':
+                    salle = col.value;
+                    break;
                 case 'matiere':
                     matiere = col.value;
                     break;
-                case 'semestre':
-                    semestre = col.value;
+                case 'filiere':
+                    filiere = col.value;
                     break;
-
+                case 'campus':
+                    campus = col.value;
+                    break;
                 default:
             }
         });
-        return this._noteService
-            .getnoteEtudiants(
-                this.paginator.pageIndex,
-                this.paginator.pageSize,
-                this.sort.active,
-                this.sort.direction,
-                this.userEmail,
-                matiere,
-                semestre
+        return this._matiereService
+            .query(
+                {
+                    page: this.paginator.pageIndex,
+                    size: this.paginator.pageSize,
+                    sort: this.sort.active + "," + this.sort.direction,
+                     matiere: matiere, salle: salle, filiere: filiere,
+                      campus: campus
+                },
             )
             .subscribe((data) => {
                 console.log(
-                    '@@@@@@@@@@@@@@@@@@@@@@@@ note data @@@@@@@@@@@@',
+                    '@@@@@@@@@@@@@@@@@@@@@@@@ matiere data @@@@@@@@@@@@',
                     data
                 );
 
@@ -175,19 +170,21 @@ export class MesNotesComponent implements OnInit, AfterViewInit {
 
         if (fields.length == 0) {
             this.searchFilds.clear();
-            this.getAllNote(fields);
+            this.getAllCalendrierCours(fields);
+
         } else {
             this.searchFilds.clear();
             fields.forEach((field) => {
                 this.searchFilds.push(
                     this._formBuilder.group({
                         key: [field.key],
-                        value: [field.value],
+                        value: [field.value]
                     })
                 );
             });
         }
     }
+
 
     public compareWith(object1: SearchFild, object2: SearchFild): boolean {
         return object1?.key === object2?.key;
@@ -201,22 +198,22 @@ export class MesNotesComponent implements OnInit, AfterViewInit {
             '@@@@@@@@@@@@@ filtered column ======>',
             this.selectedColumn
         );
-        this.getAllNote(column);
+        this.getAllCalendrierCours(column);
+
     }
 
-    allNotes() {
-
+    allCalendrierCourss() {
         merge(this.sort.sortChange, this.paginator.page)
             .pipe(
                 startWith({}),
                 switchMap(() => {
                     this.isLoadingResults = true;
-                    return this._noteService!.getnoteEtudiants(
-                        this.paginator.pageIndex,
-                        this.paginator.pageSize,
-                        this.sort.active,
-                        this.sort.direction,
-                        this.userEmail
+                    return this._matiereService!.query(
+                        {
+                            page: this.paginator.pageIndex,
+                            size: this.paginator.pageSize,
+                            sort: this.sort.active + "," + this.sort.direction
+                        }
                     ).pipe(catchError(() => observableOf(null)));
                 }),
                 map((data) => {
@@ -230,9 +227,9 @@ export class MesNotesComponent implements OnInit, AfterViewInit {
 
                     // Only refresh the result length if there is new data. In case of rate
                     // limit errors, we do not want to reset the paginator to zero, as that
-                    // would prevent notes from re-triggering requests.
+                    // would prevent users from re-triggering requests.
                     console.log(
-                        '@@@@@@@@@@@@@@@@@ note data @@@@@@@@@@@@@@@@',
+                        '@@@@@@@@@@@@@@@@@ matiere data @@@@@@@@@@@@@@@@',
                         data
                     );
 
@@ -246,28 +243,29 @@ export class MesNotesComponent implements OnInit, AfterViewInit {
             });
     }
 
+
+
     refreshColumnToDisplay(event) {
         const afficher = event.value;
         //  this.displayedColumns = afficher
-       
-        if(this._authService.getUtilisateur().role == "ROLE_SECRETAIRE"){
-          this.columnsToDisplayWithExpand = ['matiere', ...afficher, 'expand'];
-        }else{
-          this.columnsToDisplayWithExpand = ['matiere', ...afficher];
-        }
+        this.columnsToDisplayWithExpand = [
+            'nom',
+            ...afficher,
+            'expand',
+        ];
     }
 
     fiche: boolean = false;
-    setDataSource(note: NewNote) {
-        console.log('>>>>>>>>>>>>>>>.. data set >>>>>>>>>>>>>>>>>>', note);
+    setDataSource(matiere: NewCalendrierCours) {
+        console.log('>>>>>>>>>>>>>>>.. data set >>>>>>>>>>>>>>>>>>', matiere);
         if (this.fiche) {
-            this.noteId = null;
+            this.matiereUtilisateurId = null
             this.fiche = false;
             this.data = [...this.dataSource];
         } else {
-            this.noteId = note.id;
+            this.matiereUtilisateurId = matiere.id
             this.fiche = true;
-            this.data = [note];
+            this.data = [matiere];
         }
 
         console.log(
@@ -277,23 +275,23 @@ export class MesNotesComponent implements OnInit, AfterViewInit {
         );
     }
 
-    setDataSourceEdit(note: NewNote) {
-        console.log('>>>>>>>>>>>>>>>.. data set >>>>>>>>>>>>>>>>>>', note);
+    setDataSourceEdit(matiere: NewCalendrierCours) {
+        console.log('>>>>>>>>>>>>>>>.. data set >>>>>>>>>>>>>>>>>>', matiere);
         if (this.add) {
-            this.noteIdEdit = null;
-            this.selectNoteEdit = null;
+            this.matiereUtilisateurIdEdit = null
+            this.selectCalendrierCoursEdit = null
             this.add = false;
             this.data = [...this.dataSource];
         } else {
-            this.noteIdEdit = note.id;
-            this.selectNoteEdit = note;
+            this.matiereUtilisateurIdEdit = matiere.id
+            this.selectCalendrierCoursEdit = matiere
             this.add = true;
-            this.data = [note];
+            this.data = [matiere];
         }
     }
 
     setAdd(event) {
-        this.add = event;
-        this.allNotes();
+        this.add = event
+        this.allCalendrierCourss()
     }
 }

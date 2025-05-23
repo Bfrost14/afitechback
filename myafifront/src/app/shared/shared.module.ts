@@ -6,12 +6,16 @@ import { ToastrModule } from 'ngx-toastr';
 import { HasRoleDirective } from './hasrole.directive';
 import { NgxMatDatetimePickerModule } from '@angular-material-components/datetime-picker';
 import { NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
+import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
+import { MatIconModule } from '@angular/material/icon';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
 
 @NgModule({
     declarations: [
         NumberConverterPipe,
-        HasRoleDirective
+        HasRoleDirective,
+        UnauthorizedComponent
     ],
     imports: [
         CommonModule,
@@ -19,7 +23,9 @@ import { NgxMatTimepickerModule } from '@angular-material-components/datetime-pi
         ReactiveFormsModule,
         ToastrModule.forRoot(),
         NgxMatDatetimePickerModule,
-        NgxMatTimepickerModule
+        NgxMatTimepickerModule,
+        MatIconModule,
+        NgxMatSelectSearchModule
     ],
     exports: [
         CommonModule,
@@ -28,7 +34,8 @@ import { NgxMatTimepickerModule } from '@angular-material-components/datetime-pi
         NumberConverterPipe,
         HasRoleDirective,
         NgxMatDatetimePickerModule,
-        NgxMatTimepickerModule
+        NgxMatTimepickerModule,
+        NgxMatSelectSearchModule
     ]
 })
 export class SharedModule {

@@ -132,10 +132,10 @@ export class AjoutEtudiantComponent implements OnInit {
             'etudiant form >>>>>>>>>>>>>>>>>>>>>>>>>>>>',
             this.form.value
         );
-         this.form.value.login = this.form.value.email
+        this.form.value.login = this.form.value.email
         let profile = this.profiles.find(profile => profile.nom == "ETUDIANT")
-        if(profile == undefined){
-            return this._alertToastService.toastDanger('Profil étudiant inéxistant','Profile non trouvé')
+        if (profile == undefined) {
+            return this._alertToastService.toastDanger('Profil étudiant inéxistant', 'Profile non trouvé')
         }
         this.form.value.profil = profile
         this.form.value.authorities = profile.authorities
@@ -155,7 +155,12 @@ export class AjoutEtudiantComponent implements OnInit {
     }
 
     modifier() {
-
+         let profile = this.profiles.find(profile => profile.nom == "ETUDIANT")
+        if (profile == undefined) {
+            return this._alertToastService.toastDanger('Profil étudiant inéxistant', 'Profile non trouvé')
+        }
+        this.form.value.profil = profile
+        this.form.value.authorities = profile.authorities
         this._etudiantService.updateuser(this.etudiantId, this.form.value).subscribe((data) => {
             console.log(
                 'updated etudiant  >>>>>>>>>>>>>>>>>>>>>>>>>>>>',
@@ -209,8 +214,8 @@ export class AjoutEtudiantComponent implements OnInit {
             });
     }
 
-    getAllFiliere(nom: string){
-        this._filiereService.query({page: 0, size: 10, sort: 'id,desc', nom: nom}).subscribe(data =>{
+    getAllFiliere(nom: string) {
+        this._filiereService.query({ page: 0, size: 10, sort: 'id,desc', nom: nom }).subscribe(data => {
             this.filieres = data.body.data;
         })
     }
@@ -219,16 +224,16 @@ export class AjoutEtudiantComponent implements OnInit {
         return profil && profil.nom ? profil.nom : '';
     }
 
-    getAllCampus(nom: string = ""){
-        this._campusService.query({page: 0, size: 10, nom: nom}).subscribe(
+    getAllCampus(nom: string = "") {
+        this._campusService.query({ page: 0, size: 10, nom: nom }).subscribe(
             response => {
                 this.campus = response.body["data"];
             }
         )
     }
 
-    getAllProfile(){
-        this._profileService.query({page: 0, size: 10, sort: 'id,desc', nom: "ETUDIANT"}).subscribe(data =>{
+    getAllProfile() {
+        this._profileService.query({ page: 0, size: 10, sort: 'id,desc', nom: "ETUDIANT" }).subscribe(data => {
             this.profiles = data.body.data;
         })
     }

@@ -18,8 +18,8 @@ public class NotationDTO implements Serializable {
 
     private String appreciation;
 
-    private CalendrierCoursDTO calendrierCoursDTO;
+    private CalendrierCoursDTO calendrierCours;
 
-    private UserDTO etudiant;
+    private AdminUserDTO etudiant;
 
 }

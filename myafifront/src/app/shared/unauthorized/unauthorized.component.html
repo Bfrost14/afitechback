@@ -1,0 +1,23 @@
+<div class="fullscreen-unauthorized">
+  <div class="centered-content">
+    <!-- Logo de l'organisation -->
+    <img src="assets/images/logo/logo.png" alt="Logo Organisation" class="organisation-logo">
+    
+    <div class="error-card">
+      <mat-icon class="error-icon">warning</mat-icon>
+      <h1>Accès restreint</h1>
+      <p class="error-message">Vous n'avez pas les autorisations nécessaires pour accéder à cette ressource.</p>
+      
+      <div class="action-buttons">
+        <button mat-raised-button (click)="goToHome()" class="home-btn">
+          <mat-icon>home</mat-icon>
+          Retour à l'accueil
+        </button>
+        <button mat-stroked-button (click)="logout()" class="logout-btn">
+          <mat-icon>logout</mat-icon>
+          Se déconnecter
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

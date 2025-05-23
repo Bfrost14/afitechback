@@ -6,9 +6,9 @@ import dayjs from 'dayjs/esm';
 
 import { isPresent } from 'app/core/util/operators';
 import { createRequestOption } from 'app/core/request/request-util';
-import { ICahierTexte, NewCahierTexte } from '../../cahier-texte/cahier-texte.model';
 import { ApplicationConfigService } from 'app/core/config/config/application-config.service';
 import { DATE_FORMAT } from 'app/core/config/input.constants';
+import { ICahierTexte, NewCahierTexte } from '../models/cahier-texte.model';
 
 export type PartialUpdateCahierTexte = Partial<ICahierTexte> & Pick<ICahierTexte, 'id'>;
 
@@ -32,38 +32,33 @@ export class CahierTexteService {
 
   protected resourceUrl = this.applicationConfigService.getEndpointFor('/api/cahier-textes');
 
-  create(cahierTexte: NewCahierTexte): Observable<any> {
+  create(cahierTexte: any): Observable<any> {
     const copy = this.convertDateFromClient(cahierTexte);
     return this.http
-      .post<RestCahierTexte>(this.resourceUrl, copy, { observe: 'response' })
-      .pipe(map(res => this.convertResponseFromServer(res)));
+      .post<RestCahierTexte>(this.resourceUrl, copy, { observe: 'response' });
   }
 
   update(cahierTexte: ICahierTexte): Observable<any> {
     const copy = this.convertDateFromClient(cahierTexte);
     return this.http
-      .put<RestCahierTexte>(`${this.resourceUrl}/${this.getCahierTexteIdentifier(cahierTexte)}`, copy, { observe: 'response' })
-      .pipe(map(res => this.convertResponseFromServer(res)));
+      .put<RestCahierTexte>(`${this.resourceUrl}/${this.getCahierTexteIdentifier(cahierTexte)}`, copy, { observe: 'response' });
   }
 
   partialUpdate(cahierTexte: PartialUpdateCahierTexte): Observable<any> {
     const copy = this.convertDateFromClient(cahierTexte);
     return this.http
-      .patch<RestCahierTexte>(`${this.resourceUrl}/${this.getCahierTexteIdentifier(cahierTexte)}`, copy, { observe: 'response' })
-      .pipe(map(res => this.convertResponseFromServer(res)));
+      .patch<RestCahierTexte>(`${this.resourceUrl}/${this.getCahierTexteIdentifier(cahierTexte)}`, copy, { observe: 'response' });
   }
 
   find(id: number): Observable<any> {
     return this.http
-      .get<RestCahierTexte>(`${this.resourceUrl}/${id}`, { observe: 'response' })
-      .pipe(map(res => this.convertResponseFromServer(res)));
+      .get<RestCahierTexte>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
   query(req?: any): Observable<any> {
     const options = createRequestOption(req);
     return this.http
-      .get<RestCahierTexte[]>(this.resourceUrl, { params: options, observe: 'response' })
-      .pipe(map(res => this.convertResponseArrayFromServer(res)));
+      .get<RestCahierTexte[]>(this.resourceUrl, { params: options, observe: 'response' });
   }
 
   delete(id: number): Observable<HttpResponse<{}>> {

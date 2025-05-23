@@ -35,6 +35,9 @@ public class Profil implements Serializable {
     @Column(name = "nom", nullable = false)
     private String nom;
 
+    @NotNull
+    private String redirection;
+
     @JsonIgnore
     @ManyToMany
     @JoinTable(

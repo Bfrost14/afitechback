@@ -1,5 +1,6 @@
 package com.bfrost.universite.service.dto;
 
+import com.bfrost.universite.domain.enumeration.TypeNote;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -16,7 +17,9 @@ public class NoteDTO implements Serializable {
 
     private Float valeur;
 
-    private UserDTO user;
+    private TypeNote typeNote;
+
+    private AdminUserDTO user;
 
     private MatiereUserDTO matiereUser;
 }

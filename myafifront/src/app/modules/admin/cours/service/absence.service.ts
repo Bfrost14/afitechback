@@ -32,38 +32,31 @@ export class AbsenceService {
 
   protected resourceUrl = this.applicationConfigService.getEndpointFor('/api/absences');
 
-  create(absence: NewAbsence): Observable<any> {
-    const copy = this.convertDateFromClient(absence);
+  create(absence: NewAbsence[]): Observable<any> {
     return this.http
-      .post<RestAbsence>(this.resourceUrl, copy, { observe: 'response' })
-      .pipe(map(res => this.convertResponseFromServer(res)));
+      .post<RestAbsence>(this.resourceUrl, absence, { observe: 'response' })
   }
 
   update(absence: IAbsence): Observable<any> {
-    const copy = this.convertDateFromClient(absence);
     return this.http
-      .put<RestAbsence>(`${this.resourceUrl}/${this.getAbsenceIdentifier(absence)}`, copy, { observe: 'response' })
-      .pipe(map(res => this.convertResponseFromServer(res)));
+      .put<RestAbsence>(`${this.resourceUrl}/${this.getAbsenceIdentifier(absence)}`, absence, { observe: 'response' })
   }
 
   partialUpdate(absence: PartialUpdateAbsence): Observable<any> {
     const copy = this.convertDateFromClient(absence);
     return this.http
       .patch<RestAbsence>(`${this.resourceUrl}/${this.getAbsenceIdentifier(absence)}`, copy, { observe: 'response' })
-      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   find(id: number): Observable<any> {
     return this.http
       .get<RestAbsence>(`${this.resourceUrl}/${id}`, { observe: 'response' })
-      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   query(req?: any): Observable<any> {
     const options = createRequestOption(req);
     return this.http
-      .get<RestAbsence[]>(this.resourceUrl, { params: options, observe: 'response' })
-      .pipe(map(res => this.convertResponseArrayFromServer(res)));
+      .get<RestAbsence[]>(this.resourceUrl, { params: options, observe: 'response' });
   }
 
   delete(id: number): Observable<HttpResponse<{}>> {

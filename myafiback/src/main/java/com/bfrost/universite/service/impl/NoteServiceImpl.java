@@ -1,7 +1,9 @@
 package com.bfrost.universite.service.impl;
 
 import com.bfrost.universite.domain.Note;
+import com.bfrost.universite.domain.enumeration.TypeNote;
 import com.bfrost.universite.repository.NoteRepository;
+import com.bfrost.universite.service.MailService;
 import com.bfrost.universite.service.NoteService;
 import com.bfrost.universite.service.dto.NoteDTO;
 import com.bfrost.universite.service.mapper.NoteMapper;
@@ -28,9 +30,12 @@ public class NoteServiceImpl implements NoteService {
 
     private final NoteMapper noteMapper;
 
-    public NoteServiceImpl(NoteRepository noteRepository, NoteMapper noteMapper) {
+    private final MailService mailService;
+
+    public NoteServiceImpl(NoteRepository noteRepository, NoteMapper noteMapper, MailService mailService) {
         this.noteRepository = noteRepository;
         this.noteMapper = noteMapper;
+        this.mailService = mailService;
     }
 
     @Override
@@ -39,6 +44,9 @@ public class NoteServiceImpl implements NoteService {
         return noteDTO.stream().map(noteDTO1 -> {
             Note note = noteMapper.toEntity(noteDTO1);
             note = noteRepository.save(note);
+            String content = "Votre note est "+ note.getValeur()+ ".\nVous pouvez aller le vérifier dans votre espace étudiant";
+            mailService.sendEmail(note.getUser().getEmail(),"NOTE "+ note.getTypeNote().name() + " " + note.getMatiereUser().getMatiere().getNom().toUpperCase(),content,false,false);
+
             return noteMapper.toDto(note);
         }).toList();
 
@@ -69,9 +77,13 @@ public class NoteServiceImpl implements NoteService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<NoteDTO> findAll(Pageable pageable) {
+    public Page<NoteDTO> findAll(Pageable pageable, String etudiant, String semestre, String matiere, String typeNote,Long idMatiereUser) {
         LOG.debug("Request to get all Notes");
-        return noteRepository.findAll(pageable).map(noteMapper::toDto);
+        final TypeNote[] typeNote1 = {null};
+        Optional.ofNullable(typeNote).ifPresent(value ->
+            typeNote1[0] = TypeNote.valueOf(value)
+        );
+        return noteRepository.manageNote(pageable,etudiant,semestre,matiere, typeNote1[0], idMatiereUser).map(noteMapper::toDto);
     }
 
     @Override

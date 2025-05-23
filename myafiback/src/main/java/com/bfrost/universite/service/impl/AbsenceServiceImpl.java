@@ -69,9 +69,9 @@ public class AbsenceServiceImpl implements AbsenceService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<AbsenceDTO> findAll(Pageable pageable) {
+    public Page<AbsenceDTO> findAll(Pageable pageable, String etudiant, Long idCalendrier, String filiere) {
         LOG.debug("Request to get all Absences");
-        return absenceRepository.findAll(pageable).map(absenceMapper::toDto);
+        return absenceRepository.managedAbsence(pageable, etudiant, idCalendrier, filiere).map(absenceMapper::toDto);
     }
 
     @Override

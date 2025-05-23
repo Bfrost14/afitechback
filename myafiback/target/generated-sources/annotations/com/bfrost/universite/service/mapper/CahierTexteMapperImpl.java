@@ -26,7 +26,6 @@ import com.bfrost.universite.service.dto.ProfilDTO;
 import com.bfrost.universite.service.dto.SalleDTO;
 import com.bfrost.universite.service.dto.SemestreDTO;
 import com.bfrost.universite.service.dto.UEDTO;
-import com.bfrost.universite.service.dto.UserDTO;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -36,8 +35,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-22T02:38:41+0000",
-    comments = "version: 1.5.3.Final, compiler: javac, environment: Java 17.0.10 (Oracle Corporation)"
+    date = "2025-05-23T20:34:39+0000",
+    comments = "version: 1.5.3.Final, compiler: javac, environment: Java 21.0.4 (Oracle Corporation)"
 )
 @Component
 public class CahierTexteMapperImpl implements CahierTexteMapper {
@@ -54,7 +53,7 @@ public class CahierTexteMapperImpl implements CahierTexteMapper {
         cahierTexte.setDate( dto.getDate() );
         cahierTexte.setContenu( dto.getContenu() );
         cahierTexte.setCalendrierCours( calendrierCoursDTOToCalendrierCours( dto.getCalendrierCours() ) );
-        cahierTexte.setUser( userDTOToUser( dto.getUser() ) );
+        cahierTexte.setUser( adminUserDTOToUser( dto.getUser() ) );
 
         return cahierTexte;
     }
@@ -71,7 +70,7 @@ public class CahierTexteMapperImpl implements CahierTexteMapper {
         cahierTexteDTO.setDate( entity.getDate() );
         cahierTexteDTO.setContenu( entity.getContenu() );
         cahierTexteDTO.setCalendrierCours( calendrierCoursToCalendrierCoursDTO( entity.getCalendrierCours() ) );
-        cahierTexteDTO.setUser( userToUserDTO( entity.getUser() ) );
+        cahierTexteDTO.setUser( userToAdminUserDTO( entity.getUser() ) );
 
         return cahierTexteDTO;
     }
@@ -129,7 +128,7 @@ public class CahierTexteMapperImpl implements CahierTexteMapper {
             if ( entity.getUser() == null ) {
                 entity.setUser( new User() );
             }
-            userDTOToUser1( dto.getUser(), entity.getUser() );
+            adminUserDTOToUser1( dto.getUser(), entity.getUser() );
         }
     }
 
@@ -206,6 +205,7 @@ public class CahierTexteMapperImpl implements CahierTexteMapper {
 
         profil.setId( profilDTO.getId() );
         profil.setNom( profilDTO.getNom() );
+        profil.setRedirection( profilDTO.getRedirection() );
         profil.setAuthorities( authorityDTOSetToAuthoritySet( profilDTO.getAuthorities() ) );
 
         return profil;
@@ -348,19 +348,6 @@ public class CahierTexteMapperImpl implements CahierTexteMapper {
         return calendrierCours;
     }
 
-    protected User userDTOToUser(UserDTO userDTO) {
-        if ( userDTO == null ) {
-            return null;
-        }
-
-        User user = new User();
-
-        user.setId( userDTO.getId() );
-        user.setLogin( userDTO.getLogin() );
-
-        return user;
-    }
-
     protected CampusDTO campusToCampusDTO(Campus campus) {
         if ( campus == null ) {
             return null;
@@ -448,6 +435,7 @@ public class CahierTexteMapperImpl implements CahierTexteMapper {
 
         profilDTO.setId( profil.getId() );
         profilDTO.setNom( profil.getNom() );
+        profilDTO.setRedirection( profil.getRedirection() );
         profilDTO.setAuthorities( authoritySetToAuthorityDTOSet( profil.getAuthorities() ) );
 
         return profilDTO;
@@ -576,19 +564,6 @@ public class CahierTexteMapperImpl implements CahierTexteMapper {
         return calendrierCoursDTO;
     }
 
-    protected UserDTO userToUserDTO(User user) {
-        if ( user == null ) {
-            return null;
-        }
-
-        UserDTO userDTO = new UserDTO();
-
-        userDTO.setId( user.getId() );
-        userDTO.setLogin( user.getLogin() );
-
-        return userDTO;
-    }
-
     protected void anneeScolaireDTOToAnneeScolaire1(AnneeScolaireDTO anneeScolaireDTO, AnneeScolaire mappingTarget) {
         if ( anneeScolaireDTO == null ) {
             return;
@@ -623,6 +598,7 @@ public class CahierTexteMapperImpl implements CahierTexteMapper {
 
         mappingTarget.setId( profilDTO.getId() );
         mappingTarget.setNom( profilDTO.getNom() );
+        mappingTarget.setRedirection( profilDTO.getRedirection() );
         if ( mappingTarget.getAuthorities() != null ) {
             Set<Authority> set = authorityDTOSetToAuthoritySet( profilDTO.getAuthorities() );
             if ( set != null ) {
@@ -861,14 +837,5 @@ public class CahierTexteMapperImpl implements CahierTexteMapper {
         else {
             mappingTarget.setSalle( null );
         }
-    }
-
-    protected void userDTOToUser1(UserDTO userDTO, User mappingTarget) {
-        if ( userDTO == null ) {
-            return;
-        }
-
-        mappingTarget.setId( userDTO.getId() );
-        mappingTarget.setLogin( userDTO.getLogin() );
     }
 }

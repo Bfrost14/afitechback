@@ -1,0 +1,50 @@
+<div class="-mr-4 -ml-4">
+  <div
+    class=" w-full  border-solid border-bleu-foncee bg-white border-b-4 border-r-4 border-l-4 divide-y-8 divide-bleue-claire-1">
+
+    <p class="flex bg-bleu-foncee h-10 text-white justify-between w-full -mb-0.5 justify-between">
+      <span class="ml-4 mt-2 ">Détails cours</span>
+    </p>
+
+    <div class="grid grid-cols-1 gap-1 divide-y-8 divide-bleue-claire-1">
+
+      <div class="flex flex-col gt-xs:flex-row">
+
+        <mat-card>
+
+          <mat-card-content class=" flex justify-center">
+
+            <mat-tab-group class="w-full">
+
+
+              <mat-tab>
+                <ng-template mat-tab-label>
+                  <button class="btspan">{{'EVALUATION'}}</button>
+
+                </ng-template>
+                <app-ajout-note *ngIf="matiereUtilisateurId != undefined" [matiereUtilisateurId]="matiereUtilisateurId" [matiereUser]="matiereUser" [typeNote]="'EVALUATION'"></app-ajout-note>
+
+              </mat-tab>
+              <mat-tab>
+                <ng-template mat-tab-label>
+                  <button class="btspan">{{'EXAMEN'}}</button>
+
+                </ng-template>
+                <app-ajout-note *ngIf="matiereUtilisateurId != undefined" [matiereUtilisateurId]="matiereUtilisateurId" [matiereUser]="matiereUser" [typeNote]="'EXAMEN'"></app-ajout-note>
+              </mat-tab>
+              <mat-tab>
+                <ng-template mat-tab-label>
+                  <button class="btspan">{{'RATTRAPAGE'}}</button>
+
+                </ng-template>
+                <app-ajout-note *ngIf="matiereUtilisateurId != undefined" [matiereUtilisateurId]="matiereUtilisateurId" [matiereUser]="matiereUser" [typeNote]="'RATTRAPAGE'"></app-ajout-note>
+              </mat-tab>
+
+
+            </mat-tab-group>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>

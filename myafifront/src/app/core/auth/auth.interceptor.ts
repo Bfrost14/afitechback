@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { catchError, filter, finalize, switchMap, take } from 'rxjs/operators';
+import { catchError, filter, switchMap, take } from 'rxjs/operators';
 import { AuthService } from 'app/core/auth/auth.service';
 import { AuthUtils } from 'app/core/auth/auth.utils';
 import { Router } from '@angular/router';
@@ -30,16 +30,15 @@ export class AuthInterceptor implements HttpInterceptor {
         if (this._authService.accessToken && !AuthUtils.isTokenExpired(this._authService.accessToken, 60)) {
             authReq = this.addTokenHeader(req, token);
         }
-        console.log(authReq)
+
         return next.handle(authReq).pipe(
             catchError((error: HttpErrorResponse) => {
-                console.log("========== intercept error status ========>", error, "instance of ", error instanceof HttpErrorResponse);
                 if (error.status === 401) {
                     // Unauthorized - navigate to sign-out page
                     this._router.navigate(['sign-out']);
                 } else if (error.status === 403) {
-                    // Forbidden - handle it accordingly
-                    return this.handle401Error(authReq, next);
+                    // Forbidden - navigate to unauthorized page
+                    this._router.navigate(['unauthorized']);
                 }
                 // Pass the error to the caller
                 return throwError(error);
@@ -47,25 +46,7 @@ export class AuthInterceptor implements HttpInterceptor {
         );
     }
 
-    private handle401Error(request: HttpRequest<any>, next: HttpHandler) {
-        
-        if (!this.isRefreshing) {
-            this.isRefreshing = true;
-            this.refreshTokenSubject.next(null);
-
-            const token = this._authService.accessToken;
-            
-        }
-
-        return this.refreshTokenSubject.pipe(
-            filter(token => token !== null),
-            take(1),
-            switchMap((token) => next.handle(this.addTokenHeader(request, token)))
-        );
-    }
-
     private addTokenHeader(request: HttpRequest<any>, token: string) {
-        console.log("Adding token to request headers");
         return request.clone({
             setHeaders: {
                 Authorization: `Bearer ${token}`,

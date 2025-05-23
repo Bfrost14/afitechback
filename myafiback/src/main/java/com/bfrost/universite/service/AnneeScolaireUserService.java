@@ -42,9 +42,10 @@ public interface AnneeScolaireUserService {
      * @param etudiant
      * @param anneeScolaire
      * @param filiere
+     * @param semestre
      * @return the list of entities.
      */
-    Page<AnneeScolaireUserDTO> findAll(Pageable pageable, String etudiant, String anneeScolaire, String filiere);
+    Page<AnneeScolaireUserDTO> findAll(Pageable pageable, String etudiant, String anneeScolaire, String filiere, String semestre);
 
     /**
      * Get the "id" anneeScolaireUser.

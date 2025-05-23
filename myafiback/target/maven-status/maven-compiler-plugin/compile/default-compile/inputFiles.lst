@@ -23,6 +23,7 @@ C:\Users\LENOVO\Documents\afitechback\myafiback\src\main\java\com\bfrost\univers
 C:\Users\LENOVO\Documents\afitechback\myafiback\src\main\java\com\bfrost\universite\web\rest\vm\KeyAndPasswordVM.java
 C:\Users\LENOVO\Documents\afitechback\myafiback\src\main\java\com\bfrost\universite\service\dto\AuthenticationRequest.java
 C:\Users\LENOVO\Documents\afitechback\myafiback\src\main\java\com\bfrost\universite\config\Constants.java
+C:\Users\LENOVO\Documents\afitechback\myafiback\src\main\java\com\bfrost\universite\domain\enumeration\TypeNote.java
 C:\Users\LENOVO\Documents\afitechback\myafiback\src\main\java\com\bfrost\universite\MyAfiBackApplication.java
 C:\Users\LENOVO\Documents\afitechback\myafiback\src\main\java\com\bfrost\universite\web\rest\errors\ExceptionTranslator.java
 C:\Users\LENOVO\Documents\afitechback\myafiback\src\main\java\com\bfrost\universite\service\dto\PasswordChangeDTO.java
@@ -54,7 +55,6 @@ C:\Users\LENOVO\Documents\afitechback\myafiback\src\main\java\com\bfrost\univers
 C:\Users\LENOVO\Documents\afitechback\myafiback\src\main\java\com\bfrost\universite\service\dto\CahierTexteDTO.java
 C:\Users\LENOVO\Documents\afitechback\myafiback\src\main\java\com\bfrost\universite\web\rest\CalendrierCoursResource.java
 C:\Users\LENOVO\Documents\afitechback\myafiback\src\main\java\com\bfrost\universite\repository\package-info.java
-C:\Users\LENOVO\Documents\afitechback\myafiback\src\main\java\com\bfrost\universite\service\dto\RegisterRequest.java
 C:\Users\LENOVO\Documents\afitechback\myafiback\src\main\java\com\bfrost\universite\service\mapper\FiliereMapper.java
 C:\Users\LENOVO\Documents\afitechback\myafiback\src\main\java\com\bfrost\universite\service\MatiereUserService.java
 C:\Users\LENOVO\Documents\afitechback\myafiback\src\main\java\com\bfrost\universite\domain\AbstractAuditingEntity.java
@@ -150,7 +150,6 @@ C:\Users\LENOVO\Documents\afitechback\myafiback\src\main\java\com\bfrost\univers
 C:\Users\LENOVO\Documents\afitechback\myafiback\src\main\java\com\bfrost\universite\repository\MatiereRepository.java
 C:\Users\LENOVO\Documents\afitechback\myafiback\src\main\java\com\bfrost\universite\web\rest\errors\package-info.java
 C:\Users\LENOVO\Documents\afitechback\myafiback\src\main\java\com\bfrost\universite\service\UsernameAlreadyUsedException.java
-C:\Users\LENOVO\Documents\afitechback\myafiback\src\main\java\com\bfrost\universite\domain\enumeration\Role.java
 C:\Users\LENOVO\Documents\afitechback\myafiback\src\main\java\com\bfrost\universite\web\rest\vm\LoginVM.java
 C:\Users\LENOVO\Documents\afitechback\myafiback\src\main\java\com\bfrost\universite\domain\enumeration\package-info.java
 C:\Users\LENOVO\Documents\afitechback\myafiback\src\main\java\com\bfrost\universite\web\rest\NotationResource.java

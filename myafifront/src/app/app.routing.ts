@@ -5,6 +5,7 @@ import { LayoutComponent } from 'app/layout/layout.component';
 import { InitialDataResolver } from 'app/app.resolvers';
 import { RedirectByRoleGuard } from './core/auth/guards/redirect-by-role.guard';
 import { EmptyComponent } from './modules/admin/empty/empty.component';
+import { UnauthorizedComponent } from './shared/unauthorized/unauthorized.component';
 
 // @formatter:off
 /* eslint-disable max-len */
@@ -23,6 +24,8 @@ export const appRoutes: Route[] = [
         canActivate: [RedirectByRoleGuard],
         component: EmptyComponent
     },
+
+    { path: 'unauthorized', component: UnauthorizedComponent },
 
 
     // Auth routes for guests
@@ -106,6 +109,9 @@ export const appRoutes: Route[] = [
             {
                 path: 'gestion', children: [
                     { path: 'calendrier', loadChildren: () => import('app/modules/admin/calendrier-cours/calendrier-cours.module').then(m => m.CalendrierCoursModule) },
+                    { path: 'cours', loadChildren: () => import('app/modules/admin/cours/cours.module').then(m => m.CoursModule) },
+                    { path: 'note', loadChildren: () => import('app/modules/admin/note/note.module').then(m => m.NoteModule) },
+                    { path: 'espace', loadChildren: () => import('app/modules/admin/espace/espace.module').then(m => m.EspaceEtudiantModule) },
 
                 ]
             },

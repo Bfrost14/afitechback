@@ -11,6 +11,16 @@
         [@shake]="alert.type === 'error'">
         {{alert.message}}
       </fuse-alert>
+      <div class="flex items-center mt-4 sm:mt-0 justify-between">
+       <button class="order-first sm:order-last" mat-flat-button [color]="'warn'"
+                [swal]="restaurationSwal">
+                Restauration mot de passe
+            </button>
+            <button  class="order-first sm:order-last" mat-flat-button [color]="'primary'"
+               [swal]="activationCompte">
+                {{etudiant.activated == true ? "Désactivation compte" : "Activation compte"}}
+            </button>
+      </div>
 
     </div>
 
@@ -100,7 +110,8 @@
                 <button class="btspan">{{'Année scolaire'}}</button>
 
               </ng-template>
-              <app-liste-annee-scolaire-utilisateur *ngIf="etudiant != undefined" [user]="etudiant"></app-liste-annee-scolaire-utilisateur>
+              <app-liste-annee-scolaire-utilisateur *ngIf="etudiant != undefined"
+                [user]="etudiant"></app-liste-annee-scolaire-utilisateur>
             </mat-tab>
           </mat-tab-group>
         </mat-card-content>
@@ -108,3 +119,6 @@
     </div>
   </div>
 </div>
+
+<swal #activationCompte (confirm)="activation()" [swalOptions]="Enregistrer"></swal>
+<swal #restaurationSwal (confirm)="resetPassword()" [swalOptions]="Supprimer"></swal>

@@ -19,8 +19,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-22T02:38:39+0000",
-    comments = "version: 1.5.3.Final, compiler: javac, environment: Java 17.0.10 (Oracle Corporation)"
+    date = "2025-05-23T20:34:37+0000",
+    comments = "version: 1.5.3.Final, compiler: javac, environment: Java 21.0.4 (Oracle Corporation)"
 )
 @Component
 public class UserMapperImpl implements UserMapper {
@@ -287,6 +287,7 @@ public class UserMapperImpl implements UserMapper {
 
         profil.setId( profilDTO.getId() );
         profil.setNom( profilDTO.getNom() );
+        profil.setRedirection( profilDTO.getRedirection() );
         profil.setAuthorities( authorityDTOSetToAuthoritySet( profilDTO.getAuthorities() ) );
 
         return profil;
@@ -365,6 +366,7 @@ public class UserMapperImpl implements UserMapper {
 
         profilDTO.setId( profil.getId() );
         profilDTO.setNom( profil.getNom() );
+        profilDTO.setRedirection( profil.getRedirection() );
         profilDTO.setAuthorities( authoritySetToAuthorityDTOSet( profil.getAuthorities() ) );
 
         return profilDTO;
@@ -408,6 +410,7 @@ public class UserMapperImpl implements UserMapper {
 
         mappingTarget.setId( profilDTO.getId() );
         mappingTarget.setNom( profilDTO.getNom() );
+        mappingTarget.setRedirection( profilDTO.getRedirection() );
         if ( mappingTarget.getAuthorities() != null ) {
             Set<Authority> set = authorityDTOSetToAuthoritySet( profilDTO.getAuthorities() );
             if ( set != null ) {

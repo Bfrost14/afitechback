@@ -7,7 +7,7 @@ export interface ICahierTexte {
   date?: dayjs.Dayjs | null;
   contenu?: string | null;
   calendrierCours?: Pick<ICalendrierCours, 'id'> | null;
-  utilisateur?: Pick<IUtilisateur, 'id'> | null;
+  user?: Pick<IUtilisateur, 'id'> | null;
 }
 
 export type NewCahierTexte = Omit<ICahierTexte, 'id'> & { id: null };

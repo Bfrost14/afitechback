@@ -39,11 +39,11 @@ public class AuthenticationService {
 
 
         AuthenticationResponse authenticationResponse = new AuthenticationResponse();
-        if(user.isActivated()){
+        if(!user.getFirstConnection()){
             authenticationResponse.setAccessToken(jwtToken);
             authenticationResponse.setMessage(null);
         }else{
-           authenticationResponse.setMessage("Votre compte est désactivé");
+           authenticationResponse.setMessage("Changez votre mot de passe");
         }
 
 
@@ -57,6 +57,7 @@ public class AuthenticationService {
         var user = repository.findOneByLogin(request.getEmail())
                 .orElseThrow();
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setFirstConnection(false);
         repository.save(user);
         AuthenticationResponse authenticationResponse = new AuthenticationResponse();
         authenticationResponse.setMessage("Le mot de passe a été modifié avec success");

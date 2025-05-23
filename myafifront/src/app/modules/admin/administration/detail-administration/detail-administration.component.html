@@ -11,7 +11,14 @@
         [@shake]="alert.type === 'error'">
         {{alert.message}}
       </fuse-alert>
-
+      <div class="flex items-center mt-4 sm:mt-0 justify-between">
+        <button class="order-first sm:order-last" mat-flat-button [color]="'warn'" [swal]="restaurationSwal">
+          Restauration mot de passe
+        </button>
+        <button class="order-first sm:order-last" mat-flat-button [color]="'primary'" [swal]="activationCompte">
+          {{administration.activated == true ? "Désactivation compte" : "Activation compte"}}
+        </button>
+      </div>
     </div>
 
     <div class="flex flex-col gt-xs:flex-row">
@@ -99,3 +106,7 @@
     </div>
   </div>
 </div>
+
+
+<swal #activationCompte (confirm)="activation()" [swalOptions]="Enregistrer"></swal>
+<swal #restaurationSwal (confirm)="resetPassword()" [swalOptions]="Supprimer"></swal>

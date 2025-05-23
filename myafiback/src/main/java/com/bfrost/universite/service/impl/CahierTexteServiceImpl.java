@@ -65,9 +65,9 @@ public class CahierTexteServiceImpl implements CahierTexteService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<CahierTexteDTO> findAll(Pageable pageable) {
+    public Page<CahierTexteDTO> findAll(Pageable pageable, String professeur, Long idCalendrier, String matiere) {
         LOG.debug("Request to get all CahierTextes");
-        return cahierTexteRepository.findAll(pageable).map(cahierTexteMapper::toDto);
+        return cahierTexteRepository.manageCahier(pageable,professeur,idCalendrier,matiere).map(cahierTexteMapper::toDto);
     }
 
     @Override

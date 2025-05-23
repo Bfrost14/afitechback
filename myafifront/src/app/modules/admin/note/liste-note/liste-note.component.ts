@@ -21,9 +21,9 @@ import {
     UntypedFormGroup,
 } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { NoteService } from '../service/note.service';
-import { NewNote } from '../models/note';
-
+import { NewMatiereUtilisateur } from '../../matiere-utilisateur/matiere-utilisateur.model';
+import { MatiereUtilisateurService } from '../../matiere-utilisateur/service/matiere-utilisateur.service';
+import { AuthService } from 'app/core/auth/auth.service';
 
 interface SearchFild {
     key: string;
@@ -35,7 +35,7 @@ interface SearchFild {
  */
 @Component({
     selector: 'app-liste-note',
-    styleUrls: ['./liste-note.component.css'],
+    styleUrls: ['./liste-note.component.scss'],
     templateUrl: './liste-note.component.html',
     animations: [
         trigger('detailExpand', [
@@ -50,30 +50,28 @@ interface SearchFild {
 })
 export class ListeNoteComponent implements OnInit, AfterViewInit {
     searchFieldList: SearchFild[] = [
+        { key: 'anneeScolaire', value: null },
         { key: 'matiere', value: null },
-        { key: 'prenom', value: null },
-        { key: 'nom', value: null },
-        { key: 'semestre', value: null },
         { key: 'filiere', value: null },
+        { key: 'semestre', value: null },
     ];
 
-    dataSource: NewNote[] = [];
-    columnsToDisplay = ["matricule", 'prenom', 'nom', 'filiere',"matiere", 'semestre',"valeur"];
-    displayedColumn: string[] = ['prenom', 'nom', 'filiere',"matiere", 'semestre',"valeur"];
-    displayedColumns: string[] = ['prenom', 'nom', 'filiere',"matiere", 'semestre',"valeur"];
+    dataSource: NewMatiereUtilisateur[] = [];
+    columnsToDisplay = ['anneeScolaire', 'matiere', 'filiere', 'semestre'];
+    displayedColumn: string[] = ['anneeScolaire', 'matiere', 'filiere', 'semestre'];
+    displayedColumns: string[] = ['anneeScolaire', 'matiere', 'filiere', 'semestre'];
 
     columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
-    expandedElement: NewNote | null;
-    selectNewNoteEdit: NewNote
+    expandedElement: NewMatiereUtilisateur | null;
+    selectMatiereUtilisateurEdit: NewMatiereUtilisateur
     selectedColumn = [
-        { key: 'matiere', value: '' },
-        { key: 'semestre', value: '' },
-        { key: 'filiere', value: '' },
+        { key: 'anneeScolaire', value: null },
+        { key: 'matiere', value: null },
     ];
     add: boolean = false
     edit: boolean = false
-    noteId: number = 0
-    noteIdEdit: number = 0
+    matiereUtilisateurId: number = 0
+    matiereUtilisateurIdEdit: number = 0
     // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     resultsLength = 0;
     isLoadingResults = true;
@@ -81,7 +79,7 @@ export class ListeNoteComponent implements OnInit, AfterViewInit {
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
     exampleDatabase: any | null;
-    data: NewNote[] = [];
+    data: NewMatiereUtilisateur[] = [];
     pageSize = 25;
     pageSizeOptions: number[] = [25, 50, 100];
     // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -92,10 +90,10 @@ export class ListeNoteComponent implements OnInit, AfterViewInit {
      */
 
     constructor(
-        private _noteService: NoteService,
+        private _matiereService: MatiereUtilisateurService,
         private _formBuilder: UntypedFormBuilder,
-        private _route: ActivatedRoute
-    ) {}
+        private _authService: AuthService
+    ) { }
 
     ngOnInit(): void {
         this.searchColumnForm = this._formBuilder.group({
@@ -108,55 +106,53 @@ export class ListeNoteComponent implements OnInit, AfterViewInit {
 
     ngAfterViewInit() {
         this.addSearchFiels(this.selectedColumn);
-        this.sort.sort({ id: 'matiere', start: 'asc' } as MatSortable);
+        this.sort.sort({ id: 'anneeScolaire', start: 'asc' } as MatSortable);
 
         this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
 
-        this.allNewNotes();
+        this.allMatiereUtilisateurs();
     }
 
-    getAllNewNote(column: SearchFild[]) {
+    getAllMatiereUtilisateur(column: SearchFild[]) {
+        let anneeScolaire = '';
         let matiere = '';
-        let prenom = '';
-        let nom = '';
+        let professeur = '';
         let filiere = '';
         let semestre = '';
         column.forEach((col) => {
             switch (col.key) {
+
+                case 'anneeScolaire':
+                    anneeScolaire = col.value;
+                    break;
                 case 'matiere':
                     matiere = col.value;
-                    break;
-                case 'prenom':
-                    prenom = col.value;
-                    break;
-                case 'nom':
-                    nom = col.value;
                     break;
                 case 'filiere':
                     filiere = col.value;
                     break;
+                case 'professeur':
+                    professeur = col.value;
+                    break;
                 case 'semestre':
                     semestre = col.value;
                     break;
-
                 default:
             }
         });
-        return this._noteService
-            .getnote(
-                this.paginator.pageIndex,
-                this.paginator.pageSize,
-                this.sort.active,
-                this.sort.direction,
-                matiere,
-                semestre,
-                nom,
-                prenom,
-                filiere
+        return this._matiereService
+            .query(
+                {
+                    page: this.paginator.pageIndex,
+                    size: this.paginator.pageSize,
+                    sort: this.sort.active + "," + this.sort.direction,
+                     matiere: matiere, professeur: professeur, filiere: filiere,
+                      anneeScolaire: anneeScolaire, semestre: semestre
+                },
             )
             .subscribe((data) => {
                 console.log(
-                    '@@@@@@@@@@@@@@@@@@@@@@@@ note data @@@@@@@@@@@@',
+                    '@@@@@@@@@@@@@@@@@@@@@@@@ matiere data @@@@@@@@@@@@',
                     data
                 );
 
@@ -180,8 +176,8 @@ export class ListeNoteComponent implements OnInit, AfterViewInit {
 
         if (fields.length == 0) {
             this.searchFilds.clear();
-            this.getAllNewNote(fields);
-            
+            this.getAllMatiereUtilisateur(fields);
+
         } else {
             this.searchFilds.clear();
             fields.forEach((field) => {
@@ -195,7 +191,7 @@ export class ListeNoteComponent implements OnInit, AfterViewInit {
         }
     }
 
-    
+
     public compareWith(object1: SearchFild, object2: SearchFild): boolean {
         return object1?.key === object2?.key;
     }
@@ -208,21 +204,22 @@ export class ListeNoteComponent implements OnInit, AfterViewInit {
             '@@@@@@@@@@@@@ filtered column ======>',
             this.selectedColumn
         );
-        this.getAllNewNote(column);
-      
+        this.getAllMatiereUtilisateur(column);
+
     }
 
-    allNewNotes() {
+    allMatiereUtilisateurs() {
         merge(this.sort.sortChange, this.paginator.page)
             .pipe(
                 startWith({}),
                 switchMap(() => {
                     this.isLoadingResults = true;
-                    return this._noteService!.getnote(
-                        this.paginator.pageIndex,
-                        this.paginator.pageSize,
-                        this.sort.active,
-                        this.sort.direction
+                    return this._matiereService!.query(
+                        {
+                            page: this.paginator.pageIndex,
+                            size: this.paginator.pageSize,
+                            sort: this.sort.active + "," + this.sort.direction
+                        }
                     ).pipe(catchError(() => observableOf(null)));
                 }),
                 map((data) => {
@@ -236,9 +233,9 @@ export class ListeNoteComponent implements OnInit, AfterViewInit {
 
                     // Only refresh the result length if there is new data. In case of rate
                     // limit errors, we do not want to reset the paginator to zero, as that
-                    // would prevent notes from re-triggering requests.
+                    // would prevent users from re-triggering requests.
                     console.log(
-                        '@@@@@@@@@@@@@@@@@ note data @@@@@@@@@@@@@@@@',
+                        '@@@@@@@@@@@@@@@@@ matiere data @@@@@@@@@@@@@@@@',
                         data
                     );
 
@@ -258,23 +255,23 @@ export class ListeNoteComponent implements OnInit, AfterViewInit {
         const afficher = event.value;
         //  this.displayedColumns = afficher
         this.columnsToDisplayWithExpand = [
-            'matricule',
+            'nom',
             ...afficher,
             'expand',
         ];
     }
 
     fiche: boolean = false;
-    setDataSource(note: NewNote) {
-        console.log('>>>>>>>>>>>>>>>.. data set >>>>>>>>>>>>>>>>>>', note);
+    setDataSource(matiere: NewMatiereUtilisateur) {
+        console.log('>>>>>>>>>>>>>>>.. data set >>>>>>>>>>>>>>>>>>', matiere);
         if (this.fiche) {
-            this.noteId = null
+            this.matiereUtilisateurId = null
             this.fiche = false;
             this.data = [...this.dataSource];
         } else {
-            this.noteId = note.id
+            this.matiereUtilisateurId = matiere.id
             this.fiche = true;
-            this.data = [note];
+            this.data = [matiere];
         }
 
         console.log(
@@ -284,23 +281,9 @@ export class ListeNoteComponent implements OnInit, AfterViewInit {
         );
     }
 
-    setDataSourceEdit(note: NewNote) {
-        console.log('>>>>>>>>>>>>>>>.. data set >>>>>>>>>>>>>>>>>>', note);
-        if (this.add) {
-            this.noteIdEdit = null
-            this.selectNewNoteEdit = null
-            this.add = false;
-            this.data = [...this.dataSource];
-        } else {
-            this.noteIdEdit = note.id
-            this.selectNewNoteEdit = note
-            this.add = true;
-            this.data = [note];
-        }
-    }
 
-    setAdd(event){
+    setAdd(event) {
         this.add = event
-        this.allNewNotes()
-      }
+        this.allMatiereUtilisateurs()
+    }
 }

@@ -72,9 +72,9 @@ public class AnneeScolaireUserServiceImpl implements AnneeScolaireUserService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<AnneeScolaireUserDTO> findAll(Pageable pageable, String etudiant, String anneeScolaire, String filiere) {
+    public Page<AnneeScolaireUserDTO> findAll(Pageable pageable, String etudiant, String anneeScolaire, String filiere, String semestre) {
         LOG.debug("Request to get all AnneeScolaireUsers");
-        return anneeScolaireUserRepository.manageUser(pageable, etudiant, anneeScolaire, filiere).map(anneeScolaireUserMapper::toDto);
+        return anneeScolaireUserRepository.manageUser(pageable, etudiant, anneeScolaire, filiere, semestre).map(anneeScolaireUserMapper::toDto);
     }
 
     @Override

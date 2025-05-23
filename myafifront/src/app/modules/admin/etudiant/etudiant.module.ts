@@ -29,7 +29,6 @@ import { ListeEtudiantComponent } from './liste-etudiant/liste-etudiant.componen
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTabsModule } from '@angular/material/tabs';
 import { QuillModule } from 'ngx-quill';
-import { MesNotesComponent } from './mes-notes/mes-notes.component';
 import { AjoutEtudiantComponent } from './ajout-etudiant/ajout-etudiant.component';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 
@@ -40,7 +39,6 @@ import { AjoutAnneeScolaireUtilisateurComponent } from './annee-scolaire-utilisa
   declarations: [
     DetailEtudiantComponent,
     ListeEtudiantComponent,
-    MesNotesComponent,
     AjoutEtudiantComponent,
     ListeAnneeScolaireUtilisateurComponent,
     AjoutAnneeScolaireUtilisateurComponent

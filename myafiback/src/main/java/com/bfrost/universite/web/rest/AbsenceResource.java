@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -59,6 +60,7 @@ public class AbsenceResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
+    @PreAuthorize("hasAnyAuthority('ENREGISTREMENT_ABSENCES')")
     public ResponseEntity<List<AbsenceDTO>> createAbsence(@Valid @RequestBody List<AbsenceDTO> absenceDTO) throws URISyntaxException {
         LOG.debug("REST request to save Absence : {}", absenceDTO);
         if (absenceDTO.get(0).getId() != null) {
@@ -81,6 +83,7 @@ public class AbsenceResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('MODIFICATION_GENERALE_ABSENCES')")
     public ResponseEntity<AbsenceDTO> updateAbsence(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody AbsenceDTO absenceDTO
@@ -115,6 +118,7 @@ public class AbsenceResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PreAuthorize("hasAnyAuthority('MODIFICATION_ABSENCES')")
     public ResponseEntity<AbsenceDTO> partialUpdateAbsence(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody AbsenceDTO absenceDTO
@@ -146,9 +150,15 @@ public class AbsenceResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of absences in body.
      */
     @GetMapping("")
-    public ResponseEntity<Map<String,Object>> getAllAbsences(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
+    @PreAuthorize("hasAnyAuthority('LECTURE_LISTE_ABSENCES')")
+    public ResponseEntity<Map<String,Object>> getAllAbsences(
+            @org.springdoc.core.annotations.ParameterObject Pageable pageable,
+            @RequestParam(required = false) String etudiant,
+            @RequestParam(required = false) Long idCalendrier,
+            @RequestParam(required = false) String filiere
+    ) {
         LOG.debug("REST request to get a page of Absences");
-        Page<AbsenceDTO> page = absenceService.findAll(pageable);
+        Page<AbsenceDTO> page = absenceService.findAll(pageable, etudiant, idCalendrier, filiere);
         Pagination pagination=paginationService.instancierPagination(page);
         Map<String,Object> response=new HashMap<>();
         response.put("data",page.getContent());
@@ -163,6 +173,7 @@ public class AbsenceResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the absenceDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('LECTURE_DETAILLE_ABSENCES')")
     public ResponseEntity<AbsenceDTO> getAbsence(@PathVariable("id") Long id) {
         LOG.debug("REST request to get Absence : {}", id);
         Optional<AbsenceDTO> absenceDTO = absenceService.findOne(id);
@@ -176,6 +187,7 @@ public class AbsenceResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('SUPPRESSION_ABSENCES')")
     public ResponseEntity<Void> deleteAbsence(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete Absence : {}", id);
         absenceService.delete(id);

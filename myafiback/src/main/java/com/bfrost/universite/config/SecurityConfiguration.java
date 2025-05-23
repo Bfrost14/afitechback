@@ -1,8 +1,6 @@
 package com.bfrost.universite.config;
 
-import com.bfrost.universite.domain.User;
-import com.bfrost.universite.domain.enumeration.Role;
-import com.bfrost.universite.repository.UserRepository;
+
 import com.bfrost.universite.security.*;
 import com.bfrost.universite.web.filter.SpaWebFilter;
 import org.springframework.context.annotation.Bean;

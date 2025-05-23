@@ -161,61 +161,7 @@ export class AuthService {
             );
     }
 
-    validateOTP(credentials: { email: string; otp: string }): Observable<any> {
-        // Throw error, if the user is already logged in
-        const param = {
-            email: localStorage.getItem("email"),
-            otp: credentials.otp,
-        };
-
-        return this._httpClient
-            .get(this.resourceUrl + '/validate-otp', {
-                params: param,
-                observe: 'response',
-            })
-            .pipe(
-                switchMap((response: any) => {
-                    // Store the access token in the local storage
-                    this.accessToken = response.body.access_token;
-                    console.log('access_token====> ', response.body);
-                    // Store the refresh token in the local storage
-                    this.refreshToken = response.body.refresh_token;
-                    // Set the authenticated flag to true
-                    this._authenticated = true;
-
-                    // Store the user on the user service
-                    // this._userService.user = response.body.user;
-
-                    // Return a new observable with the response.body
-                    return of(response.body);
-                })
-            );
-    }
-
-    validateOTP2(credentials: { email: string; otp: string }): Observable<any> {
-        // Throw error, if the user is already logged in
-        const param = {
-            email: credentials.email,
-            otp: credentials.otp,
-        };
-
-        return this._httpClient
-            .get(this.resourceUrl + '/validate-otp', {
-                params: param,
-                observe: 'response',
-            })
-            .pipe(
-                switchMap((response: any) => {
-                    // Store the access token in the local storage
-                
-                    // Store the user on the user service
-                    // this._userService.user = response.body.user;
-
-                    // Return a new observable with the response.body
-                    return of(response);
-                })
-            );
-    }
+ 
 
     /**
      * Sign in using the access token
@@ -350,12 +296,9 @@ export class AuthService {
     getUtilisateur(): any {
         console.log(AuthUtils.decodeToken(this.accessToken));
         return {
-            id: null,
-            name: AuthUtils.decodeToken(this.accessToken).aud,
+            id: AuthUtils.decodeToken(this.accessToken).userId,
             email: AuthUtils.decodeToken(this.accessToken).sub,
-            role: AuthUtils.decodeToken(this.accessToken).iss,
-            flotte: AuthUtils.decodeToken(this.accessToken).jti,
-            avatar: 'assets/images/avatars/default-user.jpg',
+            role: AuthUtils.decodeToken(this.accessToken).auth,
             status: 'online',
         };
     }
@@ -366,13 +309,10 @@ export class AuthService {
         if(tokenDecoded == null){
             return of(null)
         }
-        const user: User = {
-            id: null,
-            name: tokenDecoded.aud,
-            email: tokenDecoded.sub,
-            role: tokenDecoded.iss,
-            flotte: tokenDecoded.jti,
-            avatar: 'assets/images/avatars/default-user.jpg',
+        const user: any = {
+            id: AuthUtils.decodeToken(this.accessToken).userId,
+            email: AuthUtils.decodeToken(this.accessToken).sub,
+            role: AuthUtils.decodeToken(this.accessToken).auth,
             status: 'online',
         };
     

@@ -156,10 +156,11 @@ public class AnneeScolaireUserResource {
         @org.springdoc.core.annotations.ParameterObject Pageable pageable,
         @RequestParam(value = "etudiant", required = false) String etudiant,
         @RequestParam(value = "anneeScolaire", required = false) String anneeScolaire,
-        @RequestParam(value = "filiere", required = false) String filiere
+        @RequestParam(value = "filiere", required = false) String filiere,
+        @RequestParam(value = "semestre", required = false) String semestre
     ) {
         LOG.debug("REST request to get a page of AnneeScolaireUsers");
-        Page<AnneeScolaireUserDTO> page = anneeScolaireUserService.findAll(pageable, etudiant, anneeScolaire, filiere);
+        Page<AnneeScolaireUserDTO> page = anneeScolaireUserService.findAll(pageable, etudiant, anneeScolaire, filiere, semestre);
         Pagination pagination=paginationService.instancierPagination(page);
         Map<String,Object> response=new HashMap<>();
         response.put("data",page.getContent());
