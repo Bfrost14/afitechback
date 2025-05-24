@@ -98,4 +98,9 @@ public class NoteServiceImpl implements NoteService {
         LOG.debug("Request to delete Note : {}", id);
         noteRepository.deleteById(id);
     }
+
+    @Override
+    public List<NoteDTO> findByUserId(Long id) {
+        return noteRepository.findAllByUserId(id).stream().map(noteMapper::toDto).toList();
+    }
 }

@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * Spring Data JPA repository for the Note entity.
  */
@@ -24,4 +26,6 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
         AND (:typeNote is null or n.typeNote = :typeNote)
         """)
     Page<Note> manageNote(Pageable pageable, String etudiant, String semestre, String matiere, TypeNote typeNote, Long idMatiereUser);
+
+    List<Note> findAllByUserId(Long id);
 }

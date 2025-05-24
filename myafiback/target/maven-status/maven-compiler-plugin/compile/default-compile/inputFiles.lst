@@ -1,5 +1,6 @@
 C:\Users\LENOVO\Documents\afitechback\myafiback\src\main\java\com\bfrost\universite\config\package-info.java
 C:\Users\LENOVO\Documents\afitechback\myafiback\src\main\java\com\bfrost\universite\web\rest\NoteResource.java
+C:\Users\LENOVO\Documents\afitechback\myafiback\src\main\java\com\bfrost\universite\service\dto\StatistiquesSemestreDTO.java
 C:\Users\LENOVO\Documents\afitechback\myafiback\src\main\java\com\bfrost\universite\service\impl\CahierTexteServiceImpl.java
 C:\Users\LENOVO\Documents\afitechback\myafiback\src\main\java\com\bfrost\universite\domain\Note.java
 C:\Users\LENOVO\Documents\afitechback\myafiback\src\main\java\com\bfrost\universite\service\CalendrierCoursService.java
@@ -118,8 +119,10 @@ C:\Users\LENOVO\Documents\afitechback\myafiback\src\main\java\com\bfrost\univers
 C:\Users\LENOVO\Documents\afitechback\myafiback\src\main\java\com\bfrost\universite\service\PaginationService.java
 C:\Users\LENOVO\Documents\afitechback\myafiback\src\main\java\com\bfrost\universite\repository\UserRepository.java
 C:\Users\LENOVO\Documents\afitechback\myafiback\src\main\java\com\bfrost\universite\service\FiliereService.java
+C:\Users\LENOVO\Documents\afitechback\myafiback\src\main\java\com\bfrost\universite\service\dto\StatParSemestreDTO.java
 C:\Users\LENOVO\Documents\afitechback\myafiback\src\main\java\com\bfrost\universite\config\JwtService.java
 C:\Users\LENOVO\Documents\afitechback\myafiback\src\main\java\com\bfrost\universite\web\rest\PublicUserResource.java
+C:\Users\LENOVO\Documents\afitechback\myafiback\src\main\java\com\bfrost\universite\domain\enumeration\TypeProfil.java
 C:\Users\LENOVO\Documents\afitechback\myafiback\src\main\java\com\bfrost\universite\web\rest\vm\ManagedUserVM.java
 C:\Users\LENOVO\Documents\afitechback\myafiback\src\main\java\com\bfrost\universite\web\rest\PointageProfesseurResource.java
 C:\Users\LENOVO\Documents\afitechback\myafiback\src\main\java\com\bfrost\universite\web\rest\AccountResource.java

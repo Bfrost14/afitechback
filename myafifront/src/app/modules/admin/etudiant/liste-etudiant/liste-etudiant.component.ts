@@ -141,7 +141,7 @@ export class ListeEtudiantComponent implements OnInit, AfterViewInit {
                  {page: this.paginator.pageIndex, 
                             size: this.paginator.pageSize, 
                             sort: this.sort.active+","+this.sort.direction,
-                        email:email, prenom: prenom, nom: nom, matricule: matricule, profil: "PROFESSEUR" }
+                        email:email, prenom: prenom, nom: nom, matricule: matricule, name: "ETUDIANT" }
             )
             .subscribe((data) => {
                 console.log(

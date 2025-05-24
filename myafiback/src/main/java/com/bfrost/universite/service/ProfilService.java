@@ -37,11 +37,12 @@ public interface ProfilService {
     /**
      * Get all the profiles.
      *
-     * @param pageable the pagination information.
+     * @param pageable   the pagination information.
      * @param nom
+     * @param typeProfil
      * @return the list of entities.
      */
-    Page<ProfilDTO> findAll(Pageable pageable, String nom);
+    Page<ProfilDTO> findAll(Pageable pageable, String nom, String typeProfil);
 
     /**
      * Get the "id" profil.

@@ -30,6 +30,10 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { MatRadioModule } from '@angular/material/radio';
 import { EspaceRoutingModule } from './espace-routing.module';
 import { EspaceComponent } from './espace/espace.component';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { NoteModule } from '../note/note.module';
+import { CoursModule } from '../cours/cours.module';
+
 
 @NgModule({
   declarations: [
@@ -66,7 +70,10 @@ import { EspaceComponent } from './espace/espace.component';
     QuillModule.forRoot(),
     FuseAlertModule,
     SweetAlert2Module.forRoot(),
-    MatRadioModule
+    MatRadioModule,
+    MatExpansionModule,
+    NoteModule,
+    CoursModule
   ],
 schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

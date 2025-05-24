@@ -62,4 +62,13 @@ public interface NoteService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+
+    /**
+     * Get the "id" note.
+     *
+     * @param id the id of the entity.
+     * @return the entity.
+     */
+    List<NoteDTO> findByUserId(Long id);
 }

@@ -83,7 +83,7 @@
 
         <div class="flex justify-end mb-2 -mt-4">
 
-          <button class="ml-4" mat-flat-button class="bg-rouge-1 text-white" (click)="add = true">
+          <button class="ml-4" mat-flat-button class="bg-rouge-1 text-white" (click)="add = true" *hasAuthority="'ENREGISTREMENT_POINTAGE_PROFESSEUR'">
             <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
             <span class="ml-2 mr-1">{{'Ajouter un pointage' | titlecase}}</span>
           </button>

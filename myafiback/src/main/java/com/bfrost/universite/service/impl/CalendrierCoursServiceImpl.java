@@ -103,4 +103,9 @@ public class CalendrierCoursServiceImpl implements CalendrierCoursService {
         LOG.debug("Request to delete CalendrierCours : {}", id);
         calendrierCoursRepository.deleteById(id);
     }
+
+    @Override
+    public List<CalendrierCoursDTO> findByFiliere(Long id) {
+        return calendrierCoursRepository.findAllByMatiereUserFiliereId(id).stream().map(calendrierCoursMapper::toDto).toList();
+    }
 }

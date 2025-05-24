@@ -60,4 +60,12 @@ public interface AbsenceService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+    /**
+     * Get the "id" absence.
+     *
+     * @param id the id of the entity.
+     * @return the entity.
+     */
+    List<AbsenceDTO> findByUserId(Long id);
 }

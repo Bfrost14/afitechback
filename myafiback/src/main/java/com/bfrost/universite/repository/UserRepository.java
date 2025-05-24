@@ -4,6 +4,8 @@ import com.bfrost.universite.domain.User;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+
+import com.bfrost.universite.domain.enumeration.TypeProfil;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -46,9 +48,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
       AND (:telephone IS NULL OR u.telephone LIKE CONCAT('%', :telephone, '%'))
       AND (:filiere IS NULL OR LOWER(f.nom) LIKE LOWER(CONCAT('%', :filiere, '%')))
       AND (:matricule IS NULL OR u.matricule LIKE CONCAT('%', :matricule, '%'))
-      AND (:profil IS NULL OR LOWER(p.nom) LIKE LOWER(CONCAT('%', :profil, '%')))
+      AND (:profil IS NULL OR p.typeProfil = :profil)
       AND (:campus IS NULL OR LOWER(c.nom) LIKE LOWER(CONCAT('%', :campus, '%')))
       AND (:admin IS NULL OR LOWER(p.nom) NOT IN ('professeur', 'etudiant'))
+      AND (:name IS NULL OR f.nom IS NOT NULL)
 """)
-    Page<User> managedUserBy(Pageable pageable, String prenom, String nom, String email, String telephone, String filiere, String campus, String matricule, String profil, Integer admin);
+    Page<User> managedUserBy(Pageable pageable, String prenom, String nom, String email, String telephone, String filiere, String campus, String matricule, TypeProfil profil, Integer admin, String name);
 }

@@ -196,7 +196,7 @@ export class AjoutAdministrationComponent implements OnInit {
     }
 
     getAllProfile(nom: string){
-        this._profileService.query({page: 0, size: 10, sort: 'id,desc', nom: nom}).subscribe(data =>{
+        this._profileService.query({page: 0, size: 10, sort: 'id,desc', typeProfil: "ADMINISTRATION", nom: nom}).subscribe(data =>{
             this.profiles = data.body.data;
         })
     }

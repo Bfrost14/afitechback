@@ -6,7 +6,6 @@ import { environment } from 'environments/environment';
 import { AdminService } from '../../user/service/admin.service';
 import { NewUtilisateur } from '../../ue/ue.model';
 import { ProfileService } from '../../profile/service/profile.service';
-import { create } from 'lodash';
 import { AuthService } from 'app/core/auth/auth.service';
 @Component({
     selector: 'app-ajout-professeur',
@@ -192,10 +191,14 @@ export class AjoutProfesseurComponent implements OnInit {
             });
     }
 
-    getAllProfile(){
-        this._profileService.query({page: 0, size: 10, sort: 'id,desc', nom: "PROFESSEUR"}).subscribe(data =>{
+     getAllProfile(nom: string = ""){
+        this._profileService.query({page: 0, size: 10, sort: 'id,desc', typeProfil: "PROFESSEUR", nom: nom}).subscribe(data =>{
             this.profiles = data.body.data;
         })
+    }
+
+    displayFn(profil: any): string {
+        return profil && profil.nom ? profil.nom : '';
     }
 
 }

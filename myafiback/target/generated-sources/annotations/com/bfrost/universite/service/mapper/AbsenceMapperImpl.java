@@ -35,7 +35,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-23T20:34:32+0000",
+    date = "2025-05-24T17:00:11+0000",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 21.0.4 (Oracle Corporation)"
 )
 @Component
@@ -211,6 +211,7 @@ public class AbsenceMapperImpl implements AbsenceMapper {
         profil.setId( profilDTO.getId() );
         profil.setNom( profilDTO.getNom() );
         profil.setRedirection( profilDTO.getRedirection() );
+        profil.setTypeProfil( profilDTO.getTypeProfil() );
         profil.setAuthorities( authorityDTOSetToAuthoritySet( profilDTO.getAuthorities() ) );
 
         return profil;
@@ -272,6 +273,7 @@ public class AbsenceMapperImpl implements AbsenceMapper {
 
         uE.setId( uEDTO.getId() );
         uE.setNom( uEDTO.getNom() );
+        uE.setCredit( uEDTO.getCredit() );
 
         return uE;
     }
@@ -441,6 +443,7 @@ public class AbsenceMapperImpl implements AbsenceMapper {
         profilDTO.setId( profil.getId() );
         profilDTO.setNom( profil.getNom() );
         profilDTO.setRedirection( profil.getRedirection() );
+        profilDTO.setTypeProfil( profil.getTypeProfil() );
         profilDTO.setAuthorities( authoritySetToAuthorityDTOSet( profil.getAuthorities() ) );
 
         return profilDTO;
@@ -502,6 +505,7 @@ public class AbsenceMapperImpl implements AbsenceMapper {
 
         uEDTO.setId( uE.getId() );
         uEDTO.setNom( uE.getNom() );
+        uEDTO.setCredit( uE.getCredit() );
 
         return uEDTO;
     }
@@ -604,6 +608,7 @@ public class AbsenceMapperImpl implements AbsenceMapper {
         mappingTarget.setId( profilDTO.getId() );
         mappingTarget.setNom( profilDTO.getNom() );
         mappingTarget.setRedirection( profilDTO.getRedirection() );
+        mappingTarget.setTypeProfil( profilDTO.getTypeProfil() );
         if ( mappingTarget.getAuthorities() != null ) {
             Set<Authority> set = authorityDTOSetToAuthoritySet( profilDTO.getAuthorities() );
             if ( set != null ) {
@@ -713,6 +718,7 @@ public class AbsenceMapperImpl implements AbsenceMapper {
 
         mappingTarget.setId( uEDTO.getId() );
         mappingTarget.setNom( uEDTO.getNom() );
+        mappingTarget.setCredit( uEDTO.getCredit() );
     }
 
     protected void matiereDTOToMatiere1(MatiereDTO matiereDTO, Matiere mappingTarget) {

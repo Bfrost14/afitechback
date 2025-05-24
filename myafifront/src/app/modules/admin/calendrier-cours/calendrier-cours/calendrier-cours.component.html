@@ -5,7 +5,7 @@
       <mat-card-subtitle>Gestion des plannings des filières</mat-card-subtitle>
     </mat-card-header>
 
-    <div class="text-right mb-2">
+    <div class="text-right mb-2" *ngIf="etudiant.filiere == null;">
       <button mat-stroked-button color="primary" (click)="toggleFilters()">
         <mat-icon>{{ showFilters ? 'expand_less' : 'expand_more' }}</mat-icon>
         {{ showFilters ? 'Masquer les filtres' : 'Afficher les filtres' }}
@@ -13,7 +13,7 @@
     </div>
     <mat-card-content>
       <!-- Filtres -->
-      <mat-card class="filter-card mb-4" *ngIf="showFilters">
+      <mat-card class="filter-card mb-4" *ngIf="showFilters && etudiant.filiere == null;">
         <mat-card-header>
           <mat-card-title>🔍 Filtres</mat-card-title>
         </mat-card-header>
@@ -100,10 +100,10 @@
 
       <div style="display: flex; flex-direction: row; justify-content: center;">
         <div>
-          <button mat-raised-button color="primary" (click)="openAddDialog()" class="mr-2">
+          <button mat-raised-button color="primary" (click)="openAddDialog()" class="mr-2" *hasAuthority="'ENREGISTREMENT_CALENDRIER_COURS'">
             <mat-icon>add</mat-icon> Ajouter un cours
           </button>
-          <button mat-raised-button color="accent" (click)="openAddMultipleDialog()">
+          <button mat-raised-button color="accent" (click)="openAddMultipleDialog()" *hasAuthority="'ENREGISTREMENT_CALENDRIER_COURS'"> 
             <mat-icon>post_add</mat-icon> Ajout multiple
           </button>
         </div>

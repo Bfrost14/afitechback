@@ -89,4 +89,9 @@ public class AnneeScolaireUserServiceImpl implements AnneeScolaireUserService {
         LOG.debug("Request to delete AnneeScolaireUser : {}", id);
         anneeScolaireUserRepository.deleteById(id);
     }
+
+    @Override
+    public List<AnneeScolaireUserDTO> findByUserId(Long id) {
+        return anneeScolaireUserRepository.findAllByUserId(id).stream().map(anneeScolaireUserMapper::toDto).toList();
+    }
 }

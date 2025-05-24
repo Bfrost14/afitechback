@@ -12,6 +12,9 @@ import { SalleService } from '../../salle/service/salle.service';
 import { MatiereService } from '../../matiere/service/matiere.service';
 import { CampusService } from '../../campus/service/campus.service';
 import { addDays, addMonths, addWeeks, endOfDay, endOfMonth, endOfWeek, startOfDay, startOfMonth, startOfWeek, subDays, subMonths, subWeeks } from 'date-fns';
+import { AuthService } from 'app/core/auth/auth.service';
+import { AdminService } from '../../user/service/admin.service';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-calendrier-cours',
@@ -32,6 +35,7 @@ export class CalendrierCoursComponent implements OnInit {
   selectedFiliere: string = ""
   selectedCampus: string = ""
   showFilters = false;
+  etudiant: any = {filiere: null};
 
 
   constructor(
@@ -41,7 +45,9 @@ export class CalendrierCoursComponent implements OnInit {
     private _filiereService: FiliereService,
     private _matiereService: MatiereService,
     private _salleService: SalleService,
-    private _campusService: CampusService
+    private _campusService: CampusService,
+    private _authService: AuthService,
+    private etudiantService: AdminService
   ) {
     this.filterForm = this.fb.group({
       page: 0,
@@ -58,9 +64,8 @@ export class CalendrierCoursComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadCours();
-    this.getAllFiliere();
-    this.getAllCampus();
+    this.getEtudiantBySearch(this._authService.getUtilisateur().email)
+    
   }
 
   loadCours(): void {
@@ -275,4 +280,29 @@ export class CalendrierCoursComponent implements OnInit {
     };
   }
 
+  getEtudiantBySearch(email: string): void {
+  
+  
+      this.etudiantService.get(email)
+        .subscribe({
+          next: (data: any) => {
+            
+            this.etudiant = data;
+            if(this.etudiant.filiere != null){
+              this.filterForm.get("filiere").setValue(this.etudiant.filiere.nom)
+              this.filterForm.get("campus").setValue(this.etudiant.campus.nom)
+            }else{
+              this.getAllFiliere();
+              this.getAllCampus();
+            }
+            this.loadCours();
+          },
+          error: (err) => {
+            console.error('Erreur lors du chargement:', err);
+          }
+        });
+  
+  
+    }
+  
 }

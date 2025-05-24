@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-23T20:34:33+0000",
+    date = "2025-05-24T17:00:09+0000",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 21.0.4 (Oracle Corporation)"
 )
 @Component
@@ -25,6 +25,7 @@ public class UEMapperImpl implements UEMapper {
 
         uE.setId( dto.getId() );
         uE.setNom( dto.getNom() );
+        uE.setCredit( dto.getCredit() );
 
         return uE;
     }
@@ -39,6 +40,7 @@ public class UEMapperImpl implements UEMapper {
 
         uEDTO.setId( entity.getId() );
         uEDTO.setNom( entity.getNom() );
+        uEDTO.setCredit( entity.getCredit() );
 
         return uEDTO;
     }
@@ -82,6 +84,9 @@ public class UEMapperImpl implements UEMapper {
         }
         if ( dto.getNom() != null ) {
             entity.setNom( dto.getNom() );
+        }
+        if ( dto.getCredit() != null ) {
+            entity.setCredit( dto.getCredit() );
         }
     }
 }

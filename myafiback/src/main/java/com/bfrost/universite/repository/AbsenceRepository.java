@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * Spring Data JPA repository for the Absence entity.
  */
@@ -19,4 +21,6 @@ public interface AbsenceRepository extends JpaRepository<Absence, Long> {
             "AND (:idCalendrier is null or a.calendrierCours.id = :idCalendrier) " +
             "AND (:filiere is null or a.calendrierCours.matiereUser.filiere.nom like %:filiere%)")
     Page<Absence> managedAbsence(Pageable pageable, String etudiant, Long idCalendrier, String filiere);
+
+    List<Absence> findAllByUserId(Long id);
 }

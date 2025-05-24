@@ -8,6 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
 export class DetailNoteComponent implements OnInit {
   @Input() matiereUtilisateurId: any;
   @Input() matiereUser: any
+  @Input() etudiant: any
   constructor() { }
 
   ngOnInit() {

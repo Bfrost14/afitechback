@@ -129,9 +129,12 @@
     <!-- Barre d'actions fixe en bas -->
     <div class="sticky bottom-0 bg-white border-t border-gray-200 px-6 py-4 flex justify-end gap-4">
         <button mat-button (click)="onCancel()">Annuler</button>
-        <button mat-raised-button color="primary" (click)="save()" [disabled]="form.invalid || isSaving">
-            <mat-spinner *ngIf="isSaving" diameter="20" class="mr-2"></mat-spinner>
-            Enregistrer
-        </button>
+        <ng-container *hasAuthority="'ENREGISTREMENT_CALENDRIER_COURS'">
+            <button mat-raised-button color="primary" (click)="save()" [disabled]="form.invalid || isSaving">
+                <mat-spinner *ngIf="isSaving" diameter="20" class="mr-2"></mat-spinner>
+                Enregistrer
+            </button>
+        </ng-container>
+
     </div>
 </div>

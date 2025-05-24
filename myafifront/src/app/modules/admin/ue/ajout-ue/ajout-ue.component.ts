@@ -84,7 +84,8 @@ export class AjoutUeComponent implements OnInit {
 
         this.form = this._formBuilder.group({
           id: [null],
-          nom: [null, Validators.required]
+          nom: [null, Validators.required],
+          credit: [null, Validators.required]
       });
         if(this.ue != undefined){
           this.form.patchValue(this.ue)

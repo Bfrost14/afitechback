@@ -28,6 +28,7 @@ com\bfrost\universite\web\rest\SemestreResource.class
 com\bfrost\universite\config\DateTimeFormatConfiguration.class
 com\bfrost\universite\domain\PointageProfesseur.class
 com\bfrost\universite\domain\Campus.class
+com\bfrost\universite\service\dto\StatParSemestreDTO.class
 com\bfrost\universite\service\mapper\UserMapperImpl.class
 com\bfrost\universite\web\rest\errors\BadRequestAlertException.class
 com\bfrost\universite\domain\enumeration\TypeNote.class
@@ -90,6 +91,7 @@ com\bfrost\universite\web\rest\CahierTexteResource.class
 com\bfrost\universite\domain\Salle.class
 com\bfrost\universite\service\NoteService.class
 com\bfrost\universite\domain\AnneeScolaireUser.class
+com\bfrost\universite\domain\enumeration\TypeProfil.class
 com\bfrost\universite\service\dto\PasswordChangeDTO.class
 com\bfrost\universite\domain\Authority.class
 com\bfrost\universite\service\mapper\ProfilMapperImpl.class
@@ -99,6 +101,7 @@ com\bfrost\universite\repository\CalendrierCoursRepository.class
 com\bfrost\universite\service\dto\MatiereUserDTO.class
 com\bfrost\universite\service\dto\Pagination.class
 com\bfrost\universite\service\mapper\PointageProfesseurMapperImpl.class
+com\bfrost\universite\service\dto\StatistiquesSemestreDTO.class
 com\bfrost\universite\repository\CampusRepository.class
 com\bfrost\universite\config\SecurityConfiguration.class
 com\bfrost\universite\service\dto\PointageProfesseurDTO.class

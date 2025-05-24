@@ -1,5 +1,6 @@
 package com.bfrost.universite.domain;
 
+import com.bfrost.universite.domain.enumeration.TypeProfil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -37,6 +38,8 @@ public class Profil implements Serializable {
 
     @NotNull
     private String redirection;
+
+    private TypeProfil typeProfil;
 
     @JsonIgnore
     @ManyToMany

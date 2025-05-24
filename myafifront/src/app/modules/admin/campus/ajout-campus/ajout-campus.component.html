@@ -1,9 +1,10 @@
 <div class="flex flex-col md:min-w-160 max-h-screen divide-y-8 divide-bleue-claire-1 w-full">
 
     <div class=" flex  h-10 text-white  w-full -mb-0.5 justify-between  bg-rouge-1 p-1">
-        
-        <span class="mr-4 mt-1.5 font-bold">{{campus == undefined ? ('Ajouter Campus' | titlecase) : ('Modifier Campus' | titlecase)}}</span>
-      </div>
+
+        <span class="mr-4 mt-1.5 font-bold">{{campus == undefined ? ('Ajouter Campus' | titlecase) : ('Modifier Campus'
+            | titlecase)}}</span>
+    </div>
     <!-- Compose form -->
     <form class="flex flex-col flex-auto sm:p-8 overflow-y-auto bg-bleue-claire-6 w-full" [formGroup]="form">
 
@@ -19,9 +20,9 @@
                         </mat-form-field>
 
                     </div>
-                  
 
-                
+
+
                 </ng-container>
             </div>
         </div>
@@ -33,18 +34,24 @@
                 *ngIf="!campus">
                 Annuler
             </button>
-            <button *ngIf="campus" class="order-first sm:order-last" mat-flat-button [color]="'warn'"
-            [swal]="supprimerSwal">
-                Supprimer
-            </button>
+            <ng-container *hasAuthority="'SUPPRESSION_CAMPUS'">
+                <button *ngIf="campus" class="order-first sm:order-last" mat-flat-button [color]="'warn'"
+                    [swal]="supprimerSwal">
+                    Supprimer
+                </button>
+            </ng-container>
+
             <button *ngIf="!campus" class="order-first sm:order-last" mat-flat-button [color]="'primary'"
                 [disabled]="!form.valid" [swal]="enregistrerSwal">
                 Ajouter
             </button>
-            <button *ngIf="campus" class="order-first sm:order-last" mat-flat-button [color]="'primary'"
-            [swal]="modifierSwal" [disabled]="!form.valid">
-                Modifier
-            </button>
+
+            <ng-container *hasAuthority="'MODIFICATION_CAMPUS'">
+                <button *ngIf="campus" class="order-first sm:order-last" mat-flat-button [color]="'primary'"
+                    [swal]="modifierSwal" [disabled]="!form.valid">
+                    Modifier
+                </button>
+            </ng-container>
         </div>
     </form>
 </div>

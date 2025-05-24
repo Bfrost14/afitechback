@@ -74,4 +74,13 @@ public interface CalendrierCoursService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+    /**
+     * Get the "id" calendrierCours.
+     *
+     * @param id the id of the entity.
+     * @return the entity.
+     */
+    List<CalendrierCoursDTO> findByFiliere(Long id);
+
 }

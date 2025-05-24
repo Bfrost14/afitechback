@@ -13,8 +13,7 @@ import lombok.Data;
 import java.io.Serializable;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -71,7 +70,6 @@ public class AdminUserDTO implements Serializable {
 
     private Instant lastModifiedDate;
 
-    private Set<String> authoritie;
     private Set<AuthorityDTO> authorities;
 
     private FiliereDTO filiere;
@@ -82,45 +80,12 @@ public class AdminUserDTO implements Serializable {
 
     private Set<CampusDTO> campuses;
 
-    public AdminUserDTO() {
-        // Empty constructor needed for Jackson.
-    }
+    private CalendrierCoursDTO calendrierCours;
 
-    public AdminUserDTO(User user) {
-        this.id = user.getId();
-        this.login = user.getLogin();
-        this.firstName = user.getFirstName();
-        this.lastName = user.getLastName();
-        this.email = user.getEmail();
-        this.activated = user.isActivated();
-        this.imageUrl = user.getImageUrl();
-        this.langKey = user.getLangKey();
-        this.createdBy = user.getCreatedBy();
-        this.createdDate = user.getCreatedDate();
-        this.lastModifiedBy = user.getLastModifiedBy();
-        this.lastModifiedDate = user.getLastModifiedDate();
-        this.authoritie = user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toSet());
-        this.matricule = user.getMatricule();
-        this.telephone = user.getTelephone();
-    }
+    private List<StatParSemestreDTO> statsParSemestre;
+
+    private Double progressionAcademique;
 
 
-    // prettier-ignore
-    @Override
-    public String toString() {
-        return "AdminUserDTO{" +
-            "login='" + login + '\'' +
-            ", firstName='" + firstName + '\'' +
-            ", lastName='" + lastName + '\'' +
-            ", email='" + email + '\'' +
-            ", imageUrl='" + imageUrl + '\'' +
-            ", activated=" + activated +
-            ", langKey='" + langKey + '\'' +
-            ", createdBy=" + createdBy +
-            ", createdDate=" + createdDate +
-            ", lastModifiedBy='" + lastModifiedBy + '\'' +
-            ", lastModifiedDate=" + lastModifiedDate +
-            ", authorities=" + authorities +
-            "}";
-    }
+
 }

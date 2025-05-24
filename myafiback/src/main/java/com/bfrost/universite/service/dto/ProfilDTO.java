@@ -1,6 +1,7 @@
 package com.bfrost.universite.service.dto;
 
 import com.bfrost.universite.domain.Authority;
+import com.bfrost.universite.domain.enumeration.TypeProfil;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -22,6 +23,8 @@ public class ProfilDTO implements Serializable {
 
     @NotNull
     private String redirection;
+
+    private TypeProfil typeProfil;
 
     private Set<AuthorityDTO> authorities;
 

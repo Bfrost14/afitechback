@@ -140,9 +140,9 @@ export class ListeProfileComponent implements OnInit, AfterViewInit {
     ];
 
     dataSource: NewProfile[] = [];
-    columnsToDisplay = [ 'nom', "pageredirection"];
-    displayedColumn: string[] = ['nom', "pageredirection"];
-    displayedColumns: string[] = ['nom', "pageredirection"];
+    columnsToDisplay = [ 'nom', "pageredirection", "typeProfil"];
+    displayedColumn: string[] = ['nom', "pageredirection", "typeProfil"];
+    displayedColumns: string[] = ['nom', "pageredirection", "typeProfil"];
 
     columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
     expandedElement: NewProfile | null;

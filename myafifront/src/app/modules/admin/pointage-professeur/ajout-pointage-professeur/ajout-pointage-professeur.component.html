@@ -68,18 +68,24 @@
                 *ngIf="!pointage">
                 Annuler
             </button>
-            <button *ngIf="pointage" class="order-first sm:order-last" mat-flat-button [color]="'warn'"
-                [swal]="supprimerSwal">
-                Supprimer
-            </button>
+            <ng-container *hasAuthority="'SUPPRESSION_POINTAGE_PROFESSEUR'">
+                <button *ngIf="pointage" class="order-first sm:order-last" mat-flat-button [color]="'warn'"
+                    [swal]="supprimerSwal">
+                    Supprimer
+                </button>
+            </ng-container>
+
             <button *ngIf="!pointage" class="order-first sm:order-last" mat-flat-button [color]="'primary'"
                 [disabled]="!form.valid" [swal]="enregistrerSwal">
                 Ajouter
             </button>
-            <button *ngIf="pointage" class="order-first sm:order-last" mat-flat-button [color]="'primary'"
-                [swal]="modifierSwal" [disabled]="pointage.heureDepart != null ? form.valid : !form.valid">
-                Modifier
-            </button>
+            <ng-container *hasAuthority="'MODIFICATION_POINTAGE_PROFESSEUR'">
+                <button *ngIf="pointage" class="order-first sm:order-last" mat-flat-button [color]="'primary'"
+                    [swal]="modifierSwal" [disabled]="pointage.heureDepart != null ? form.valid : !form.valid">
+                    Modifier
+                </button>
+            </ng-container>
+
         </div>
     </form>
 </div>

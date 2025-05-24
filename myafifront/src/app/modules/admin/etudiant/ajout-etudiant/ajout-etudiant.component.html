@@ -67,7 +67,7 @@
 
                     </div>
                     <div class="flex">
-                        <mat-form-field class="w-2/3 pr-2">
+                        <mat-form-field class="w-1/3 pr-2">
                             <mat-label>Campus</mat-label>
                             <input type="text" matInput formControlName="campus" [matAutocomplete]="auto2"
                                 (keyup)="getAllCampus($event.target.value)">
@@ -84,6 +84,19 @@
                             <mat-label>Nationalité</mat-label>
                             <input matInput type="nationalite" [formControlName]="'nationalite'">
                         </mat-form-field>
+
+                        <mat-form-field class="w-1/3 px-2">
+                            <mat-label>Profil</mat-label>
+                            <input type="text" matInput formControlName="profil" [matAutocomplete]="autoProfil"
+                                (keyup)="getAllProfile($event.target.value)">
+                            <mat-autocomplete #autoProfil="matAutocomplete" [displayWith]="displayFn">
+                                <mat-option *ngFor="let option of profiles " [value]="option">
+                                    {{option.nom}}
+                                </mat-option>
+                            </mat-autocomplete>
+                            <mat-error *ngIf="form.get('profil').hasError('required')">
+                                {{ 'l\'.profile.doit.etre.choisi' }}</mat-error>
+                        </mat-form-field>
                     </div>
 
 
@@ -99,18 +112,24 @@
                 *ngIf="!etudiant">
                 Annuler
             </button>
-            <button *ngIf="etudiant" class="order-first sm:order-last" mat-flat-button [color]="'warn'"
-                [swal]="supprimerSwal">
-                Supprimer
-            </button>
+
+            <ng-container *hasAuthority="'SUPPRESSION_USER'">
+                <button *ngIf="etudiant" class="order-first sm:order-last" mat-flat-button [color]="'warn'"
+                    [swal]="supprimerSwal">
+                    Supprimer
+                </button>
+            </ng-container>
             <button *ngIf="!etudiant" class="order-first sm:order-last" mat-flat-button [color]="'primary'"
                 [disabled]="!form.valid" [swal]="enregistrerSwal">
                 Ajouter
             </button>
-            <button *ngIf="etudiant" class="order-first sm:order-last" mat-flat-button [color]="'primary'"
-                [swal]="modifierSwal" [disabled]="!form.valid">
-                Modifier
-            </button>
+
+            <ng-container *hasAuthority="'MODIFICATION_USER'">
+                <button *ngIf="etudiant" class="order-first sm:order-last" mat-flat-button [color]="'primary'"
+                    [swal]="modifierSwal" [disabled]="!form.valid">
+                    Modifier
+                </button>
+            </ng-container>
         </div>
     </form>
 </div>

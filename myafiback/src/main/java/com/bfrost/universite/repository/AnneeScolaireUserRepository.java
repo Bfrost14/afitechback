@@ -31,4 +31,6 @@ public interface AnneeScolaireUserRepository extends JpaRepository<AnneeScolaire
             "AND (:filiere is null or mu.user.filiere.nom like %:filiere% ) " +
             "AND (:semestre is null or mu.semestre.nom like %:semestre% ) ")
     List<AnneeScolaireUser> searchAllEtudiantfiliere(String anneeScolaire, String filiere, String semestre);
+
+    List<AnneeScolaireUser> findAllByUserId(Long id);
 }

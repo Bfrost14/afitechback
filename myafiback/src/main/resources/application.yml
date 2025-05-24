@@ -1,6 +1,6 @@
 spring:
-#  profiles:
-#    active: prod
+  profiles:
+    active: prod
   messages:
     basename: i18n/messages
   mail:

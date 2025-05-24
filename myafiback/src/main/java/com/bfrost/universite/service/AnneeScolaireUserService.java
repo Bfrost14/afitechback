@@ -61,4 +61,13 @@ public interface AnneeScolaireUserService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+    /**
+     * Get all the anneeScolaireUsers.
+     *
+     * @param id      the pagination information.
+     * @return the list of entities.
+     */
+    List<AnneeScolaireUserDTO> findByUserId(Long id);
+
 }

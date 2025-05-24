@@ -2,13 +2,19 @@ package com.bfrost.universite.service;
 
 import com.bfrost.universite.config.Constants;
 import com.bfrost.universite.domain.Authority;
+import com.bfrost.universite.domain.Semestre;
 import com.bfrost.universite.domain.User;
+import com.bfrost.universite.domain.enumeration.TypeProfil;
 import com.bfrost.universite.repository.AuthorityRepository;
+import com.bfrost.universite.repository.CalendrierCoursRepository;
+import com.bfrost.universite.repository.SemestreRepository;
 import com.bfrost.universite.repository.UserRepository;
 import com.bfrost.universite.security.AuthoritiesConstants;
 import com.bfrost.universite.security.SecurityUtils;
-import com.bfrost.universite.service.dto.AdminUserDTO;
-import com.bfrost.universite.service.dto.UserDTO;
+import com.bfrost.universite.service.dto.*;
+import com.bfrost.universite.service.impl.AbsenceServiceImpl;
+import com.bfrost.universite.service.impl.AnneeScolaireUserServiceImpl;
+import com.bfrost.universite.service.impl.NoteServiceImpl;
 import com.bfrost.universite.service.mapper.*;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -20,10 +26,12 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import tech.jhipster.security.RandomUtil;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -54,6 +62,11 @@ public class UserService {
     private final UserMapper userMapper;
     private final AuthorityMapper authorityMapper;
     private final MailService mailService;
+    private final CalendrierCoursService calendrierCoursService;
+    private final NoteService noteService;
+    private final AbsenceService absenceService;
+    private final AnneeScolaireUserService anneeScolaireUserService;
+    private final SemestreRepository semestreRepository;
 
 
     public Optional<User> activateRegistration(String email) {
@@ -209,9 +222,11 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public Page<AdminUserDTO> getAllManagedUsers(Pageable pageable, String prenom, String nom, String email, String telephone, String filiere, String campus, String matricule, String profil,Integer admin) {
+    public Page<AdminUserDTO> getAllManagedUsers(Pageable pageable, String prenom, String nom, String email, String telephone, String filiere, String campus, String matricule, String profil,Integer admin, String name) {
         //return userRepository.findAll(pageable).map(userMapper::userToAdminUserDTO);
-        return userRepository.managedUserBy(pageable, prenom, nom, email, telephone, filiere, campus, matricule, profil, admin).map(userMapper::toDto);
+
+        TypeProfil typeProfil = StringUtils.hasText(profil) ? TypeProfil.valueOf(profil) : null;
+        return userRepository.managedUserBy(pageable, prenom, nom, email, telephone, filiere, campus, matricule, typeProfil, admin, name).map(userMapper::toDto);
     }
 
     @Transactional(readOnly = true)
@@ -220,8 +235,133 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<User> getUserWithAuthoritiesByLogin(String login) {
-        return userRepository.findOneWithAuthoritiesByLogin(login);
+    public Optional<AdminUserDTO> getUserWithAuthoritiesByLogin(String login) {
+        return userRepository.findOneWithAuthoritiesByLogin(login).map(user -> {
+            AdminUserDTO dto = userMapper.toDto(user);
+
+            List<NoteDTO> notes = noteService.findByUserId(user.getId());
+            List<AbsenceDTO> absences = absenceService.findByUserId(user.getId());
+
+            Map<SemestreDTO, List<NoteDTO>> notesParSemestre = notes.stream()
+                    .filter(n -> n.getMatiereUser() != null && n.getMatiereUser().getSemestre() != null)
+                    .collect(Collectors.groupingBy(n -> n.getMatiereUser().getSemestre()));
+
+            Map<SemestreDTO, List<AbsenceDTO>> absencesParSemestre = absences.stream()
+                    .filter(a -> a.getCalendrierCours() != null &&
+                            a.getCalendrierCours().getMatiereUser() != null &&
+                            a.getCalendrierCours().getMatiereUser().getSemestre() != null)
+                    .collect(Collectors.groupingBy(a -> a.getCalendrierCours().getMatiereUser().getSemestre()));
+
+            List<StatParSemestreDTO> statsParSemestre = new ArrayList<>();
+            Double moyennePrecedente = null;
+            Double presencePrecedente = null;
+
+            Set<SemestreDTO> tousLesSemestres = new HashSet<>();
+            tousLesSemestres.addAll(notesParSemestre.keySet());
+            tousLesSemestres.addAll(absencesParSemestre.keySet());
+
+            for (SemestreDTO semestre : tousLesSemestres) {
+                StatistiquesSemestreDTO stats = new StatistiquesSemestreDTO();
+
+                // Moyenne
+                List<NoteDTO> notesSemestre = notesParSemestre.getOrDefault(semestre, List.of());
+                double total = 0;
+                double totalCredits = 0;
+
+                Map<Long, List<NoteDTO>> notesParUE = notesSemestre.stream()
+                        .filter(n -> n.getMatiereUser().getMatiere() != null &&
+                                n.getMatiereUser().getMatiere().getUe() != null &&
+                                n.getValeur() != null)
+                        .collect(Collectors.groupingBy(n -> n.getMatiereUser().getMatiere().getUe().getId()));
+
+                for (var ueEntry : notesParUE.entrySet()) {
+                    List<NoteDTO> notesUE = ueEntry.getValue();
+                    double moyenneUE = notesUE.stream().mapToDouble(NoteDTO::getValeur).average().orElse(0.0);
+                    String creditStr = notesUE.get(0).getMatiereUser().getMatiere().getUe().getCredit();
+                    double credit = 0;
+                    try {
+                        credit = Double.parseDouble(creditStr);
+                    } catch (NumberFormatException ignored) {}
+                    total += moyenneUE * credit;
+                    totalCredits += credit;
+                }
+
+                if (totalCredits > 0) {
+                    double moyenne = total / totalCredits;
+                    stats.setMoyenne(moyenne);
+                    if (moyennePrecedente != null) {
+                        double trend = moyenne - moyennePrecedente;
+                        stats.setTrendMoyenne(trend);
+                        stats.setIconMoyenne(trend > 0 ? "trending_up" : trend < 0 ? "trending_down" : "trending_flat");
+
+                    }
+                    moyennePrecedente = moyenne;
+                }
+
+                // Taux de présence
+                List<AbsenceDTO> abs = absencesParSemestre.getOrDefault(semestre, List.of());
+                long totalCours = abs.size();
+                long absents = abs.stream().filter(a -> Boolean.FALSE.equals(a.getPresence())).count();
+                if (totalCours > 0) {
+                    double tauxPresence = 100.0 - ((absents * 100.0) / totalCours);
+                    stats.setTauxPresence(tauxPresence);
+                    if (presencePrecedente != null) {
+                        double trendP = tauxPresence - presencePrecedente;
+                        stats.setTrendPresence(trendP);
+                        stats.setIconPresence(trendP > 0 ? "trending_up" : trendP < 0 ? "trending_down" : "trending_flat");
+                    }
+
+                    presencePrecedente = tauxPresence;
+                }
+
+                statsParSemestre.add(new StatParSemestreDTO(semestre, stats));
+            }
+            dto.setStatsParSemestre(statsParSemestre);
+
+            // Prochain cours
+            List<AnneeScolaireUserDTO> inscriptions = anneeScolaireUserService.findByUserId(user.getId());
+            Set<Long> anneeIdsInscrit = inscriptions.stream()
+                    .map(a -> a.getAnneeScolaire().getId())
+                    .collect(Collectors.toSet());
+
+            FiliereDTO filiereEtudiant = dto.getFiliere();
+            if (filiereEtudiant != null && !anneeIdsInscrit.isEmpty()) {
+                List<CalendrierCoursDTO> tousLesCours = calendrierCoursService.findByFiliere(filiereEtudiant.getId());
+
+                Optional<CalendrierCoursDTO> prochainCours = tousLesCours.stream()
+                        .filter(c -> c.getDateDebut().isAfter(ZonedDateTime.now()))
+                        .filter(c -> c.getMatiereUser() != null &&
+                                c.getMatiereUser().getFiliere() != null &&
+                                c.getMatiereUser().getAnneeScolaire() != null)
+                        .filter(c -> Objects.equals(c.getMatiereUser().getFiliere().getId(), filiereEtudiant.getId()) &&
+                                anneeIdsInscrit.contains(c.getMatiereUser().getAnneeScolaire().getId()))
+                        .sorted(Comparator.comparing(CalendrierCoursDTO::getDateDebut))
+                        .findFirst();
+
+              prochainCours.ifPresent(dto::setCalendrierCours);
+            }
+
+            // Récupère tous les semestres du système
+            List<Semestre> semestres = semestreRepository.findAll();
+            int nbTotalSemestres = semestres.size();
+
+
+            // On extrait les semestres uniques auxquels il est inscrit
+            Set<Long> semestresInscrits = inscriptions.stream()
+                    .map(i -> i.getSemestre().getId())
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toSet());
+
+// Progression = % de semestres complétés / existants
+            double progression = 0;
+            if (nbTotalSemestres > 0) {
+                progression = ((double) semestresInscrits.size() / nbTotalSemestres) * 100;
+            }
+
+            dto.setProgressionAcademique(progression);
+
+            return dto;
+        });
     }
 
     @Transactional(readOnly = true)

@@ -5,8 +5,8 @@
        <div *ngIf="!canEditPresence" class="text-sm italic text-gray-600">
         ⚠️ La période de saisie est terminée. Vous pouvez encore justifier les absences.
       </div>
-      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-red-600 p-3 text-white">
-        <span class="font-bold">{{'Total Etudiants' | titlecase}}: {{resultsLength}}</span>
+      <div *ngIf="etudiant == undefined " class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-red-600 p-3 text-white">
+        <span class="font-bold">{{etudiant != undefined ? ('Total Présences' | titlecase) :('Total Etudiants' | titlecase)}}: {{resultsLength}}</span>
         <span *ngIf="!canEditPresence" class="text-sm mt-1 sm:mt-0">
           Période de saisie: {{cours.dateDebut | date:'dd/MM/yyyy HH:mm'}} -
           {{editWindowEnd | date:'dd/MM/yyyy HH:mm'}}
@@ -46,6 +46,41 @@
                   {{element.firstName || element?.user?.firstName}} {{element.lastName || element?.user?.lastName}}
                 </ng-container>
               </ng-container>
+            </td>
+          </ng-container>
+
+            <ng-container matColumnDef="matiere">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-blue-50 text-gray-700 font-semibold">
+              {{'matiere' | titlecase}}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              
+               {{element?.calendrierCours?.matiereUser?.matiere?.nom | uppercase}}
+
+            </td>
+          </ng-container>
+
+
+            <ng-container matColumnDef="dateDebut">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-blue-50 text-gray-700 font-semibold">
+              {{'Date début' | titlecase}}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              
+               {{element?.calendrierCours?.dateDebut | date: 'dd/mm/yyyy à HH:mm'}}
+
+            </td>
+          </ng-container>
+
+
+            <ng-container matColumnDef="dateFin">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-blue-50 text-gray-700 font-semibold">
+              {{'Date fin' | titlecase}}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              
+               {{element?.calendrierCours?.dateFin | date: 'dd/mm/yyyy à HH:mm'}}
+
             </td>
           </ng-container>
 

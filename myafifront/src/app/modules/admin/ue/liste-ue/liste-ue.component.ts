@@ -53,9 +53,9 @@ export class ListeUeComponent implements OnInit, AfterViewInit {
     ];
 
     dataSource: NewUE[] = [];
-    columnsToDisplay = ['nom'];
-    displayedColumn: string[] = ['nom'];
-    displayedColumns: string[] = ['nom'];
+    columnsToDisplay = ['nom', 'credit'];
+    displayedColumn: string[] = ['nom', 'credit'];
+    displayedColumns: string[] = ['nom', 'credit'];
 
     columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
     expandedElement: NewUE | null;

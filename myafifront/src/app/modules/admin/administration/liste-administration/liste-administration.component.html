@@ -80,7 +80,7 @@
 
         <div class="flex justify-end mb-2">
 
-          <button class="ml-4" mat-flat-button class="bg-rouge-1 text-white" (click)="add = true">
+          <button class="ml-4" mat-flat-button class="bg-rouge-1 text-white" (click)="add = true" *hasAuthority="'ENREGISTREMENT_USER'">
             <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
             <span class="ml-2 mr-1">{{'Ajouter un membre de l\'administration' | titlecase}}</span>
           </button>
@@ -152,7 +152,7 @@
               <mat-icon *ngIf="expandedElement === element" svgIcon="heroicons_solid:eye-off"
                 class="text-rouge-1"></mat-icon>
             </button>
-            <button mat-icon-button aria-label="expand row"
+            <button mat-icon-button aria-label="expand row" *hasAuthority="'MODIFICATION_USER'"
               (click)="setDataSourceEdit(element); (expandedElementEdit = expandedElementEdit === element ? null : element); $event.stopPropagation()">
 
               <mat-icon *ngIf="expandedElementEdit !== element || !add " svgIcon="mat_solid:edit"

@@ -23,10 +23,10 @@
                         <mat-form-field class="w-1/3 pl-2">
                             <mat-label>Campus</mat-label>
                             <input type="text" matInput formControlName="campus" [matAutocomplete]="auto"
-                                (keyup)="getAllCampus($event.target.value)" >
+                                (keyup)="getAllCampus($event.target.value)">
                             <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
                                 <mat-option *ngFor="let option of campus " [value]="option">
-                                {{option.nom}}
+                                    {{option.nom}}
                                 </mat-option>
                             </mat-autocomplete>
                             <mat-error *ngIf="form.get('campus').hasError('required')">
@@ -48,18 +48,24 @@
                 *ngIf="!salle">
                 Annuler
             </button>
-            <button *ngIf="salle" class="order-first sm:order-last" mat-flat-button [color]="'warn'"
-                [swal]="supprimerSwal">
-                Supprimer
-            </button>
+            <ng-container *hasAuthority="'SUPPRESSION_SALLE'">
+                <button *ngIf="salle" class="order-first sm:order-last" mat-flat-button [color]="'warn'"
+                    [swal]="supprimerSwal">
+                    Supprimer
+                </button>
+            </ng-container>
+
             <button *ngIf="!salle" class="order-first sm:order-last" mat-flat-button [color]="'primary'"
                 [disabled]="!form.valid" [swal]="enregistrerSwal">
                 Ajouter
             </button>
-            <button *ngIf="salle" class="order-first sm:order-last" mat-flat-button [color]="'primary'"
-                [swal]="modifierSwal" [disabled]="!form.valid">
-                Modifier
-            </button>
+            <ng-container *hasAuthority="'MODIFICATION_SALLE'">
+                <button *ngIf="salle" class="order-first sm:order-last" mat-flat-button [color]="'primary'"
+                    [swal]="modifierSwal" [disabled]="!form.valid">
+                    Modifier
+                </button>
+            </ng-container>
+
         </div>
     </form>
 </div>

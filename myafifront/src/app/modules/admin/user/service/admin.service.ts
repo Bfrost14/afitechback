@@ -63,7 +63,7 @@ export class AdminService {
      */
     updateuser(id: string, user: any): Observable<any> {
         return this._httpClient
-            .put<any>(this.resourceUrl + '/' + id, user, { observe: 'response' });
+            .put<any>(this.resourceUrl , user, { observe: 'response' });
     }
 
     saveuser(user: any): Observable<any> {

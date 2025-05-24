@@ -17,6 +17,11 @@
                             <mat-label>Nom</mat-label>
                             <input matInput [formControlName]="'nom'" oninput="this.value = this.value.toUpperCase()">
                         </mat-form-field>
+
+                        <mat-form-field class="w-1/3 pr-2">
+                            <mat-label>Crédit</mat-label>
+                            <input matInput [formControlName]="'credit'" oninput="this.value = this.value.toUpperCase()">
+                        </mat-form-field>
                     </div>
 
                 
@@ -31,18 +36,25 @@
                 *ngIf="!ue">
                 Annuler
             </button>
-            <button *ngIf="ue" class="order-first sm:order-last" mat-flat-button [color]="'warn'"
+            <ng-container  *hasAuthority="'SUPPRESSION_UE'">
+ <button *ngIf="ue" class="order-first sm:order-last" mat-flat-button [color]="'warn'"
             [swal]="supprimerSwal">
                 Supprimer
             </button>
+            </ng-container>
+           
             <button *ngIf="!ue" class="order-first sm:order-last" mat-flat-button [color]="'primary'"
                 [disabled]="!form.valid" [swal]="enregistrerSwal">
                 Ajouter
             </button>
-            <button *ngIf="ue" class="order-first sm:order-last" mat-flat-button [color]="'primary'"
+            <ng-container  *hasAuthority="'MODIFICATION_UE'">
+                <button *ngIf="ue" class="order-first sm:order-last" mat-flat-button [color]="'primary'"
             [swal]="modifierSwal" [disabled]="!form.valid">
                 Modifier
             </button>
+            </ng-container>
+            
+            
         </div>
     </form>
 </div>

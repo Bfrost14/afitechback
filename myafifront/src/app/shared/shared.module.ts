@@ -9,14 +9,16 @@ import { NgxMatTimepickerModule } from '@angular-material-components/datetime-pi
 import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 import { MatIconModule } from '@angular/material/icon';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { HasAuthorityDirective } from './hasAuthority.directive';
 
 
 @NgModule({
-    declarations: [
+    declarations: [	
         NumberConverterPipe,
         HasRoleDirective,
-        UnauthorizedComponent
-    ],
+        UnauthorizedComponent,
+      HasAuthorityDirective
+   ],
     imports: [
         CommonModule,
         FormsModule,
@@ -35,7 +37,8 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
         HasRoleDirective,
         NgxMatDatetimePickerModule,
         NgxMatTimepickerModule,
-        NgxMatSelectSearchModule
+        NgxMatSelectSearchModule,
+        HasAuthorityDirective
     ]
 })
 export class SharedModule {

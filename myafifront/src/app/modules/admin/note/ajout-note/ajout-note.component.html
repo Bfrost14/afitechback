@@ -45,6 +45,16 @@
 
           <!-- Colonne Présence -->
 
+          <ng-container matColumnDef="matiere">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-blue-50 text-gray-700 font-semibold">
+              {{'matiere' | titlecase}}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              
+               {{element?.matiereUser?.matiere?.nom | uppercase}}
+
+            </td>
+          </ng-container>
 
 
           <!-- Colonne Note -->

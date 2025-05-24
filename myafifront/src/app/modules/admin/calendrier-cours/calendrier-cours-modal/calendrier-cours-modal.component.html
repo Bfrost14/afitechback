@@ -88,10 +88,13 @@
 
 <mat-dialog-actions align="end" class="mt-4">
   <button mat-button (click)="onCancel()">Annuler</button>
+  <ng-container  *hasAuthority="'ENREGISTREMENT_CALENDRIER_COURS'">
   <button mat-raised-button color="primary" (click)="save()" [disabled]="form.invalid || isSaving" class="ml-2">
     <mat-icon *ngIf="isSaving">
       <mat-spinner diameter="20"></mat-spinner>
     </mat-icon>
     {{ isSaving ? 'Enregistrement...' : 'Enregistrer' }}
   </button>
+            </ng-container>
+
 </mat-dialog-actions>

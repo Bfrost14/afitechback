@@ -86,4 +86,9 @@ public class AbsenceServiceImpl implements AbsenceService {
         LOG.debug("Request to delete Absence : {}", id);
         absenceRepository.deleteById(id);
     }
+
+    @Override
+    public List<AbsenceDTO> findByUserId(Long id) {
+        return absenceRepository.findAllByUserId(id).stream().map(absenceMapper::toDto).toList();
+    }
 }

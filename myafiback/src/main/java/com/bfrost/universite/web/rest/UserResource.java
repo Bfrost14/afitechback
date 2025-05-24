@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -138,10 +139,9 @@ public class UserResource {
      * @throws EmailAlreadyUsedException {@code 400 (Bad Request)} if the email is already in use.
      * @throws LoginAlreadyUsedException {@code 400 (Bad Request)} if the login is already in use.
      */
-    @PutMapping({ "/users", "/users/{login}" })
+    @PutMapping("/users")
     @PreAuthorize("hasAnyAuthority('MODIFICATION_GENERALE_USER')")
     public ResponseEntity<AdminUserDTO> updateUser(
-        @PathVariable(name = "login", required = false) @Pattern(regexp = Constants.LOGIN_REGEX) String login,
         @Valid @RequestBody AdminUserDTO userDTO
     ) {
         LOG.debug("REST request to update User : {}", userDTO);
@@ -178,6 +178,7 @@ public class UserResource {
                                                           @RequestParam(value = "campus", required = false) String campus,
                                                           @RequestParam(value = "matricule", required = false) String matricule,
                                                           @RequestParam(value = "profil", required = false) String profil,
+                                                          @RequestParam(value = "name", required = false) String name,
                                                           @RequestParam(value = "admin", required = false) Integer admin
                                                           ) {
         LOG.debug("REST request to get all User for an admin");
@@ -185,7 +186,7 @@ public class UserResource {
             return ResponseEntity.badRequest().build();
         }
 
-        final Page<AdminUserDTO> page = userService.getAllManagedUsers(pageable, prenom, nom, email, telephone, filiere, campus, matricule, profil, admin);
+        final Page<AdminUserDTO> page = userService.getAllManagedUsers(pageable, prenom, nom, email, telephone, filiere, campus, matricule, profil, admin, name);
         Pagination pagination=paginationService.instancierPagination(page);
         Map<String,Object> response=new HashMap<>();
         response.put("data",page.getContent());
@@ -207,7 +208,7 @@ public class UserResource {
     @PreAuthorize("hasAnyAuthority('LECTURE_DETAILLE_USER')")
     public ResponseEntity<AdminUserDTO> getUser(@PathVariable("login") @Pattern(regexp = Constants.LOGIN_REGEX) String login) {
         LOG.debug("REST request to get User : {}", login);
-        return ResponseUtil.wrapOrNotFound(userService.getUserWithAuthoritiesByLogin(login).map(userMapper::toDto));
+        return ResponseUtil.wrapOrNotFound(userService.getUserWithAuthoritiesByLogin(login));
     }
 
     /**

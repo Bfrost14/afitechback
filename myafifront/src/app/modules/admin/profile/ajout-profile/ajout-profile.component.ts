@@ -61,6 +61,8 @@ export class AjoutProfileComponent implements OnInit {
         cancelButtonText: 'Annuler',
     };
 
+    allProfil = ["ETUDIANT","PROFESSEUR","ADMINISTRATION"]
+
     allLinks = [
         {
             title: 'Pointage',
@@ -173,6 +175,7 @@ export class AjoutProfileComponent implements OnInit {
             id: [null],
             nom: [null, Validators.required],
             redirection: [null, Validators.required],
+            typeProfil: [null, Validators.required],
             authorities: [[], Validators.required],
         });
 

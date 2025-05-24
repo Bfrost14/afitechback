@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-23T20:34:38+0000",
+    date = "2025-05-24T17:00:08+0000",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 21.0.4 (Oracle Corporation)"
 )
 @Component
@@ -171,6 +171,7 @@ public class PointageProfesseurMapperImpl implements PointageProfesseurMapper {
         profil.setId( profilDTO.getId() );
         profil.setNom( profilDTO.getNom() );
         profil.setRedirection( profilDTO.getRedirection() );
+        profil.setTypeProfil( profilDTO.getTypeProfil() );
         profil.setAuthorities( authorityDTOSetToAuthoritySet( profilDTO.getAuthorities() ) );
 
         return profil;
@@ -284,6 +285,7 @@ public class PointageProfesseurMapperImpl implements PointageProfesseurMapper {
         profilDTO.setId( profil.getId() );
         profilDTO.setNom( profil.getNom() );
         profilDTO.setRedirection( profil.getRedirection() );
+        profilDTO.setTypeProfil( profil.getTypeProfil() );
         profilDTO.setAuthorities( authoritySetToAuthorityDTOSet( profil.getAuthorities() ) );
 
         return profilDTO;
@@ -362,6 +364,7 @@ public class PointageProfesseurMapperImpl implements PointageProfesseurMapper {
         mappingTarget.setId( profilDTO.getId() );
         mappingTarget.setNom( profilDTO.getNom() );
         mappingTarget.setRedirection( profilDTO.getRedirection() );
+        mappingTarget.setTypeProfil( profilDTO.getTypeProfil() );
         if ( mappingTarget.getAuthorities() != null ) {
             Set<Authority> set = authorityDTOSetToAuthoritySet( profilDTO.getAuthorities() );
             if ( set != null ) {

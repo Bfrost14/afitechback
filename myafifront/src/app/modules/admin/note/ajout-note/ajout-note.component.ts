@@ -30,6 +30,7 @@ export class AjoutNoteComponent implements OnInit, AfterViewInit {
   @Input() typeNote: string;
   @Input() matiereUtilisateurId: number;
   @Input() matiereUser: any;
+  @Input() etudiant: any;
 
   // Configuration du tableau
   columnsToDisplay = ['select', 'matricule', 'nom', 'note'];
@@ -67,7 +68,14 @@ export class AjoutNoteComponent implements OnInit, AfterViewInit {
       notes: this._formBuilder.array([])
     });
     this.notes = this.noteForm.get('notes') as FormArray;
-
+     if (this.etudiant != undefined) {
+      this.displayedColumns.pop()
+      this.displayedColumns.pop()
+      this.displayedColumns.pop()
+      this.displayedColumns.pop()
+      this.displayedColumns.push('matiere')
+      this.displayedColumns.push('note')
+    }
   }
 
   ngAfterViewInit() {
@@ -76,11 +84,18 @@ export class AjoutNoteComponent implements OnInit, AfterViewInit {
 
     this.sort.sort({ id: 'id', start: 'desc' } as MatSortable);
     this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
-    this.loadNotes();
+    if (this.etudiant != undefined) {
+      this.columnsToDisplay.pop()
+      this.columnsToDisplay.push('matiere')
+      this.columnsToDisplay.push('note')
+      this.loadNotesEtudiant();
+    } else {
+      this.loadNotes();
+    }
+
   }
 
-
-  loadNotes() {
+   loadNotes() {
     this.isLoadingResults = true;
     this._noteService.query({
       page: this.paginator?.pageIndex || 0,
@@ -99,6 +114,25 @@ export class AjoutNoteComponent implements OnInit, AfterViewInit {
         this.showSaveButton = this.canEditNote;
         this.loadEtudiants();
       }
+      this.resultsLength = response.body.pagination.length;
+      this.isLoadingResults = false;
+    });
+  }
+
+  loadNotesEtudiant() {
+    this.isLoadingResults = true;
+    this._noteService.query({
+      page: this.paginator?.pageIndex || 0,
+      size: 100,
+      sort: this.sort?.active + "," + this.sort?.direction,
+      etudiant: this.etudiant.emails,
+      typeNote: this.typeNote
+    }).subscribe(response => {
+        this.hasNotes = true;
+        this.showSaveButton = !this.canEditNote;
+        this.dataSource.data = response.body.data;
+        this.createNoteForms(response.body.data);
+      
       this.resultsLength = response.body.pagination.length;
       this.isLoadingResults = false;
     });

@@ -1,7 +1,7 @@
 package com.bfrost.universite.service.impl;
 
-import ch.qos.logback.core.util.StringUtil;
 import com.bfrost.universite.domain.Profil;
+import com.bfrost.universite.domain.enumeration.TypeProfil;
 import com.bfrost.universite.repository.ProfilRepository;
 import com.bfrost.universite.service.ProfilService;
 import com.bfrost.universite.service.dto.ProfilDTO;
@@ -67,12 +67,12 @@ public class ProfilServiceImpl implements ProfilService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<ProfilDTO> findAll(Pageable pageable, String nom) {
+    public Page<ProfilDTO> findAll(Pageable pageable, String nom, String typeProfil) {
         LOG.debug("Request to get all Profiles");
-        if(StringUtils.hasText(nom)){
-            return profilRepository.findAllByNomContainingIgnoreCase(pageable, nom).map(profilMapper::toDto);
-        }
-        return profilRepository.findAll(pageable).map(profilMapper::toDto);
+
+        TypeProfil profil = StringUtils.hasText(typeProfil) ? TypeProfil.valueOf(typeProfil) : null;
+        return profilRepository.manageProfil(pageable, nom, profil).map(profilMapper::toDto);
+
     }
 
     @Override

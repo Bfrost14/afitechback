@@ -1,121 +1,286 @@
-<div class="-mr-4 -ml-4">
-  <div
-    class=" w-full  border-solid border-bleu-foncee bg-white border-b-4 border-r-4 border-l-4 divide-y-8 divide-bleue-claire-1">
 
-    <p class="flex bg-bleu-foncee h-10 text-white justify-between w-full -mb-0.5 justify-between">
-      <span class="ml-4 mt-2 ">ESPACE ETUDIANT</span>
-    </p>
+<div class="student-portal w-full">
+  <ng-container *ngIf="tag > 0">
+  <div *ngIf="tag === 1" class="mb-6 text-center">
+    <button mat-flat-button color="primary" (click)="tag = 3">
+      <mat-icon>search</mat-icon>
+      Rechercher un étudiant
+    </button>
+  </div>
 
-    <div class="grid grid-cols-1 gap-1 divide-y-8 divide-bleue-claire-1">
+    <div *ngIf="tag === 3" class="search-container glass-card p-4 mb-6">
+      <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-bold text-gray-800">Recherche d'étudiants</h2>
+      <button mat-icon-button (click)="tag = 1" matTooltip="Fermer">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
 
-      <div class="flex flex-col gt-xs:flex-row">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- Sélection du campus -->
 
-        <mat-card>
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Campus</mat-label>
+          <input matInput [matAutocomplete]="autoCampus"
+            (keyup)="getAllCampus($event.target.value)">
+          <mat-autocomplete #autoCampus="matAutocomplete">
+            <mat-option *ngFor="let option of campuses" [value]="option.nom" (click)="getAllFiliere(option)">
+              {{ option.nom }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
 
-          <mat-card-content class=" flex justify-center">
+        <!-- Sélection de la filière -->
 
-            <mat-tab-group class="w-full">
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Filière</mat-label>
+          <input matInput [matAutocomplete]="autoFiliere"
+            (keyup)="getAllFiliere($event.target.value)">
+          <mat-autocomplete #autoFiliere="matAutocomplete">
+            <mat-option *ngFor="let option of filieres" [value]="option.nom" (click)="getAllEtudiant(option)">
+              {{ option.nom }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
 
+        <!-- Nom -->
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Nom</mat-label>
+          <input matInput [(ngModel)]="nom" />
+        </mat-form-field>
 
-               <mat-tab>
-              <ng-template mat-tab-label>
-                <button class="btspan">{{'Identification'}}</button>
+        <!-- Prénom -->
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Prénom</mat-label>
+          <input matInput [(ngModel)]="prenom" />
+        </mat-form-field>
 
-              </ng-template>
+        <!-- Matricule -->
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Matricule</mat-label>
+          <input matInput [(ngModel)]="matricule" />
+        </mat-form-field>
 
-              <div class=" w-full rounded-md  bg-white border-4 ">
-                <mat-card>
-                  <div class="grid grid-cols-2 gap-4 divide-x-4 ">
-                    <div class="flex flex-col gt-xs:flex-row">
+        <!-- Bouton de recherche -->
+        <div class="flex items-end">
+          <button mat-flat-button color="primary" (click)="getAllEtudiant(filiere, matricule, prenom, nom)">
+            Rechercher
+          </button>
+        </div>
+      </div>
 
-
-                      <div class="truncate hover:text-clip flex justify-between">
-                        <span>
-
-                          <p>
-                            <span class=" ml-2  text-black">{{'Matricule'}}:</span>
-                            <span class="ml-2 text-slate-500">{{etudiant?.matricule}}</span>
-                          </p>
-                          <p>
-                            <span class=" ml-2  text-black">{{'Prénom'}}:</span>
-                            <span class="ml-2 text-slate-500">{{etudiant?.firstName}}</span>
-                          </p>
-                          <p>
-                            <span class=" ml-2  text-black">{{'Nom'}}:</span>
-                            <span class="ml-2 text-slate-500">{{etudiant?.lastName}}</span>
-                          </p>
-                          <p>
-                            <span class=" ml-2  text-black">{{'Campus'}}:</span>
-                            <span class="ml-2 text-slate-500">{{etudiant?.campus?.nom}}</span>
-                          </p>
-                        </span>
-
-
-                      </div>
-
-
-                    </div>
-
-                    <div class="flex flex-col gt-xs:flex-row">
-
-
-
-                      <div class="truncate hover:text-clip flex justify-between">
-                        <span>
-                          <span class=" ml-2 text-black">{{'Email'}}:</span>
-                          <span class="ml-2 text-slate-500">{{etudiant?.email}}</span>
-
-                        </span>
-
-
-                      </div>
-
-                      <p><span class=" ml-2 text-black">{{'Filière'}}:</span><span
-                          class="ml-2 text-slate-500">{{etudiant?.filiere?.nom}}</span></p>
-                      <p class="truncate hover:text-clip"> <span class=" ml-2  text-black">{{'Téléphone'}}:</span><span
-                          class="ml-2 text-slate-500">{{etudiant?.telephone}}</span></p>
-                      <p class="truncate hover:text-clip"> <span class=" ml-2  text-black">{{'Date de
-                          naissance'}}:</span><span class="ml-2 text-slate-500">{{etudiant?.dateDeNaissance |
-                          date:'dd/MM/YYYY'}}</span></p>
-                      <p class="truncate hover:text-clip">
-                        <span class=" ml-2 text-black">{{'Nationalité'}}:</span>
-                        <span class="ml-2 text-slate-500">{{etudiant?.nationalite}}</span>
-
-                      </p>
-                    </div>
-
-                  </div>
-                </mat-card>
+      <!-- Résultats de la recherche -->
+      <div *ngIf="data?.length" class="mt-4">
+        <h4 class="text-md font-semibold mb-2">Résultats :</h4>
+        <mat-list dense>
+          <mat-list-item *ngFor="let e of data">
+            <div class="flex justify-between w-full items-center">
+              <div>
+                {{ e.lastName }} {{ e.firstName }} ({{ e.matricule }})
               </div>
-            </mat-tab>
-              <!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ les notes @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
-               <mat-tab>
-                <ng-template mat-tab-label>
-                  <button class="btspan">{{'Liste des cours'}}</button>
+              <button mat-icon-button (click)="getEtudiantBySearch(e.email)" matTooltip="Consulter">
+                <mat-icon color="primary">visibility</mat-icon>
+              </button>
+            </div>
+          </mat-list-item>
+        </mat-list>
+      </div>
+    </div>
+  
+  <ng-container *ngIf="tag === 2">
+    <div class="text-right mb-4">
+      <button mat-flat-button color="primary" (click)="tag = 3">
+        <mat-icon>arrow_back</mat-icon>
+        Retour
+      </button>
+    </div>
+  </ng-container>
 
-                </ng-template>
-                <app-detail-note *ngIf="etudiant != undefined" [etudiant]="etudiant"></app-detail-note>
-              </mat-tab>
-              <mat-tab>
-                <ng-template mat-tab-label>
-                  <button class="btspan">{{'Fiche de présence'}}</button>
+</ng-container>
 
-                </ng-template>
-                <app-liste-presence *ngIf="etudiant != undefined" [etudiant]="etudiant"></app-liste-presence>
-              </mat-tab>
+  <header class="glass-header">
+    <div class="header-content">
+      <div class="avatar-wrapper">
+        <div class="avatar-glow"></div>
+        <img [src]="'assets/images/avatars/default-user.jpg'" alt="Photo de profil" class="profile-avatar">
+        <button mat-icon-button class="edit-avatar" aria-label="Modifier la photo">
+          <mat-icon>photo_camera</mat-icon>
+        </button>
+      </div>
 
-              <mat-tab>
-                <ng-template mat-tab-label>
-                  <button class="btspan">{{'Liste des cours'}}</button>
+      <div class="student-identity">
+        <h1 class="student-name">{{etudiant?.firstName}} {{etudiant?.lastName}}</h1>
+        <p class="student-welcome">Bienvenue, {{etudiant?.firstName}} !</p>
+        <div class="student-meta">
+          <span class="meta-chip"><mat-icon class="icon-small">fingerprint</mat-icon>{{etudiant?.matricule}}</span>
+          <span class="meta-chip accent"><mat-icon
+              class="icon-small">location_on</mat-icon>{{etudiant?.campus?.nom}}</span>
+          <span class="meta-chip"><mat-icon class="icon-small">school</mat-icon>{{etudiant?.filiere?.nom}}</span>
+        </div>
+      </div>
 
-                </ng-template>
-                <app-liste-notation *ngIf="etudiant != undefined" [etudiant]="etudiant"></app-liste-notation>
-              </mat-tab>
+      <div class="academic-progress">
+        <div class="progress-circle">
+          <svg viewBox="0 0 36 36" class="circular-chart">
+            <path class="circle-bg" d="M18 2.0845a 15.9155 15.9155 0 0 1 0 31.831a 15.9155 15.9155 0 0 1 0 -31.831" />
+            <path class="circle-fill" [attr.stroke-dasharray]="etudiant?.progressionAcademique + ', 100'"
+              d="M18 2.0845a 15.9155 15.9155 0 0 1 0 31.831a 15.9155 15.9155 0 0 1 0 -31.831" />
 
-            </mat-tab-group>
+          </svg>
+          <div class="progress-value">{{etudiant?.progressionAcademique}}%</div>
+        </div>
+        <span class="progress-label">Progression académique</span>
+      </div>
+    </div>
+  </header>
+
+  <nav class="portal-nav">
+    <button mat-button *ngFor="let tab of tabs" [class.active]="activeTab === tab.id" (click)="activeTab = tab.id"
+      matTooltip="{{tab.label}}">
+      <mat-icon>{{tab.icon}}</mat-icon>
+      {{tab.label}}
+    </button>
+  </nav>
+
+  <main class="portal-main">
+    <!-- Section Profil -->
+    <section *ngIf="activeTab === 'profile'">
+      <div class="profile-cards">
+        <mat-card class="info-card glass-card">
+          <mat-card-header>
+            <div class="card-icon"><mat-icon>person_outline</mat-icon></div>
+            <mat-card-title>Identité</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="info-grid">
+              <div class="info-item">
+                <mat-icon>mail_outline</mat-icon>
+                <div>
+                  <div class="info-label">Email</div>
+                  <div class="info-value">{{etudiant?.email}}</div>
+                </div>
+              </div>
+              <div class="info-item">
+                <mat-icon>phone_iphone</mat-icon>
+                <div>
+                  <div class="info-label">Téléphone</div>
+                  <div class="info-value">{{etudiant?.telephone || 'Non renseigné'}}</div>
+                </div>
+              </div>
+              <div class="info-item">
+                <mat-icon>cake</mat-icon>
+                <div>
+                  <div class="info-label">Naissance</div>
+                  <div class="info-value">{{etudiant?.dateDeNaissance | date:'dd/MM/yyyy'}}</div>
+                </div>
+              </div>
+              <div class="info-item">
+                <mat-icon>public</mat-icon>
+                <div>
+                  <div class="info-label">Nationalité</div>
+                  <div class="info-value">{{etudiant?.nationalite || 'Non renseignée'}}</div>
+                </div>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="stats-card glass-card">
+          <mat-card-header>
+            <div class="card-icon"><mat-icon>insights</mat-icon></div>
+            <mat-card-title>Statistiques</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <mat-card class="stats-card glass-card" *ngFor="let item of statistiquesParSemestreList">
+              <mat-card-header class="justify-between">
+                <mat-card-title class="text-sm text-blue-900 font-bold">
+                  {{ item.semestre.nom }}
+                </mat-card-title>
+                <div class="card-icon"><mat-icon>insights</mat-icon></div>
+              </mat-card-header>
+
+              <mat-card-content>
+                <div class="stats-container mt-2">
+                  <!-- Moyenne -->
+                  <div class="stat-item">
+                    <div class="stat-number">{{ item.stats.moyenne | number:'1.1-1' }}</div>
+                    <div class="stat-desc">Moyenne</div>
+                    <div class="stat-trend" [ngClass]="item.stats.trendMoyenne >= 0 ? 'up' : 'down'"
+                      *ngIf="item.stats.trendMoyenne != null">
+                      <mat-icon [ngClass]="item.stats.iconMoyenne === 'trending_up' ? 'up' : 'down'">
+                        {{ item.stats.iconMoyenne }}
+                      </mat-icon>
+                      {{ item.stats.trendMoyenne | number:'1.1-1' }}
+                    </div>
+                  </div>
+
+                  <div class="divider"></div>
+
+                  <!-- Présence -->
+                  <div class="stat-item">
+                    <div class="stat-number">{{ item.stats.tauxPresence | number:'1.0-0' }}%</div>
+                    <div class="stat-desc">Présence</div>
+                    <div class="stat-trend" [ngClass]="item.stats.trendPresence >= 0 ? 'up' : 'down'"
+                      *ngIf="item.stats.trendPresence != null">
+                      <mat-icon [ngClass]="item.stats.iconPresence === 'trending_up' ? 'up' : 'down'">
+                        {{ item.stats.iconPresence }}
+                      </mat-icon>
+                      {{ item.stats.trendPresence | number:'1.1-1' }}
+                    </div>
+                  </div>
+                </div>
+              </mat-card-content>
+            </mat-card>
+
+
+            <!-- Taux d'absence par semestre -->
+            <div class="semester-absences" *ngIf="tauxAbsenceParSemestreList?.length">
+              <h4 class="mt-3">Absence par semestre</h4>
+              <ul>
+                <li *ngFor="let item of tauxAbsenceParSemestreList">
+                  {{ item.nom }} : <strong>{{ item.valeur | number:'1.0-0' }}%</strong> d'absence
+                </li>
+              </ul>
+            </div>
+
+            <!-- Prochain cours intégré dans les stats -->
+            <div class="next-class-inline" *ngIf="etudiant?.calendrierCours">
+              <div class="widget-header">
+                <mat-icon>schedule</mat-icon>
+                <h4>Prochain cours</h4>
+              </div>
+              <div class="class-info">
+                <div class="class-time">
+                  <div class="class-day">{{ etudiant.calendrierCours.dateDebut | date:'EEE' | uppercase }}</div>
+                  <div class="class-hour">{{ etudiant.calendrierCours.dateDebut | date:'HH:mm' }}</div>
+                </div>
+                <div class="class-details">
+                  <h5>{{ etudiant.calendrierCours.matiereUser?.matiere?.nom }}</h5>
+                  <p><mat-icon>person</mat-icon> {{ etudiant.calendrierCours.matiereUser?.user?.firstName }} {{
+                    etudiant.calendrierCours.matiereUser?.user?.lastName }}</p>
+                  <p><mat-icon>location_on</mat-icon> {{ etudiant.calendrierCours.salle?.nom }} - {{
+                    etudiant.calendrierCours.salle?.localisation }}</p>
+                </div>
+              </div>
+            </div>
           </mat-card-content>
         </mat-card>
       </div>
-    </div>
-  </div>
+    </section>
+
+    <!-- Section Notes -->
+    <section *ngIf="activeTab === 'grades'">
+      <app-detail-note *ngIf="etudiant" [etudiant]="etudiant"></app-detail-note>
+    </section>
+
+    <!-- Section Présence -->
+    <section *ngIf="activeTab === 'attendance'">
+      <app-liste-presence *ngIf="etudiant" [etudiant]="etudiant"></app-liste-presence>
+    </section>
+
+    <!-- Section Cours -->
+    <section *ngIf="activeTab === 'courses'">
+      <app-liste-notation *ngIf="etudiant" [etudiant]="etudiant"></app-liste-notation>
+    </section>
+  </main>
 </div>

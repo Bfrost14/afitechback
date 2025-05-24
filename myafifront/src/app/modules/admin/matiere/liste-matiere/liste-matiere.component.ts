@@ -54,9 +54,9 @@ export class ListeMatiereComponent implements OnInit, AfterViewInit {
     ];
 
     dataSource: NewMatiere[] = [];
-    columnsToDisplay = ['nom', 'credit', 'ue'];
-    displayedColumn: string[] = ['nom', 'credit', 'ue'];
-    displayedColumns: string[] = ['nom', 'credit', 'ue'];
+    columnsToDisplay = ['nom', 'coefficient', 'ue'];
+    displayedColumn: string[] = ['nom', 'coefficient', 'ue'];
+    displayedColumns: string[] = ['nom', 'coefficient', 'ue'];
 
     columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
     expandedElement: NewMatiere | null;

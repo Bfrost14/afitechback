@@ -22,7 +22,7 @@
                   <button class="btspan">{{'EVALUATION'}}</button>
 
                 </ng-template>
-                <app-ajout-note *ngIf="matiereUtilisateurId != undefined" [matiereUtilisateurId]="matiereUtilisateurId" [matiereUser]="matiereUser" [typeNote]="'EVALUATION'"></app-ajout-note>
+                <app-ajout-note *ngIf="matiereUtilisateurId != undefined || etudiant != undefined" [matiereUtilisateurId]="matiereUtilisateurId" [matiereUser]="matiereUser" [typeNote]="'EVALUATION'" [etudiant]="etudiant"></app-ajout-note>
 
               </mat-tab>
               <mat-tab>
@@ -30,14 +30,14 @@
                   <button class="btspan">{{'EXAMEN'}}</button>
 
                 </ng-template>
-                <app-ajout-note *ngIf="matiereUtilisateurId != undefined" [matiereUtilisateurId]="matiereUtilisateurId" [matiereUser]="matiereUser" [typeNote]="'EXAMEN'"></app-ajout-note>
+                <app-ajout-note *ngIf="matiereUtilisateurId != undefined || etudiant != undefined" [matiereUtilisateurId]="matiereUtilisateurId" [matiereUser]="matiereUser" [typeNote]="'EXAMEN'" [etudiant]="etudiant"></app-ajout-note>
               </mat-tab>
               <mat-tab>
                 <ng-template mat-tab-label>
                   <button class="btspan">{{'RATTRAPAGE'}}</button>
 
                 </ng-template>
-                <app-ajout-note *ngIf="matiereUtilisateurId != undefined" [matiereUtilisateurId]="matiereUtilisateurId" [matiereUser]="matiereUser" [typeNote]="'RATTRAPAGE'"></app-ajout-note>
+                <app-ajout-note *ngIf="matiereUtilisateurId != undefined || etudiant != undefined" [matiereUtilisateurId]="matiereUtilisateurId" [matiereUser]="matiereUser" [typeNote]="'RATTRAPAGE'" [etudiant]="etudiant"></app-ajout-note>
               </mat-tab>
 
 

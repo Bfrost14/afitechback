@@ -6,6 +6,7 @@ import { IProfile } from "../profile/profile.model";
 export interface IUE {
   id: number;
   nom?: string | null;
+  credit?: string | null;
 }
 
 export type NewUE = Omit<IUE, 'id'> & { id: null };

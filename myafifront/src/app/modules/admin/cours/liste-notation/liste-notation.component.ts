@@ -51,6 +51,7 @@ interface SearchFild {
 export class ListeNotationComponent implements OnInit, AfterViewInit {
 
   @Input() cours: any
+  @Input() etudiant: any
   dataSource: NewNotation[] = [];
   columnsToDisplay = ['matricule', 'nom', 'note'];
   displayedColumn: string[] = ['nom', 'note'];
@@ -90,6 +91,16 @@ export class ListeNotationComponent implements OnInit, AfterViewInit {
     this.searchFilds = this.searchColumnForm.get(
       'searchFilds'
     ) as FormArray;
+
+    if (this.etudiant != undefined) {
+      this.displayedColumns.pop()
+      this.displayedColumns.pop()
+      this.displayedColumns.pop()
+      this.displayedColumns.push("matiere")
+      this.displayedColumns.push("dateDebut")
+      this.displayedColumns.push("dateFin")
+      this.displayedColumns.push("note")
+    }
   }
 
   ngAfterViewInit() {
@@ -97,7 +108,12 @@ export class ListeNotationComponent implements OnInit, AfterViewInit {
 
     this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
 
-    this.allNotations();
+    if(this.etudiant != undefined){
+      this.allNotationsEtudiant();
+    }else{
+      this.allNotations();
+    }
+    
   }
 
 
@@ -146,6 +162,46 @@ export class ListeNotationComponent implements OnInit, AfterViewInit {
       });
   }
 
+  allNotationsEtudiant() {
+    merge(this.sort.sortChange, this.paginator.page)
+      .pipe(
+        startWith({}),
+        switchMap(() => {
+          this.isLoadingResults = true;
+          return this._notationService!.query(
+            {
+              page: this.paginator.pageIndex,
+              size: 10,
+              sort: this.sort.active + "," + this.sort.direction, etudiant: this.etudiant.email
+            }
+          ).pipe(catchError(() => observableOf(null)));
+        }),
+        map((data) => {
+          // Flip flag to show that loading has finished.
+          this.isLoadingResults = false;
+          this.isRateLimitReached = data === null;
+
+          if (data === null) {
+            return [];
+          }
+
+          // Only refresh the result length if there is new data. In case of rate
+          // limit errors, we do not want to reset the paginator to zero, as that
+          // would prevent users from re-triggering requests.
+          console.log(
+            '@@@@@@@@@@@@@@@@@ notation data @@@@@@@@@@@@@@@@',
+            data
+          );
+
+          this.resultsLength = data.body.pagination.length;
+          return data.body.data;
+        })
+      )
+      .subscribe((data) => {
+        this.data = data;
+        this.dataSource = [...data];
+      });
+  }
 
   fiche: boolean = false;
 

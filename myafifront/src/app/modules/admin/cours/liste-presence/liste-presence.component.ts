@@ -40,6 +40,7 @@ interface PresenceForm {
 })
 export class ListePresenceComponent implements OnInit, AfterViewInit {
   @Input() cours: any;
+  @Input() etudiant: any;
 
   // Configuration du tableau
   columnsToDisplay = ['select', 'matricule', 'nom', 'presence'];
@@ -79,9 +80,21 @@ export class ListePresenceComponent implements OnInit, AfterViewInit {
     });
     this.presences = this.presenceForm.get('presences') as FormArray;
 
-    // Calcul de la fenêtre d'édition (date de fin + 15 minutes)
-    this.editWindowEnd = dayjs(this.cours.dateFin).add(15, 'minute');
-    this.checkEditPermission();
+    if (this.etudiant != undefined) {
+      this.displayedColumns.pop()
+      this.displayedColumns.pop()
+      this.displayedColumns.pop()
+      this.displayedColumns.pop()
+      this.displayedColumns.push("matiere")
+      this.displayedColumns.push("dateDebut")
+      this.displayedColumns.push("dateFin")
+      this.displayedColumns.push("presence")
+    } else {
+      // Calcul de la fenêtre d'édition (date de fin + 15 minutes)
+      this.editWindowEnd = dayjs(this.cours.dateFin).add(15, 'minute');
+      this.checkEditPermission();
+    }
+
   }
 
   ngAfterViewInit() {
@@ -90,7 +103,12 @@ export class ListePresenceComponent implements OnInit, AfterViewInit {
 
     this.sort.sort({ id: 'id', start: 'desc' } as MatSortable);
     this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
-    this.loadPresences();
+    if (this.etudiant != undefined) {
+      this.loadPresencesEtudiant();
+    } else {
+      this.loadPresences();
+    }
+
   }
 
   checkEditPermission() {
@@ -110,7 +128,7 @@ export class ListePresenceComponent implements OnInit, AfterViewInit {
     this.isLoadingResults = true;
     this._presenceService.query({
       page: this.paginator?.pageIndex || 0,
-      size:  100,
+      size: 100,
       sort: this.sort?.active + "," + this.sort?.direction,
       idCalendrierCours: this.cours.id
     }).subscribe(response => {
@@ -124,6 +142,25 @@ export class ListePresenceComponent implements OnInit, AfterViewInit {
         this.showSaveButton = this.canEditPresence;
         this.loadEtudiants();
       }
+      this.resultsLength = response.body.pagination.length;
+      this.isLoadingResults = false;
+    });
+  }
+
+  loadPresencesEtudiant() {
+    this.isLoadingResults = true;
+    this._presenceService.query({
+      page: this.paginator?.pageIndex || 0,
+      size: 100,
+      sort: this.sort?.active + "," + this.sort?.direction,
+      etudiant: this.etudiant.email
+    }).subscribe(response => {
+
+      this.hasPresences = true;
+      this.showSaveButton = false;
+      this.dataSource.data = response.body.data;
+      this.createPresenceForms(response.body.data);
+
       this.resultsLength = response.body.pagination.length;
       this.isLoadingResults = false;
     });

@@ -78,7 +78,11 @@ import { DetailNotationComponent } from './detail-notation/detail-notation.compo
     QuillModule.forRoot(),
     FuseAlertModule,
     SweetAlert2Module.forRoot(),
-    MatRadioModule
+    MatRadioModule,
+  ],
+  exports:[
+    ListePresenceComponent,
+    ListeNotationComponent
   ],
 schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

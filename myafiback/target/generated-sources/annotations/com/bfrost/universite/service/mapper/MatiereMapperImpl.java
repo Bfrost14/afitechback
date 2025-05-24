@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-23T20:34:33+0000",
+    date = "2025-05-24T17:00:12+0000",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 21.0.4 (Oracle Corporation)"
 )
 @Component
@@ -109,6 +109,7 @@ public class MatiereMapperImpl implements MatiereMapper {
 
         uE.setId( uEDTO.getId() );
         uE.setNom( uEDTO.getNom() );
+        uE.setCredit( uEDTO.getCredit() );
 
         return uE;
     }
@@ -122,6 +123,7 @@ public class MatiereMapperImpl implements MatiereMapper {
 
         uEDTO.setId( uE.getId() );
         uEDTO.setNom( uE.getNom() );
+        uEDTO.setCredit( uE.getCredit() );
 
         return uEDTO;
     }
@@ -133,5 +135,6 @@ public class MatiereMapperImpl implements MatiereMapper {
 
         mappingTarget.setId( uEDTO.getId() );
         mappingTarget.setNom( uEDTO.getNom() );
+        mappingTarget.setCredit( uEDTO.getCredit() );
     }
 }

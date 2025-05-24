@@ -60,7 +60,7 @@ public class AnneeScolaireUserResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
-    @PreAuthorize("hasAnyAuthority('ENREGISTREMENT_MATIERE_USER')")
+    @PreAuthorize("hasAnyAuthority('ENREGISTREMENT_USER')")
     public ResponseEntity<List<AnneeScolaireUserDTO>> createAnneeScolaireUser(@Valid @RequestBody List<AnneeScolaireUserDTO> anneeScolaireUserDTO)
         throws URISyntaxException {
         LOG.debug("REST request to save AnneeScolaireUser : {}", anneeScolaireUserDTO);
@@ -84,7 +84,7 @@ public class AnneeScolaireUserResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('MODIFICATION_GENERALE_MATIERE_USER')")
+    @PreAuthorize("hasAnyAuthority('MODIFICATION_GENERALE_USER')")
     public ResponseEntity<AnneeScolaireUserDTO> updateAnneeScolaireUser(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody AnneeScolaireUserDTO anneeScolaireUserDTO
@@ -119,7 +119,7 @@ public class AnneeScolaireUserResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    @PreAuthorize("hasAnyAuthority('MODIFICATION_MATIERE_USER')")
+    @PreAuthorize("hasAnyAuthority('MODIFICATION_USER')")
     public ResponseEntity<AnneeScolaireUserDTO> partialUpdateAnneeScolaireUser(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody AnneeScolaireUserDTO anneeScolaireUserDTO
@@ -151,7 +151,7 @@ public class AnneeScolaireUserResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of anneeScolaireUsers in body.
      */
     @GetMapping("")
-    @PreAuthorize("hasAnyAuthority('LECTURE_LISTE_MATIERE_USER')")
+    @PreAuthorize("hasAnyAuthority('LECTURE_LISTE_USER')")
     public ResponseEntity<Map<String,Object>> getAllAnneeScolaireUsers(
         @org.springdoc.core.annotations.ParameterObject Pageable pageable,
         @RequestParam(value = "etudiant", required = false) String etudiant,
@@ -175,7 +175,7 @@ public class AnneeScolaireUserResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the anneeScolaireUserDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('LECTURE_DETAILLE_MATIERE_USER')")
+    @PreAuthorize("hasAnyAuthority('LECTURE_DETAILLE_USER')")
     public ResponseEntity<AnneeScolaireUserDTO> getAnneeScolaireUser(@PathVariable("id") Long id) {
         LOG.debug("REST request to get AnneeScolaireUser : {}", id);
         Optional<AnneeScolaireUserDTO> anneeScolaireUserDTO = anneeScolaireUserService.findOne(id);
@@ -189,7 +189,7 @@ public class AnneeScolaireUserResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('SUPPRESSION_MATIERE_USER')")
+    @PreAuthorize("hasAnyAuthority('SUPPRESSION_USER')")
     public ResponseEntity<Void> deleteAnneeScolaireUser(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete AnneeScolaireUser : {}", id);
         anneeScolaireUserService.delete(id);

@@ -152,9 +152,11 @@ public class ProfilResource {
     @GetMapping("")
     @PreAuthorize("hasAnyAuthority('LECTURE_LISTE_PROFIL')")
     public ResponseEntity<Map<String,Object>> getAllProfiles(@org.springdoc.core.annotations.ParameterObject Pageable pageable,
-                                                             @RequestParam(value = "nom", required = false) String nom) {
+                                                             @RequestParam(value = "nom", required = false) String nom,
+                                                             @RequestParam(value = "typeProfil", required = false) String typeProfil
+    ) {
         LOG.debug("REST request to get a page of Profiles");
-        Page<ProfilDTO> page = profilService.findAll(pageable, nom);
+        Page<ProfilDTO> page = profilService.findAll(pageable, nom, typeProfil);
         Pagination pagination=paginationService.instancierPagination(page);
         Map<String,Object> response=new HashMap<>();
         response.put("data",page.getContent());

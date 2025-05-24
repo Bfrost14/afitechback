@@ -72,6 +72,10 @@ import { AjoutNoteComponent } from './ajout-note/ajout-note.component';
     SweetAlert2Module.forRoot(),
     MatRadioModule
   ],
+  exports: [
+    AjoutNoteComponent,
+    DetailNoteComponent
+  ],
 schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class NoteModule { }

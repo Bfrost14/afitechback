@@ -5,6 +5,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { User } from 'app/core/user/user.types';
 import { UserService } from 'app/core/user/user.service';
 import { AuthService } from 'app/core/auth/auth.service';
+import { AdminService } from 'app/modules/admin/user/service/admin.service';
 
 @Component({
     selector       : 'user',
@@ -20,7 +21,7 @@ export class UserComponent implements OnInit, OnDestroy
     /* eslint-enable @typescript-eslint/naming-convention */
 
     @Input() showAvatar: boolean = true;
-    user: User;
+    user: any = { avatar: ""};
 
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
@@ -30,7 +31,8 @@ export class UserComponent implements OnInit, OnDestroy
     constructor(
         private _changeDetectorRef: ChangeDetectorRef,
         private _router: Router,
-        private _userService: AuthService
+        private _authService: AuthService,
+        private _userService: AdminService
     )
     {
     }
@@ -45,7 +47,13 @@ export class UserComponent implements OnInit, OnDestroy
     ngOnInit(): void
     {
         // Subscribe to user changes
-        this.user = this._userService.getUtilisateur()
+        this._userService.get(this._authService.getUtilisateur().email).subscribe(
+            data => {
+                this.user = data;
+                this.user.status = "online"
+                this.user.avatar = "assets/images/avatars/default-user.jpg"
+            }
+        )
     }
 
     /**

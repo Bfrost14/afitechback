@@ -232,8 +232,8 @@ export class AjoutEtudiantComponent implements OnInit {
         )
     }
 
-    getAllProfile() {
-        this._profileService.query({ page: 0, size: 10, sort: 'id,desc', nom: "ETUDIANT" }).subscribe(data => {
+     getAllProfile(nom: string = "") {
+        this._profileService.query({page: 0, size: 10, sort: 'id,desc', typeProfil: "ETUDIANT", nom: nom}).subscribe(data =>{
             this.profiles = data.body.data;
         })
     }

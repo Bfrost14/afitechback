@@ -83,14 +83,14 @@
                 </div>
               </mat-tab>
               <!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ les notes @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
-              <mat-tab>
+              <mat-tab *hasAuthority="'ENREGISTREMENT_ABSENCES'">
                 <ng-template mat-tab-label>
                   <button class="btspan">{{'Fiche de présence'}}</button>
 
                 </ng-template>
                 <app-liste-presence *ngIf="cours != undefined" [cours]="cours"></app-liste-presence>
               </mat-tab>
-              <mat-tab>
+              <mat-tab *hasAuthority="'ENREGISTREMENT_CAHIER_TEXTE'">
                 <ng-template mat-tab-label>
                   <button class="btspan">{{'Cahier de texte'}}</button>
 
@@ -98,7 +98,7 @@
                 <app-cahier-texte *ngIf="cours != undefined" [cours]="cours"></app-cahier-texte>
               </mat-tab>
 
-              <mat-tab>
+              <mat-tab *hasAuthority="'ENREGISTREMENT_NOTATION'">
                 <ng-template mat-tab-label>
                   <button class="btspan">{{'Notation du cours'}}</button>
 
@@ -106,7 +106,7 @@
                 <app-notation *ngIf="cours != undefined" [cours]="cours"></app-notation>
               </mat-tab>
 
-              <mat-tab>
+              <mat-tab *hasAuthority="'ENREGISTREMENT_USER'">
                 <ng-template mat-tab-label>
                   <button class="btspan">{{'Liste des cours'}}</button>
 

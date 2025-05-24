@@ -29,7 +29,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-23T20:34:19+0000",
+    date = "2025-05-24T17:00:07+0000",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 21.0.4 (Oracle Corporation)"
 )
 @Component
@@ -214,6 +214,7 @@ public class MatiereUserMapperImpl implements MatiereUserMapper {
         profil.setId( profilDTO.getId() );
         profil.setNom( profilDTO.getNom() );
         profil.setRedirection( profilDTO.getRedirection() );
+        profil.setTypeProfil( profilDTO.getTypeProfil() );
         profil.setAuthorities( authorityDTOSetToAuthoritySet( profilDTO.getAuthorities() ) );
 
         return profil;
@@ -275,6 +276,7 @@ public class MatiereUserMapperImpl implements MatiereUserMapper {
 
         uE.setId( uEDTO.getId() );
         uE.setNom( uEDTO.getNom() );
+        uE.setCredit( uEDTO.getCredit() );
 
         return uE;
     }
@@ -382,6 +384,7 @@ public class MatiereUserMapperImpl implements MatiereUserMapper {
         profilDTO.setId( profil.getId() );
         profilDTO.setNom( profil.getNom() );
         profilDTO.setRedirection( profil.getRedirection() );
+        profilDTO.setTypeProfil( profil.getTypeProfil() );
         profilDTO.setAuthorities( authoritySetToAuthorityDTOSet( profil.getAuthorities() ) );
 
         return profilDTO;
@@ -443,6 +446,7 @@ public class MatiereUserMapperImpl implements MatiereUserMapper {
 
         uEDTO.setId( uE.getId() );
         uEDTO.setNom( uE.getNom() );
+        uEDTO.setCredit( uE.getCredit() );
 
         return uEDTO;
     }
@@ -511,6 +515,7 @@ public class MatiereUserMapperImpl implements MatiereUserMapper {
         mappingTarget.setId( profilDTO.getId() );
         mappingTarget.setNom( profilDTO.getNom() );
         mappingTarget.setRedirection( profilDTO.getRedirection() );
+        mappingTarget.setTypeProfil( profilDTO.getTypeProfil() );
         if ( mappingTarget.getAuthorities() != null ) {
             Set<Authority> set = authorityDTOSetToAuthoritySet( profilDTO.getAuthorities() );
             if ( set != null ) {
@@ -620,6 +625,7 @@ public class MatiereUserMapperImpl implements MatiereUserMapper {
 
         mappingTarget.setId( uEDTO.getId() );
         mappingTarget.setNom( uEDTO.getNom() );
+        mappingTarget.setCredit( uEDTO.getCredit() );
     }
 
     protected void matiereDTOToMatiere1(MatiereDTO matiereDTO, Matiere mappingTarget) {

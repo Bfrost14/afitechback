@@ -21,7 +21,8 @@
 
                                 <mat-form-field class="w-1/3 pr-2">
                                     <mat-label>{{'Année scolaire'}}</mat-label>
-                                    <input type="text" matInput formControlName="anneeScolaire" [matAutocomplete]="autoAnnee"
+                                    <input type="text" matInput formControlName="anneeScolaire"
+                                        [matAutocomplete]="autoAnnee"
                                         (keyup)="getAllAnneeScolaire($event.target.value)">
                                     <mat-autocomplete #autoAnnee="matAutocomplete" [displayWith]="displayFn">
                                         <mat-option *ngFor="let option of anneeScolaires " [value]="option">
@@ -32,10 +33,10 @@
                                         {{ 'l\'.année.scolaire.doit.etre.choisi' }}</mat-error>
                                 </mat-form-field>
 
-                                  <mat-form-field class="w-1/3 pl-2">
+                                <mat-form-field class="w-1/3 pl-2">
                                     <mat-label>{{'Semestre'}}</mat-label>
-                                    <input type="text" matInput formControlName="semestre" [matAutocomplete]="autoSemestre"
-                                        (keyup)="getAllSemestre($event.target.value)">
+                                    <input type="text" matInput formControlName="semestre"
+                                        [matAutocomplete]="autoSemestre" (keyup)="getAllSemestre($event.target.value)">
                                     <mat-autocomplete #autoSemestre="matAutocomplete" [displayWith]="displayFn">
                                         <mat-option *ngFor="let option of semestres " [value]="option">
                                             {{option.nom}}
@@ -44,7 +45,7 @@
                                     <mat-error *ngIf="field.get('semestre').hasError('required')">
                                         {{ 'le.semestre.doit.etre.choisi' }}</mat-error>
                                 </mat-form-field>
-                           
+
 
 
                                 <mat-form-field class="w-1/3 px-2">
@@ -53,7 +54,7 @@
                                         (keyup)="getAllProfesseur($event.target.value)">
                                     <mat-autocomplete #autoUser="matAutocomplete" [displayWith]="displayFn2">
                                         <mat-option *ngFor="let option of users " [value]="option">
-                                            {{option.firstName}}  {{option.lastName}}
+                                            {{option.firstName}} {{option.lastName}}
                                         </mat-option>
                                     </mat-autocomplete>
                                     <mat-error *ngIf="field.get('user').hasError('required')">
@@ -66,8 +67,8 @@
                             <div class="flex">
                                 <mat-form-field class="w-2/3 pr-2">
                                     <mat-label>Matière</mat-label>
-                                    <input type="text" matInput formControlName="matiere" [matAutocomplete]="autoMatiere"
-                                        (keyup)="getAllMatiere($event.target.value)">
+                                    <input type="text" matInput formControlName="matiere"
+                                        [matAutocomplete]="autoMatiere" (keyup)="getAllMatiere($event.target.value)">
                                     <mat-autocomplete #autoMatiere="matAutocomplete" [displayWith]="displayFn">
                                         <mat-option *ngFor="let option of matieres " [value]="option">
                                             {{option.nom}}
@@ -79,8 +80,8 @@
 
                                 <mat-form-field class="w-2/3 pl-2">
                                     <mat-label>Filière</mat-label>
-                                    <input type="text" matInput formControlName="filiere" [matAutocomplete]="autoFiliere"
-                                        (keyup)="getAllUFiliere($event.target.value)">
+                                    <input type="text" matInput formControlName="filiere"
+                                        [matAutocomplete]="autoFiliere" (keyup)="getAllUFiliere($event.target.value)">
                                     <mat-autocomplete #autoFiliere="matAutocomplete" [displayWith]="displayFn">
                                         <mat-option *ngFor="let option of filieres " [value]="option">
                                             {{option.nom}}
@@ -115,18 +116,24 @@
                 *ngIf="!matiereUtilisateur">
                 Annuler
             </button>
-            <button *ngIf="matiereUtilisateur" class="order-first sm:order-last" mat-flat-button [color]="'warn'"
-                [swal]="supprimerSwal">
-                Supprimer
-            </button>
+            <ng-container *hasAuthority="'SUPPRESSION_MATIERE_USER'">
+                <button *ngIf="matiereUtilisateur" class="order-first sm:order-last" mat-flat-button [color]="'warn'"
+                    [swal]="supprimerSwal">
+                    Supprimer
+                </button>
+            </ng-container>
+
             <button *ngIf="!matiereUtilisateur" class="order-first sm:order-last" mat-flat-button [color]="'primary'"
                 [disabled]="!form.valid" [swal]="enregistrerSwal">
                 Ajouter
             </button>
-            <button *ngIf="matiereUtilisateur" class="order-first sm:order-last" mat-flat-button [color]="'primary'"
-                [swal]="modifierSwal" [disabled]="!form.valid">
-                Modifier
-            </button>
+            <ng-container *hasAuthority="'MODIFICATION_MATIERE_USER'">
+                <button *ngIf="matiereUtilisateur" class="order-first sm:order-last" mat-flat-button [color]="'primary'"
+                    [swal]="modifierSwal" [disabled]="!form.valid">
+                    Modifier
+                </button>
+            </ng-container>
+
         </div>
     </form>
 </div>

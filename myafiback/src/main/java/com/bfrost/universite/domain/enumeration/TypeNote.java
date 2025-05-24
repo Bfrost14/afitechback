@@ -1,7 +1,7 @@
 package com.bfrost.universite.domain.enumeration;
 
 /**
- * The Role enumeration.
+ * The TypeNote enumeration.
  */
 public enum TypeNote {
     RATTRAPAGE,

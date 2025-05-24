@@ -24,11 +24,27 @@
           </ng-container>
 
           <ng-template #elseMat>
-            <ng-container *ngIf="column == 'prenom' || column == 'nom' || column == 'filiere' || column == 'campus'; else elseMat2">
+            <ng-container
+              *ngIf="column == 'matiere' || column == 'nom' || column == 'dateDebut' || column == 'dateFin'; else elseMat2">
               <td mat-cell *matCellDef="let element">
                 <ng-container *ngIf="column == 'nom'">
-                      {{element['etudiant']['firstName'] }}  {{element['etudiant']['lastName'] }}
+                  {{element['etudiant']['firstName'] }} {{element['etudiant']['lastName'] }}
                 </ng-container>
+                <ng-container *ngIf="column == 'matiere'">
+                  {{element?.calendrierCours?.matiereUser?.matiere?.nom | uppercase}}
+                </ng-container>
+
+                <ng-container *ngIf="column == 'dateDebut'">
+                  {{element?.calendrierCours?.dateDebut | date: 'dd/mm/yyyy à HH:mm'}}
+                </ng-container>
+
+
+                <ng-container *ngIf="column == 'dateFin'">
+                  {{element?.calendrierCours?.dateFin | date: 'dd/mm/yyyy à HH:mm'}}
+                </ng-container>
+
+
+
               </td>
             </ng-container>
             <ng-template #elseMat2>

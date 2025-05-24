@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 
 /**
  * Spring Data JPA repository for the CalendrierCours entity.
@@ -30,4 +31,6 @@ public interface CalendrierCoursRepository extends JpaRepository<CalendrierCours
         
         """)
     Page<CalendrierCours> managedUser(Pageable pageable, ZonedDateTime dateDebut, ZonedDateTime dateFin, String matiere, String filiere, String salle, String professeur, String campus);
+
+    List<CalendrierCours> findAllByMatiereUserFiliereId(Long id);
 }
