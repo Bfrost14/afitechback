@@ -3,6 +3,7 @@ package com.bfrost.universite.service.impl;
 import com.bfrost.universite.domain.Profil;
 import com.bfrost.universite.domain.enumeration.TypeProfil;
 import com.bfrost.universite.repository.ProfilRepository;
+import com.bfrost.universite.repository.UserRepository;
 import com.bfrost.universite.service.ProfilService;
 import com.bfrost.universite.service.dto.ProfilDTO;
 import com.bfrost.universite.service.mapper.ProfilMapper;
@@ -28,10 +29,12 @@ public class ProfilServiceImpl implements ProfilService {
     private final ProfilRepository profilRepository;
 
     private final ProfilMapper profilMapper;
+    private final UserRepository userRepository;
 
-    public ProfilServiceImpl(ProfilRepository profilRepository, ProfilMapper profilMapper) {
+    public ProfilServiceImpl(ProfilRepository profilRepository, ProfilMapper profilMapper, UserRepository userRepository) {
         this.profilRepository = profilRepository;
         this.profilMapper = profilMapper;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -47,6 +50,14 @@ public class ProfilServiceImpl implements ProfilService {
         LOG.debug("Request to update Profil : {}", profilDTO);
         Profil profil = profilMapper.toEntity(profilDTO);
         profil = profilRepository.save(profil);
+        var authorityies = profil.getAuthorities();
+        userRepository.findAllByProfilId(profil.getId()).forEach(user -> {
+            user.setAuthorities(authorityies);
+            userRepository.save(user);
+        });
+
+
+
         return profilMapper.toDto(profil);
     }
 

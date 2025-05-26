@@ -54,4 +54,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
       AND (:name IS NULL OR f.nom IS NOT NULL)
 """)
     Page<User> managedUserBy(Pageable pageable, String prenom, String nom, String email, String telephone, String filiere, String campus, String matricule, TypeProfil profil, Integer admin, String name);
+
+    List<User> findAllByProfilId(Long id);
 }
