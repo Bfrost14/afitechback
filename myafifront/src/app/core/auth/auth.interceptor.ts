@@ -27,7 +27,7 @@ export class AuthInterceptor implements HttpInterceptor {
         let authReq = req;
         const token = this._authService.accessToken;
 
-        if (this._authService.accessToken && !AuthUtils.isTokenExpired(this._authService.accessToken, 60)) {
+        if (this._authService.accessToken) {
             authReq = this.addTokenHeader(req, token);
         }
 
