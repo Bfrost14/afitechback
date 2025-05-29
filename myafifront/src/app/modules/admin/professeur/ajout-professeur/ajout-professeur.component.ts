@@ -96,6 +96,7 @@ export class AjoutProfesseurComponent implements OnInit {
             createdBy: [this._authService.getUtilisateur().email],
             login: [null, Validators.required],
             profil:[null],
+            sexe:[null],
             authorities: [null],
         });
         if (this.professeur != undefined) {

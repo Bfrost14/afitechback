@@ -105,6 +105,7 @@ export class AjoutAdministrationComponent implements OnInit {
             campus:[null, Validators.required],
             campuses:[null, Validators.required],
             authorities: [null],
+            sexe:[null],
         });
         if (this.administration != undefined) {
             this.form.patchValue(this.administration)

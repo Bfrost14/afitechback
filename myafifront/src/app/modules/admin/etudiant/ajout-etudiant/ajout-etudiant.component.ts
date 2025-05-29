@@ -103,6 +103,7 @@ export class AjoutEtudiantComponent implements OnInit {
             createdBy: [this._authService.getUtilisateur().email],
             login: [null],
             profil: [null],
+            sexe:[null],
             campus: [null, Validators.required],
             nationalite: [null, Validators.required],
             campuses: [[]],

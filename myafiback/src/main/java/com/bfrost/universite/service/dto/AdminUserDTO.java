@@ -4,6 +4,7 @@ import com.bfrost.universite.config.Constants;
 import com.bfrost.universite.domain.Authority;
 import com.bfrost.universite.domain.Campus;
 import com.bfrost.universite.domain.User;
+import com.bfrost.universite.domain.enumeration.Sexe;
 import com.bfrost.universite.service.mapper.CampusMapper;
 import com.bfrost.universite.service.mapper.FiliereMapper;
 import com.bfrost.universite.service.mapper.ProfilMapper;
@@ -57,6 +58,8 @@ public class AdminUserDTO implements Serializable {
     private LocalDate dateDeNaissance;
 
     private String telephone;
+
+    private Sexe sexe;
 
     private String nationalite;
 

@@ -1,6 +1,7 @@
 package com.bfrost.universite.domain;
 
 import com.bfrost.universite.config.Constants;
+import com.bfrost.universite.domain.enumeration.Sexe;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -93,6 +94,9 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
 
     @Column(name = "telephone")
     private String telephone;
+
+    @Column(name = "sexe")
+    private Sexe sexe;
 
     @Column(name = "first_connection")
     private Boolean firstConnection;
