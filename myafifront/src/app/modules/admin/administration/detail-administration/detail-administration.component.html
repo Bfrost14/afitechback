@@ -89,9 +89,9 @@
                           class="ml-2 text-slate-500">{{administration?.telephone}}</span></p>
 
                       <p class="truncate hover:text-clip"> <span class=" ml-2  text-black">{{'Profile'}}:</span><span
-                          class="ml-2 text-slate-500">{{administration?.profil.nom}}</span></p>
+                          class="ml-2 text-slate-500">{{administration?.profil?.nom}}</span></p>
                       <p class="truncate hover:text-clip"> <span class=" ml-2  text-black">{{'Campus'}}:</span><span
-                          class="ml-2 text-slate-500">{{administration?.campus.nom}}</span></p>
+                          class="ml-2 text-slate-500">{{administration?.campus?.nom}}</span></p>
 
                       <ng-container *ngFor="let item of administration.campuses">
                         <p class="truncate hover:text-clip"> <span class=" ml-2  text-black">{{'Campus
