@@ -9,8 +9,6 @@ import { Router } from '@angular/router';
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
     urlsToNotUse: Array<string>;
-    private isRefreshing = false;
-    private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
     constructor(private _authService: AuthService, private _router: Router) {
         this.urlsToNotUse = [
