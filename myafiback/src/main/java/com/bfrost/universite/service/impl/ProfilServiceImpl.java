@@ -1,5 +1,6 @@
 package com.bfrost.universite.service.impl;
 
+import com.bfrost.universite.domain.Authority;
 import com.bfrost.universite.domain.Profil;
 import com.bfrost.universite.domain.enumeration.TypeProfil;
 import com.bfrost.universite.repository.ProfilRepository;
@@ -15,7 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Service Implementation for managing {@link Profil}.
@@ -50,9 +53,13 @@ public class ProfilServiceImpl implements ProfilService {
         LOG.debug("Request to update Profil : {}", profilDTO);
         Profil profil = profilMapper.toEntity(profilDTO);
         profil = profilRepository.save(profil);
-        var authorityies = profil.getAuthorities();
+
+        Set<Authority> profilAuthorities = profil.getAuthorities();
+
         userRepository.findAllByProfilId(profil.getId()).forEach(user -> {
-            user.setAuthorities(authorityies);
+            // ⚠️ Créer une nouvelle instance de Set pour éviter les références partagées
+            Set<Authority> copiedAuthorities = new HashSet<>(profilAuthorities);
+            user.setAuthorities(copiedAuthorities);
             userRepository.save(user);
         });
 
